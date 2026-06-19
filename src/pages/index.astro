@@ -15,25 +15,30 @@ const featuredConcerns = concerns.slice(0, 6);
 ---
 <Base>
   <!-- Hero -->
-  <section class="section hero">
-    <div class="wrap hero__grid">
-      <div class="hero__copy">
-        <span class="eyebrow">{site.line} · {site.brand}</span>
-        <h1 class="hero__title ripple">Look like yourself, <span class="it">refined.</span></h1>
-        <p class="lede">
-          Physician-led medical aesthetics. We screen first, tailor to you, and
-          treat with restraint — subtle by design, honest about what each option
-          can and cannot do.
-        </p>
-        <div class="hero__actions">
-          <a class="btn btn--lg" href="/contact">Book a consult</a>
-          <a class="btn btn--ghost btn--lg" href="/treatments">Explore treatments</a>
-        </div>
-        <p class="meta hero__tag">{site.tagline}</p>
+  <section class="hero">
+    <!-- Signature motif: a luminous light-bloom, set to the right behind the copy (§6.2) -->
+    <div class="hero__motif" aria-hidden="true">
+      <HeroMotif />
+    </div>
+    <div class="wrap hero__inner">
+      <p class="eyebrow hero__eyebrow">{site.line} · {site.tagline.replace(/\.$/, '')}</p>
+      <h1 class="hl hero__title ripple">Look like yourself, <span class="it">refined.</span></h1>
+      <p class="lede hero__lead">
+        Physician-led medical aesthetics. We screen first, tailor to you, and
+        treat with restraint — subtle by design, honest about what each option
+        can and cannot do.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--lg" href="/contact">Book a consult</a>
+        <a class="link-arrow" href="/treatments">Explore treatments &rarr;</a>
       </div>
-      <div class="hero__motif">
-        <HeroMotif />
-      </div>
+    </div>
+    <div class="wrap hero__meta">
+      <span class="meta">Physician-led</span>
+      <span class="hero__sep" aria-hidden="true"></span>
+      <span class="meta">Clinician-delivered</span>
+      <span class="hero__sep" aria-hidden="true"></span>
+      <span class="meta">Screened first</span>
     </div>
   </section>
 
@@ -93,15 +98,29 @@ const featuredConcerns = concerns.slice(0, 6);
 </Base>
 
 <style>
-  .hero__grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: var(--space-l); align-items: center; }
-  .hero__title { font-size: var(--step-5); margin: 0.4rem 0 1.2rem; }
-  .hero__actions { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.8rem; }
-  .hero__tag { margin-top: 1.6rem; }
+  .hero { position: relative; overflow: hidden; padding-block: clamp(3.5rem, 8vh, 7rem) var(--space-l); }
+  .hero__inner, .hero__meta { position: relative; z-index: 2; }
+  .hero__motif {
+    position: absolute; z-index: 1;
+    top: 50%; right: clamp(0.5rem, 5vw, 5rem);
+    transform: translateY(-50%);
+    width: clamp(220px, 26vw, 360px);
+    aspect-ratio: 1 / 1;
+    pointer-events: none;
+  }
+  .hero__eyebrow { margin-bottom: 2rem; }
+  .hero__title { font-size: var(--step-5); max-width: 16ch; margin: 0; }
+  .hero__lead { margin-top: 2rem; }
+  .hero__actions { margin-top: 2.5rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+  .hero__meta { margin-top: 3.5rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 1.5rem; }
+  .hero__sep { width: 4px; height: 4px; border-radius: 50%; background: var(--line); }
+  @media (min-width: 1000px) {
+    .hero__inner, .hero__meta { padding-right: clamp(280px, 28vw, 400px); }
+  }
+  @media (max-width: 999px) {
+    .hero__motif { right: clamp(-60px, -4vw, -10px); opacity: 0.4; width: clamp(200px, 42vw, 280px); }
+  }
   .section-head h2 { font-size: var(--step-3); }
   .section-head .lede { margin-top: 0.6rem; }
   .trust { max-width: var(--measure); }
-  @media (max-width: 900px) {
-    .hero__grid { grid-template-columns: 1fr; }
-    .hero__motif { order: -1; }
-  }
 </style>
