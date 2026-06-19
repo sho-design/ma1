@@ -1,0 +1,15 @@
+---
+import type { Concern } from '@data/concerns';
+import { familyBySlug } from '@data/families';
+import ConcernIcon from './ConcernIcon.astro';
+interface Props { concern: Concern; }
+const { concern } = Astro.props;
+const fam = familyBySlug(concern.families[0]);
+const accent = fam ? `--accent: var(--accent-${fam.accentVar})` : '';
+---
+<a class="concern" id={concern.slug} href={`/concerns#${concern.slug}`} style={accent}>
+  <span class="concern__drop" aria-hidden="true"></span>
+  <ConcernIcon slug={concern.icon} />
+  <span class="concern__label">{concern.label}</span>
+  <span class="concern__line">{concern.line}</span>
+</a>

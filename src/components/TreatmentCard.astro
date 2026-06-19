@@ -1,0 +1,19 @@
+---
+import type { Treatment } from '@data/treatments';
+import { familyBySlug } from '@data/families';
+import ActiveChip from './ActiveChip.astro';
+interface Props { treatment: Treatment; }
+const { treatment } = Astro.props;
+const fam = familyBySlug(treatment.family);
+const accent = fam
+  ? `--accent: var(--accent-${fam.accentVar}); --accent-text: var(--accent-${fam.accentVar}-text)`
+  : '';
+---
+<article class="card" style={accent}>
+  <span class="card__family">{fam?.name}</span>
+  <h3 class="card__name">{treatment.name}</h3>
+  <p class="card__essence">{treatment.essence}</p>
+  <div class="card__actives">
+    {treatment.actives.map((slug) => <ActiveChip slug={slug} />)}
+  </div>
+</article>

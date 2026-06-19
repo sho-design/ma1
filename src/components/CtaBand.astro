@@ -1,0 +1,17 @@
+---
+interface Props { title?: string; body?: string; }
+const {
+  title = 'Start with a consult.',
+  body = 'We screen first and tailor to you. Your physician finalises the plan — never the counter.',
+} = Astro.props;
+---
+<section class="section-tight fill">
+  <div class="wrap-narrow cta-band reveal">
+    <h2 class="cta-band__title">{title}</h2>
+    <p class="cta-band__body">{body}</p>
+    <div class="cta-band__actions">
+      <a class="btn btn--lg" href="/contact">Book a consult</a>
+      <a class="btn btn--ghost btn--lg" href="/plan">Plan your treatment</a>
+    </div>
+  </div>
+</section>

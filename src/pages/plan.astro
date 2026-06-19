@@ -1,0 +1,120 @@
+---
+import Base from '@layouts/Base.astro';
+import PageHeader from '@components/PageHeader.astro';
+import Advisory from '@components/Advisory.astro';
+import { concerns } from '@data/concerns';
+import { families } from '@data/families';
+---
+<Base title="Plan your treatment" description="A simple configurator: choose areas and goals, and we shape a starting point for your consult. Not a prescription.">
+  <PageHeader
+    eyebrow="Plan your treatment"
+    title="Plan your treatment."
+    lead="Pick the areas and goals that matter to you. We’ll shape a starting point — your physician finalises everything at consult."
+    ripple
+  />
+
+  <section class="section-tight">
+    <div class="wrap planner">
+      <div class="planner__form reveal">
+        <fieldset class="planner__group">
+          <legend class="eyebrow">Areas &amp; concerns</legend>
+          <div class="planner__chips">
+            {concerns.map((c) => (
+              <label class="planner__chip">
+                <input type="checkbox" name="goal" value={c.label} />
+                <span>{c.label}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <fieldset class="planner__group">
+          <legend class="eyebrow">Comfort with downtime</legend>
+          <div class="planner__chips">
+            {['None', 'A day or two', 'A few days is fine'].map((d) => (
+              <label class="planner__chip">
+                <input type="radio" name="downtime" value={d} />
+                <span>{d}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <fieldset class="planner__group">
+          <legend class="eyebrow">Interested families</legend>
+          <div class="planner__chips">
+            {families.filter((f) => f.slug !== 'clinical').map((f) => (
+              <label class="planner__chip" style={`--accent: var(--accent-${f.accentVar})`}>
+                <input type="checkbox" name="family" value={f.name} />
+                <span>{f.name}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      </div>
+
+      <aside class="planner__summary reveal">
+        <h2 style="font-size:var(--step-2)">Your starting point</h2>
+        <p class="meta">Updates as you choose. Nothing is sent until you book.</p>
+        <dl class="planner__out" data-summary>
+          <div><dt>Goals</dt><dd data-out="goal">—</dd></div>
+          <div><dt>Downtime</dt><dd data-out="downtime">—</dd></div>
+          <div><dt>Families</dt><dd data-out="family">—</dd></div>
+        </dl>
+        <Advisory title="Not a prescription">
+          This is a conversation-starter, not a treatment plan. We screen for
+          candidacy and your physician finalises everything. Results vary.
+        </Advisory>
+        <a class="btn btn--lg" href="/contact" data-plan-cta style="margin-top:1.4rem">Take this to a consult</a>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .planner { display: grid; grid-template-columns: 1.3fr 0.9fr; gap: var(--space-l); align-items: start; }
+  .planner__group { border: 0; padding: 0; margin: 0 0 var(--space-m); }
+  .planner__group legend { margin-bottom: 0.9rem; }
+  .planner__chips { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .planner__chip { position: relative; }
+  .planner__chip input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .planner__chip span {
+    display: inline-block; padding: 0.45em 0.95em; border: 1px solid var(--line);
+    border-radius: 999px; font-size: var(--step--1); color: var(--graphite);
+    transition: border-color var(--dur-hover) var(--ease), background var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease);
+    cursor: pointer;
+  }
+  .planner__chip input:checked + span { border-color: var(--accent, var(--ink)); color: var(--ink); background: color-mix(in srgb, var(--accent, var(--ink)) 10%, var(--paper)); }
+  .planner__chip input:focus-visible + span { outline: 2px solid var(--accent-text, var(--ink)); outline-offset: 2px; }
+  .planner__summary { background: var(--white-pure); background-image: var(--gloss-white); border: 1px solid var(--line); border-radius: var(--radius); padding: var(--space-m); position: sticky; top: calc(var(--header-h) + 1rem); }
+  .planner__out { margin: 1.2rem 0; display: grid; gap: 0.9rem; }
+  .planner__out dt { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--mist); }
+  .planner__out dd { margin: 0.2rem 0 0; color: var(--ink); }
+  @media (max-width: 880px) { .planner { grid-template-columns: 1fr; } .planner__summary { position: static; } }
+</style>
+
+<script>
+  const form = document.querySelector('.planner__form');
+  const cta = document.querySelector<HTMLAnchorElement>('[data-plan-cta]');
+  const collect = (name: string) =>
+    Array.from(document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`)).map((i) => i.value);
+
+  const update = () => {
+    const goals = collect('goal');
+    const downtime = collect('downtime');
+    const fams = collect('family');
+    const set = (key: string, val: string[]) => {
+      const out = document.querySelector(`[data-out="${key}"]`);
+      if (out) out.textContent = val.length ? val.join(', ') : '—';
+    };
+    set('goal', goals); set('downtime', downtime); set('family', fams);
+
+    const params = new URLSearchParams();
+    if (goals.length) params.set('goals', goals.join('|'));
+    if (downtime.length) params.set('downtime', downtime[0]);
+    if (fams.length) params.set('families', fams.join('|'));
+    if (cta) cta.href = `/contact${params.toString() ? `?${params}` : ''}`;
+  };
+  form?.addEventListener('change', update);
+  update();
+</script>

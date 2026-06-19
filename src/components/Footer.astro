@@ -1,0 +1,54 @@
+---
+import { site } from '@data/site';
+import { families } from '@data/families';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <div class="brand">
+          <span class="brand__name">{site.brand}</span>
+          <span class="brand__line">{site.line}</span>
+        </div>
+        <p class="footer__fine" style="margin-top:1rem; max-width:34ch">{site.tagline}</p>
+      </div>
+
+      <div>
+        <h4>Treatments</h4>
+        {families.map((f) => (
+          <a class="footer__link" href={`/treatments#${f.slug}`}>{f.name}</a>
+        ))}
+      </div>
+
+      <div>
+        <h4>Explore</h4>
+        <a class="footer__link" href="/concerns">By Concern</a>
+        <a class="footer__link" href="/modalities">Modalities &amp; actives</a>
+        <a class="footer__link" href="/plan">Plan your treatment</a>
+        <a class="footer__link" href="/candidacy">Candidacy &amp; safety</a>
+        <a class="footer__link" href="/memberships">Memberships</a>
+      </div>
+
+      <div>
+        <h4>Visit</h4>
+        {site.locations.map((loc) => (
+          <p class="footer__fine" style="margin-bottom:0.8rem">
+            {loc.name}<br />{loc.address}<br />{loc.city}<br />{loc.hours}
+          </p>
+        ))}
+        <a class="footer__link" href="/contact">Book a consult</a>
+      </div>
+    </div>
+
+    <div class="footer__legal">
+      <span class="footer__fine">© {year} {site.brand}. Refined by Medicine.</span>
+      <span class="footer__fine">
+        <a class="footer__link" style="display:inline" href="/privacy">Privacy</a> ·
+        <a class="footer__link" style="display:inline" href="/terms">Terms</a> ·
+        <a class="footer__link" style="display:inline" href="/accessibility">Accessibility</a>
+      </span>
+      <span class="footer__fine">{site.legal.regulators.join(' · ')}</span>
+    </div>
+  </div>
+</footer>

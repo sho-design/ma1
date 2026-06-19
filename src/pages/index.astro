@@ -1,0 +1,107 @@
+---
+import Base from '@layouts/Base.astro';
+import HeroMotif from '@components/HeroMotif.astro';
+import TreatmentCard from '@components/TreatmentCard.astro';
+import ConcernTile from '@components/ConcernTile.astro';
+import PullQuote from '@components/PullQuote.astro';
+import CtaBand from '@components/CtaBand.astro';
+import EvidenceTag from '@components/EvidenceTag.astro';
+import { site } from '@data/site';
+import { treatments } from '@data/treatments';
+import { concerns } from '@data/concerns';
+
+const featured = treatments.slice(0, 6);
+const featuredConcerns = concerns.slice(0, 6);
+---
+<Base>
+  <!-- Hero -->
+  <section class="section hero">
+    <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <span class="eyebrow">{site.line} · {site.brand}</span>
+        <h1 class="hero__title ripple">Look like yourself, <span class="it">refined.</span></h1>
+        <p class="lede">
+          Physician-led medical aesthetics. We screen first, tailor to you, and
+          treat with restraint — subtle by design, honest about what each option
+          can and cannot do.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--lg" href="/contact">Book a consult</a>
+          <a class="btn btn--ghost btn--lg" href="/treatments">Explore treatments</a>
+        </div>
+        <p class="meta hero__tag">{site.tagline}</p>
+      </div>
+      <div class="hero__motif">
+        <HeroMotif />
+      </div>
+    </div>
+  </section>
+
+  <!-- Treatments -->
+  <section class="section-tight">
+    <div class="wrap">
+      <header class="section-head reveal">
+        <span class="eyebrow">Treatments</span>
+        <h2>Five families, one clinical standard.</h2>
+        <p class="lede">From injectables to medical-grade skin health — each held to the same physician oversight.</p>
+      </header>
+      <div class="grid grid--cards reveal" style="margin-top:2.5rem">
+        {featured.map((t) => <TreatmentCard treatment={t} />)}
+      </div>
+      <p style="margin-top:2rem"><a class="btn btn--ghost" href="/treatments">All treatments →</a></p>
+    </div>
+  </section>
+
+  <PullQuote />
+
+  <!-- By Concern -->
+  <section class="section-tight fill">
+    <div class="wrap">
+      <header class="section-head reveal">
+        <span class="eyebrow">By Concern</span>
+        <h2>Start with what you notice.</h2>
+        <p class="lede">An empathetic entry point — we map your concern to the right modality, not the other way round.</p>
+      </header>
+      <div class="grid grid--concerns reveal" style="margin-top:2.5rem">
+        {featuredConcerns.map((c) => <ConcernTile concern={c} />)}
+      </div>
+      <p style="margin-top:2rem"><a class="btn btn--ghost" href="/concerns">All concerns →</a></p>
+    </div>
+  </section>
+
+  <!-- Trust / medical anchor -->
+  <section class="section-tight">
+    <div class="wrap trust reveal">
+      <div>
+        <span class="eyebrow">The clinic, not the counter</span>
+        <h2>Trust is a design feature.</h2>
+        <p class="lede">
+          Every option is reviewed by a physician and delivered by clinicians.
+          We show our evidence rather than imply it — and we keep a genuine
+          medical anchor in dermatology and scar revision.
+        </p>
+        <p style="margin-top:1.4rem; display:flex; gap:1.4rem; flex-wrap:wrap; align-items:center">
+          <EvidenceTag level="established" />
+          <EvidenceTag level="emerging" />
+        </p>
+        <p class="meta" style="margin-top:1rem">Hover the tags — every benefit claim is rated and honest.</p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .hero__grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: var(--space-l); align-items: center; }
+  .hero__title { font-size: var(--step-5); margin: 0.4rem 0 1.2rem; }
+  .hero__actions { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.8rem; }
+  .hero__tag { margin-top: 1.6rem; }
+  .section-head h2 { font-size: var(--step-3); }
+  .section-head .lede { margin-top: 0.6rem; }
+  .trust { max-width: var(--measure); }
+  @media (max-width: 900px) {
+    .hero__grid { grid-template-columns: 1fr; }
+    .hero__motif { order: -1; }
+  }
+</style>

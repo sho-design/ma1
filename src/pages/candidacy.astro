@@ -1,0 +1,60 @@
+---
+import Base from '@layouts/Base.astro';
+import PageHeader from '@components/PageHeader.astro';
+import Advisory from '@components/Advisory.astro';
+import CtaBand from '@components/CtaBand.astro';
+
+const sections = [
+  {
+    title: 'Who we screen out',
+    body: 'Some people aren’t candidates — for now or at all. Pregnancy and breastfeeding, certain neuromuscular or autoimmune conditions, active skin infection in the area, some medications, recent related procedures, and unrealistic expectations are all reasons we may pause or decline. That’s the screening working as intended.',
+  },
+  {
+    title: 'What to expect',
+    body: 'Most treatments are quick but layered: a consult and screening first, then the procedure, then a settling period. We’ll tell you the realistic timeline to see results, how long they tend to last, and what maintenance looks like — before you commit.',
+  },
+  {
+    title: 'Downtime, honestly',
+    body: 'Downtime ranges from none to several days depending on the modality and its intensity. We plan around your life and never undersell recovery. If a treatment needs a quiet week, we’ll say so.',
+  },
+  {
+    title: 'Longevity & maintenance',
+    body: 'Results are not permanent and they vary between people. We’ll be specific about how long a given option typically lasts and what upkeep it asks for, so there are no surprises.',
+  },
+];
+---
+<Base title="Candidacy & safety" description="Contraindications, downtime, what to expect, and how long results last — set out honestly before you commit.">
+  <PageHeader
+    eyebrow="Candidacy & safety"
+    title="Screened first, treated second."
+    lead="We’d rather tell you a treatment isn’t right than sell it anyway. Here’s how we think about candidacy, safety, and what to expect."
+    ripple
+  />
+
+  <section class="section-tight">
+    <div class="wrap-narrow">
+      <Advisory title="Physician oversight">
+        Every plan is reviewed by a physician and delivered by trained clinicians.
+        Nothing here is medical advice or a guarantee of outcome — candidacy is
+        confirmed in person, and results vary.
+      </Advisory>
+
+      <div class="prose reveal" style="margin-top:var(--space-m)">
+        {sections.map((s) => (
+          <article class="candidacy-block">
+            <h2>{s.title}</h2>
+            <p>{s.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Find out if it’s right for you." body="A consult begins with screening. If you’re not a candidate, we’ll tell you — and suggest what is." />
+</Base>
+
+<style>
+  .candidacy-block { padding-block: var(--space-s); border-bottom: 1px solid var(--line); }
+  .candidacy-block h2 { font-size: var(--step-2); }
+  .candidacy-block p { color: var(--graphite); max-width: var(--measure); margin: 0; }
+</style>

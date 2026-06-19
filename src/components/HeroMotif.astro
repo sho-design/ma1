@@ -1,0 +1,99 @@
+---
+// Signature motif for the Aesthetics line (DESIGN_SYSTEM §6.2):
+// a luminous bloom / refraction — soft radial light through a diffusion canvas,
+// reframed from the infusion line's IV-bag fluid as LIGHT not ink.
+// Same canvas/rAF machinery; static gradient fallback under reduced motion.
+---
+<div class="hero-motif" aria-hidden="true">
+  <canvas class="hero-motif__canvas"></canvas>
+  <div class="hero-motif__fallback"></div>
+</div>
+
+<style>
+  .hero-motif { position: relative; aspect-ratio: 1 / 1; width: 100%; max-width: 520px; margin-inline: auto; }
+  .hero-motif__canvas, .hero-motif__fallback {
+    position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%;
+  }
+  .hero-motif__fallback {
+    background:
+      radial-gradient(circle at 42% 38%, color-mix(in srgb, var(--accent-energy) 60%, white) 0%, transparent 42%),
+      radial-gradient(circle at 60% 62%, color-mix(in srgb, var(--accent-injectables) 55%, white) 0%, transparent 46%),
+      radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent-skin) 40%, white) 0%, transparent 70%);
+    filter: blur(6px);
+    opacity: 0.9;
+  }
+  .hero-motif__canvas { opacity: 0; transition: opacity 0.9s var(--ease); }
+  .hero-motif__canvas.is-live { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .hero-motif__canvas { display: none; } }
+</style>
+
+<script>
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const root = document.querySelector<HTMLElement>('.hero-motif');
+  const canvas = root?.querySelector<HTMLCanvasElement>('.hero-motif__canvas');
+  if (canvas && !reduced) {
+    const ctx = canvas.getContext('2d');
+    const css = getComputedStyle(document.documentElement);
+    const read = (n: string) => css.getPropertyValue(n).trim() || '#c8a24b';
+    const blooms = [
+      { hue: read('--accent-energy'), bx: 0.42, by: 0.38, r: 0.34, phase: 0 },
+      { hue: read('--accent-injectables'), bx: 0.60, by: 0.60, r: 0.30, phase: 2 },
+      { hue: read('--accent-skin'), bx: 0.50, by: 0.50, r: 0.46, phase: 4 },
+    ];
+
+    let w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      w = rect.width; h = rect.height;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    let t = 0;
+    let running = true;
+    const draw = () => {
+      if (!ctx || !running) return;
+      ctx.clearRect(0, 0, w, h);
+      ctx.globalCompositeOperation = 'lighter';
+      for (const b of blooms) {
+        const drift = Math.sin(t * 0.6 + b.phase) * 0.04;
+        const drift2 = Math.cos(t * 0.5 + b.phase) * 0.04;
+        const cx = (b.bx + drift) * w;
+        const cy = (b.by + drift2) * h;
+        const rad = b.r * w * (1 + Math.sin(t * 0.8 + b.phase) * 0.08);
+        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rad);
+        g.addColorStop(0, b.hue + 'cc');
+        g.addColorStop(0.4, b.hue + '55');
+        g.addColorStop(1, b.hue + '00');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // slow refraction sweep
+      ctx.globalCompositeOperation = 'source-over';
+      const sweep = ((Math.sin(t * 0.4) + 1) / 2) * w;
+      const lg = ctx.createLinearGradient(sweep - 60, 0, sweep + 60, h);
+      lg.addColorStop(0, 'rgba(255,255,255,0)');
+      lg.addColorStop(0.5, 'rgba(255,255,255,0.14)');
+      lg.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = lg;
+      ctx.fillRect(0, 0, w, h);
+
+      t += 0.012;
+      requestAnimationFrame(draw);
+    };
+    canvas.classList.add('is-live');
+    requestAnimationFrame(draw);
+
+    // pause when offscreen (battery/CPU courtesy)
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        running = entries[0].isIntersecting;
+        if (running) requestAnimationFrame(draw);
+      }, { threshold: 0.05 }).observe(canvas);
+    }
+  }
+</script>

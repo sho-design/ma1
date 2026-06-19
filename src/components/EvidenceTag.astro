@@ -1,0 +1,10 @@
+---
+import { evidenceCopy, type Evidence } from '@data/modalities';
+interface Props { level: Evidence; }
+const { level } = Astro.props;
+const label = level === 'established' ? 'Established' : 'Emerging';
+---
+<span class={`evidence evidence--${level}`} tabindex="0" role="note" aria-label={`${label} evidence`}>
+  <span class="evidence__dot" aria-hidden="true"></span>{label}
+  <span class="evidence__tip" role="tooltip">{evidenceCopy[level]}</span>
+</span>

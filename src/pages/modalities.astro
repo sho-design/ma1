@@ -1,0 +1,67 @@
+---
+import Base from '@layouts/Base.astro';
+import PageHeader from '@components/PageHeader.astro';
+import EvidenceTag from '@components/EvidenceTag.astro';
+import CtaBand from '@components/CtaBand.astro';
+import { families } from '@data/families';
+import { modalitiesByFamily } from '@data/modalities';
+---
+<Base title="Modalities & Actives" description="The modality library — what each option is, what it may support, its evidence rating, and its downtime.">
+  <PageHeader
+    eyebrow="Modalities & Actives"
+    title="The modality library."
+    lead="What each option is, what it may support, how strong the evidence is, and what downtime to expect. We rate honesty, not hype."
+    ripple
+  />
+
+  {families.map((fam) => {
+    const items = modalitiesByFamily(fam.slug);
+    if (!items.length) return null;
+    return (
+      <section
+        class="section-tight"
+        id={fam.slug}
+        style={`--accent: var(--accent-${fam.accentVar}); --accent-text: var(--accent-${fam.accentVar}-text)`}
+      >
+        <div class="wrap">
+          <header class="reveal" style="max-width:var(--measure)">
+            <span class="eyebrow">{fam.name}</span>
+          </header>
+          <ul class="modality-list reveal">
+            {items.map((m) => (
+              <li class="modality" id={m.slug}>
+                <div class="modality__main">
+                  <span class="modality__dot" aria-hidden="true"></span>
+                  <div>
+                    <h3 class="modality__name">{m.name}</h3>
+                    <p class="modality__essence">{m.essence}</p>
+                    <p class="modality__may"><strong>May support:</strong> {m.maySupport}</p>
+                  </div>
+                </div>
+                <div class="modality__meta">
+                  <EvidenceTag level={m.evidence} />
+                  <span class="meta">Downtime: {m.downtime}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    );
+  })}
+
+  <CtaBand title="Not sure which applies to you?" body="Bring your concern to a consult. We screen first and recommend only what fits — your physician finalises the plan." />
+</Base>
+
+<style>
+  .modality-list { list-style: none; margin: 1.5rem 0 0; padding: 0; border-top: 1px solid var(--line); }
+  .modality { display: flex; justify-content: space-between; gap: var(--space-m); flex-wrap: wrap; padding: var(--space-m) 0; border-bottom: 1px solid var(--line); }
+  .modality__main { display: flex; gap: 0.9rem; max-width: 60ch; }
+  .modality__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); flex: none; margin-top: 0.55rem; }
+  .modality__name { font-size: var(--step-1); margin: 0 0 0.3rem; }
+  .modality__essence { color: var(--graphite); margin: 0 0 0.4rem; }
+  .modality__may { color: var(--mist); font-size: var(--step--1); margin: 0; }
+  .modality__may strong { color: var(--accent-text); }
+  .modality__meta { display: flex; flex-direction: column; gap: 0.6rem; align-items: flex-end; text-align: right; min-width: 220px; }
+  @media (max-width: 640px) { .modality__meta { align-items: flex-start; text-align: left; } }
+</style>

@@ -1,0 +1,46 @@
+---
+import Base from '@layouts/Base.astro';
+import PageHeader from '@components/PageHeader.astro';
+import TreatmentCard from '@components/TreatmentCard.astro';
+import CtaBand from '@components/CtaBand.astro';
+import { families } from '@data/families';
+import { treatmentsByFamily } from '@data/treatments';
+---
+<Base title="Treatments" description="Injectables, skin & resurfacing, energy & laser, body, and skin health — every option reviewed by a physician.">
+  <PageHeader
+    eyebrow="Treatments"
+    title="Treatments"
+    lead="Five service families, one clinical standard. Each option is screened for candidacy and finalised by your physician."
+    ripple
+  />
+
+  {families.map((fam) => {
+    const items = treatmentsByFamily(fam.slug);
+    if (!items.length) return null;
+    return (
+      <section
+        class="section-tight"
+        id={fam.slug}
+        style={`--accent: var(--accent-${fam.accentVar}); --accent-text: var(--accent-${fam.accentVar}-text)`}
+      >
+        <div class="wrap">
+          <header class="fam-head reveal">
+            <span class="eyebrow">{fam.reads}</span>
+            <h2>{fam.name}</h2>
+            <p class="lede">{fam.essence}</p>
+          </header>
+          <div class="grid grid--cards reveal" style="margin-top:2rem">
+            {items.map((t) => <TreatmentCard treatment={t} />)}
+          </div>
+        </div>
+      </section>
+    );
+  })}
+
+  <CtaBand />
+</Base>
+
+<style>
+  .fam-head h2 { font-size: var(--step-3); }
+  .fam-head .lede { margin-top: 0.5rem; }
+</style>

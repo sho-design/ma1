@@ -1,0 +1,14 @@
+---
+import { modalities } from '@data/modalities';
+import { familyBySlug } from '@data/families';
+interface Props { slug: string; }
+const { slug } = Astro.props;
+const m = modalities.find((x) => x.slug === slug);
+const fam = m ? familyBySlug(m.family) : undefined;
+const accent = fam ? `--accent: var(--accent-${fam.accentVar}); --accent-text: var(--accent-${fam.accentVar}-text)` : '';
+---
+{m && (
+  <a class="chip" href={`/modalities#${m.slug}`} style={accent}>
+    <span class="chip__dot"></span>{m.name}
+  </a>
+)}

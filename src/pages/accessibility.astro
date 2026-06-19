@@ -1,0 +1,36 @@
+---
+import Base from '@layouts/Base.astro';
+import PageHeader from '@components/PageHeader.astro';
+import { site } from '@data/site';
+---
+<Base title="Accessibility" description="Our accessibility commitment under AODA and WCAG.">
+  <PageHeader eyebrow="Legal" title="Accessibility" lead="Accessibility and honesty are non-negotiable." />
+  <section class="section-tight">
+    <div class="wrap-narrow legal-prose reveal">
+      <p class="meta">Template statement — replace with your reviewed commitment before publishing.</p>
+
+      <h2>Our commitment</h2>
+      <p>{site.brand} is committed to accessibility in line with the <strong>Accessibility for Ontarians with Disabilities Act (AODA)</strong>. We aim to meet <strong>WCAG 2.1 Level AA</strong> across this website and to provide our services in a way that respects dignity and independence.</p>
+
+      <h2>How this site is built</h2>
+      <ul>
+        <li>Colour is used sparingly, and every accent used as small text meets AA contrast on the page background.</li>
+        <li>Motion is decorative and optional — all animation is disabled under <code>prefers-reduced-motion</code>, with a static fallback for every effect.</li>
+        <li>Content is keyboard navigable with visible focus, semantic structure, and a skip link.</li>
+      </ul>
+
+      <h2>In the clinic</h2>
+      <p>If you need an accommodation to attend or take part in a consult or treatment, tell us in advance and we’ll arrange it where we can.</p>
+
+      <h2>Feedback</h2>
+      <p>If you encounter a barrier on this site or in our service, please tell us at <a href={`mailto:${site.email}`}>{site.email}</a> so we can fix it and offer the information another way.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .legal-prose h2 { font-size: var(--step-2); margin-top: var(--space-m); }
+  .legal-prose p, .legal-prose li { color: var(--graphite); max-width: var(--measure); }
+  .legal-prose ul { padding-left: 1.2em; }
+  .legal-prose li { margin-bottom: 0.5rem; }
+</style>

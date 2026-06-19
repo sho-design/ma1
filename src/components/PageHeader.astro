@@ -1,0 +1,9 @@
+---
+interface Props { eyebrow?: string; title: string; lead?: string; ripple?: boolean; }
+const { eyebrow, title, lead, ripple = false } = Astro.props;
+---
+<header class="page-header wrap reveal">
+  {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+  <h1 class={`page-header__title${ripple ? ' ripple' : ''}`}>{title}</h1>
+  {lead && <p class="page-header__lead">{lead}</p>}
+</header>

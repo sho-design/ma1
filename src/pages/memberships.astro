@@ -1,0 +1,67 @@
+---
+import Base from '@layouts/Base.astro';
+import PageHeader from '@components/PageHeader.astro';
+import CtaBand from '@components/CtaBand.astro';
+
+const tiers = [
+  {
+    name: 'Essentials',
+    accentVar: 'health',
+    pitch: 'A steady foundation for skin health.',
+    points: ['Quarterly skin-health review', 'Medical-grade actives at member pricing', 'Priority booking'],
+  },
+  {
+    name: 'Refined',
+    accentVar: 'injectables',
+    pitch: 'Considered upkeep for subtle, ongoing results.',
+    points: ['Everything in Essentials', 'Two treatment credits per year', 'Annual physician planning session'],
+    featured: true,
+  },
+  {
+    name: 'Signature',
+    accentVar: 'energy',
+    pitch: 'A full, physician-led aesthetics plan.',
+    points: ['Everything in Refined', 'Energy & laser credits', 'Concierge scheduling'],
+  },
+];
+---
+<Base title="Memberships" description="Quietly considered membership tiers — skin-health reviews, member pricing, and credits, all physician-led.">
+  <PageHeader
+    eyebrow="Memberships"
+    title="Upkeep, considered."
+    lead="For results that ask for maintenance, membership keeps the plan steady and the pricing fair. No pressure, cancel anytime."
+    ripple
+  />
+
+  <section class="section-tight">
+    <div class="wrap grid grid--cards reveal">
+      {tiers.map((tier) => (
+        <article
+          class={`card membership${tier.featured ? ' membership--featured' : ''}`}
+          style={`--accent: var(--accent-${tier.accentVar}); --accent-text: var(--accent-${tier.accentVar}-text)`}
+        >
+          {tier.featured && <span class="membership__flag">Most chosen</span>}
+          <span class="card__family">Membership</span>
+          <h3 class="card__name">{tier.name}</h3>
+          <p class="card__essence">{tier.pitch}</p>
+          <ul class="membership__points">
+            {tier.points.map((p) => <li>{p}</li>)}
+          </ul>
+          <a class="btn" href="/contact" style="margin-top:1.4rem">Enquire</a>
+        </article>
+      ))}
+    </div>
+    <p class="wrap meta" style="margin-top:1.5rem">Pricing is shared at consult and varies with the plan your physician recommends. Memberships are not a substitute for medical advice.</p>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .membership { padding-top: calc(var(--space-m) + 0.4rem); }
+  .membership--featured { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); box-shadow: 0 28px 50px -36px rgba(26,27,29,0.28); }
+  .membership__flag { position: absolute; top: 0.9rem; right: 0.9rem; font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent-text); }
+  .membership__points { list-style: none; margin: 1.1rem 0 0; padding: 0; display: grid; gap: 0.6rem; }
+  .membership__points li { position: relative; padding-left: 1.2em; color: var(--graphite); font-size: var(--step--1); }
+  .membership__points li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+</style>

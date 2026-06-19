@@ -1,0 +1,11 @@
+---
+import { randomQuote } from '@data/quotes';
+interface Props { text?: string; cite?: string; }
+const fallback = randomQuote();
+const { text = fallback.text, cite = fallback.cite } = Astro.props;
+---
+<figure class="pullquote reveal">
+  <div class="pullquote__rule"></div>
+  <blockquote class="pullquote__text ripple">{text}</blockquote>
+  <figcaption class="pullquote__cite">{cite}</figcaption>
+</figure>

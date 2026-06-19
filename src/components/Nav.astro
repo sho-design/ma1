@@ -1,0 +1,106 @@
+---
+import { site, nav } from '@data/site';
+import { families } from '@data/families';
+import { concerns } from '@data/concerns';
+---
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="/" aria-label={`${site.brand} — ${site.line}`}>
+      <span class="brand__name">{site.brand}</span>
+      <span class="brand__line">{site.line}</span>
+    </a>
+
+    <nav aria-label="Primary">
+      <ul class="nav__links">
+        <li>
+          <button class="nav__trigger" aria-expanded="false" aria-controls="mega-treatments" data-mega="mega-treatments">
+            Treatments <span class="nav__caret" aria-hidden="true"></span>
+          </button>
+        </li>
+        <li><a class="nav__link" href="/concerns">By Concern</a></li>
+        <li><a class="nav__link" href="/modalities">Modalities</a></li>
+        <li><a class="nav__link" href="/plan">Plan your treatment</a></li>
+        <li><a class="nav__link" href="/candidacy">Candidacy &amp; safety</a></li>
+        <li><a class="nav__link" href="/memberships">Memberships</a></li>
+        <li><a class="btn btn--ghost" href="/contact">Book a consult</a></li>
+      </ul>
+    </nav>
+
+    <button class="nav__burger" aria-label="Open menu" aria-expanded="false" data-drawer-open>
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mega-menu: families + concerns -->
+  <div class="mega" id="mega-treatments" role="region" aria-label="Treatments">
+    <div class="wrap mega__grid">
+      <div class="mega__col">
+        <h4>Treatments</h4>
+        {families.map((f) => (
+          <a class="mega__item" href={`/treatments#${f.slug}`} style={`--accent: var(--accent-${f.accentVar})`}>
+            <span class="mega__dot"></span>{f.name}
+          </a>
+        ))}
+      </div>
+      <div class="mega__col">
+        <h4>By Concern</h4>
+        {concerns.slice(0, 5).map((c) => (
+          <a class="mega__item" href={`/concerns#${c.slug}`}>{c.label}</a>
+        ))}
+      </div>
+      <div class="mega__col">
+        <h4>More concerns</h4>
+        {concerns.slice(5).map((c) => (
+          <a class="mega__item" href={`/concerns#${c.slug}`}>{c.label}</a>
+        ))}
+      </div>
+      <div class="mega__col">
+        <h4>Start here</h4>
+        <a class="mega__item" href="/plan">Plan your treatment</a>
+        <a class="mega__item" href="/candidacy">Candidacy &amp; safety</a>
+        <a class="mega__item" href="/modalities">Modalities &amp; actives</a>
+        <a class="mega__item" href="/contact">Book a consult</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile drawer + scrim -->
+<div class="scrim" data-drawer-close></div>
+<aside class="drawer" aria-label="Menu">
+  {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+  <details>
+    <summary>Treatments</summary>
+    {families.map((f) => <a href={`/treatments#${f.slug}`}>{f.name}</a>)}
+  </details>
+  <a class="btn" href="/contact" style="margin-top:1.2rem">Book a consult</a>
+</aside>
+
+<script>
+  // Mega-menu (hover + click, keyboard accessible)
+  const triggers = document.querySelectorAll<HTMLButtonElement>('[data-mega]');
+  triggers.forEach((trigger) => {
+    const panel = document.getElementById(trigger.dataset.mega!);
+    if (!panel) return;
+    const open = () => { panel.classList.add('is-open'); trigger.setAttribute('aria-expanded', 'true'); };
+    const close = () => { panel.classList.remove('is-open'); trigger.setAttribute('aria-expanded', 'false'); };
+    trigger.addEventListener('click', () => panel.classList.contains('is-open') ? close() : open());
+    const host = trigger.closest('.nav');
+    host?.addEventListener('mouseenter', open);
+    host?.addEventListener('mouseleave', close);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  });
+
+  // Mobile drawer
+  const drawer = document.querySelector('.drawer');
+  const scrim = document.querySelector('.scrim');
+  const burger = document.querySelector('[data-drawer-open]');
+  const toggle = (open: boolean) => {
+    drawer?.classList.toggle('is-open', open);
+    scrim?.classList.toggle('is-open', open);
+    burger?.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  burger?.addEventListener('click', () => toggle(!drawer?.classList.contains('is-open')));
+  scrim?.addEventListener('click', () => toggle(false));
+</script>
