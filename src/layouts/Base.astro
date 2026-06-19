@@ -6,7 +6,8 @@ import { site } from '@data/site';
 
 interface Props { title?: string; description?: string; }
 const { title, description = site.description } = Astro.props;
-const fullTitle = title ? `${title} — ${site.brand} ${site.line}` : `${site.brand} — ${site.line}`;
+const fullName = `${site.line} at ${site.brand}`;
+const fullTitle = title ? `${title} · ${fullName}` : `${fullName} · ${site.tagline}`;
 ---
 <!doctype html>
 <html lang="en">

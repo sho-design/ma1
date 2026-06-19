@@ -5,9 +5,9 @@ import { concerns } from '@data/concerns';
 ---
 <header class="nav">
   <div class="wrap nav__inner">
-    <a class="brand" href="/" aria-label={`${site.brand} — ${site.line}`}>
-      <span class="brand__name">{site.brand}</span>
-      <span class="brand__line">{site.line}</span>
+    <a class="brand" href="/" aria-label={`${site.line} at ${site.brand}`}>
+      <span class="brand__name">{site.line}</span>
+      <span class="brand__line">at {site.brand}</span>
     </a>
 
     <nav aria-label="Primary">
