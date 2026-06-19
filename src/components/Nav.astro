@@ -1,100 +1,142 @@
 ---
-import { site, nav } from '@data/site';
+import { site } from '@data/site';
 import { families } from '@data/families';
 import { concerns } from '@data/concerns';
+import ConcernIcon from './ConcernIcon.astro';
+
+const treatmentFamilies = families.filter((f) => f.slug !== 'clinical');
 ---
-<header class="nav">
+<header class="nav" data-nav>
   <div class="wrap nav__inner">
     <a class="brand" href="/" aria-label={`${site.line} at ${site.brand}`}>
       <span class="brand__name">{site.line}</span>
       <span class="brand__line">at {site.brand}</span>
     </a>
 
-    <nav aria-label="Primary">
-      <ul class="nav__links">
-        <li>
-          <button class="nav__trigger" aria-expanded="false" aria-controls="mega-treatments" data-mega="mega-treatments">
-            Treatments <span class="nav__caret" aria-hidden="true"></span>
-          </button>
-        </li>
-        <li><a class="nav__link" href="/concerns">By Concern</a></li>
-        <li><a class="nav__link" href="/modalities">Modalities</a></li>
-        <li><a class="nav__link" href="/plan">Plan your treatment</a></li>
-        <li><a class="nav__link" href="/candidacy">Candidacy &amp; safety</a></li>
-        <li><a class="nav__link" href="/memberships">Memberships</a></li>
-        <li><a class="btn btn--ghost" href="/contact">Book a consult</a></li>
-      </ul>
+    <nav class="nav__links" aria-label="Primary">
+      <!-- By Concern -->
+      <div class="nav__has-panel" data-dropdown>
+        <button class="nav__link nav__trigger" aria-expanded="false" aria-controls="mega-concern" data-trigger>
+          By Concern
+          <svg class="nav__chev" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.3" /></svg>
+        </button>
+        <div class="mega" id="mega-concern" data-panel hidden>
+          <div class="mega__inner mega__inner--narrow wrap">
+            <ul class="mega__list mega__list--two">
+              {concerns.map((c) => (
+                <li>
+                  <a class="mega__item mega__item--concern" href={`/concerns#${c.slug}`} style={`--accent: var(--accent-${families.find((f) => f.slug === c.families[0])?.accentVar})`}>
+                    <ConcernIcon slug={c.icon} size={18} class="mega__cicon" />
+                    <span class="mega__name">{c.label}</span>
+                    <span class="mega__desc">{c.line}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Treatments -->
+      <div class="nav__has-panel" data-dropdown>
+        <button class="nav__link nav__trigger" aria-expanded="false" aria-controls="mega-treatments" data-trigger>
+          Treatments
+          <svg class="nav__chev" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.3" /></svg>
+        </button>
+        <div class="mega" id="mega-treatments" data-panel hidden>
+          <div class="mega__inner wrap">
+            <div>
+              <p class="mega__heading">Service families</p>
+              <ul class="mega__list mega__list--two">
+                {treatmentFamilies.map((f) => (
+                  <li>
+                    <a class="mega__item" href={`/treatments#${f.slug}`} style={`--accent: var(--accent-${f.accentVar})`}>
+                      <span class="mega__dot"></span>
+                      <span class="mega__name">{f.name}</span>
+                      <span class="mega__desc">{f.essence}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p class="mega__heading">Start here</p>
+              <ul class="mega__list">
+                <li><a class="mega__item mega__item--plain" href="/treatments"><span class="mega__name">All treatments</span></a></li>
+                <li><a class="mega__item mega__item--plain" href="/plan"><span class="mega__name">Plan your treatment</span></a></li>
+                <li><a class="mega__item mega__item--plain" href="/modalities"><span class="mega__name">Modalities &amp; actives</span></a></li>
+                <li><a class="mega__item mega__item--plain" href="/candidacy"><span class="mega__name">Candidacy &amp; safety</span></a></li>
+              </ul>
+            </div>
+          </div>
+          <p class="mega__foot">Every plan is screened first and finalised by your physician.</p>
+        </div>
+      </div>
+
+      <a class="nav__link" href="/modalities">Modalities</a>
+      <a class="nav__link" href="/candidacy">Candidacy</a>
+      <a class="nav__link" href="/memberships">Memberships</a>
+      <a class="nav__cta btn" href="/contact">Book a consult</a>
     </nav>
 
-    <button class="nav__burger" aria-label="Open menu" aria-expanded="false" data-drawer-open>
+    <button class="nav__burger" data-burger aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
-  </div>
-
-  <!-- Mega-menu: families + concerns -->
-  <div class="mega" id="mega-treatments" role="region" aria-label="Treatments">
-    <div class="wrap mega__grid">
-      <div class="mega__col">
-        <h4>Treatments</h4>
-        {families.map((f) => (
-          <a class="mega__item" href={`/treatments#${f.slug}`} style={`--accent: var(--accent-${f.accentVar})`}>
-            <span class="mega__dot"></span>{f.name}
-          </a>
-        ))}
-      </div>
-      <div class="mega__col">
-        <h4>By Concern</h4>
-        {concerns.slice(0, 5).map((c) => (
-          <a class="mega__item" href={`/concerns#${c.slug}`}>{c.label}</a>
-        ))}
-      </div>
-      <div class="mega__col">
-        <h4>More concerns</h4>
-        {concerns.slice(5).map((c) => (
-          <a class="mega__item" href={`/concerns#${c.slug}`}>{c.label}</a>
-        ))}
-      </div>
-      <div class="mega__col">
-        <h4>Start here</h4>
-        <a class="mega__item" href="/plan">Plan your treatment</a>
-        <a class="mega__item" href="/candidacy">Candidacy &amp; safety</a>
-        <a class="mega__item" href="/modalities">Modalities &amp; actives</a>
-        <a class="mega__item" href="/contact">Book a consult</a>
-      </div>
-    </div>
   </div>
 </header>
 
 <!-- Mobile drawer + scrim -->
 <div class="scrim" data-drawer-close></div>
 <aside class="drawer" aria-label="Menu">
-  {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+  <details>
+    <summary>By Concern</summary>
+    {concerns.map((c) => <a href={`/concerns#${c.slug}`}>{c.label}</a>)}
+  </details>
   <details>
     <summary>Treatments</summary>
-    {families.map((f) => <a href={`/treatments#${f.slug}`}>{f.name}</a>)}
+    {treatmentFamilies.map((f) => <a href={`/treatments#${f.slug}`}>{f.name}</a>)}
+    <a href="/treatments">All treatments</a>
   </details>
-  <a class="btn" href="/contact" style="margin-top:1.2rem">Book a consult</a>
+  <a href="/modalities">Modalities &amp; actives</a>
+  <a href="/plan">Plan your treatment</a>
+  <a href="/candidacy">Candidacy &amp; safety</a>
+  <a href="/memberships">Memberships</a>
+  <a class="btn drawer__cta" href="/contact">Book a consult</a>
 </aside>
 
 <script>
-  // Mega-menu (hover + click, keyboard accessible)
-  const triggers = document.querySelectorAll<HTMLButtonElement>('[data-mega]');
-  triggers.forEach((trigger) => {
-    const panel = document.getElementById(trigger.dataset.mega!);
-    if (!panel) return;
-    const open = () => { panel.classList.add('is-open'); trigger.setAttribute('aria-expanded', 'true'); };
-    const close = () => { panel.classList.remove('is-open'); trigger.setAttribute('aria-expanded', 'false'); };
-    trigger.addEventListener('click', () => panel.classList.contains('is-open') ? close() : open());
-    const host = trigger.closest('.nav');
-    host?.addEventListener('mouseenter', open);
-    host?.addEventListener('mouseleave', close);
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  const dropdowns = Array.from(document.querySelectorAll<HTMLElement>('[data-dropdown]'));
+  const closeAll = (except?: HTMLElement) => {
+    for (const d of dropdowns) {
+      if (d === except) continue;
+      d.classList.remove('is-open');
+      d.querySelector('[data-trigger]')?.setAttribute('aria-expanded', 'false');
+      d.querySelector('[data-panel]')?.setAttribute('hidden', '');
+    }
+  };
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  for (const d of dropdowns) {
+    const trigger = d.querySelector<HTMLButtonElement>('[data-trigger]');
+    const panel = d.querySelector<HTMLElement>('[data-panel]');
+    if (!trigger || !panel) continue;
+    const open = () => { closeAll(d); d.classList.add('is-open'); trigger.setAttribute('aria-expanded', 'true'); panel.removeAttribute('hidden'); };
+    const close = () => { d.classList.remove('is-open'); trigger.setAttribute('aria-expanded', 'false'); panel.setAttribute('hidden', ''); };
+    trigger.addEventListener('click', (e) => { e.preventDefault(); d.classList.contains('is-open') ? close() : open(); });
+    if (canHover) {
+      d.addEventListener('mouseenter', open);
+      d.addEventListener('mouseleave', close);
+    }
+  }
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); });
+  document.addEventListener('click', (e) => {
+    if (!(e.target as HTMLElement).closest('[data-dropdown]')) closeAll();
   });
 
   // Mobile drawer
   const drawer = document.querySelector('.drawer');
   const scrim = document.querySelector('.scrim');
-  const burger = document.querySelector('[data-drawer-open]');
+  const burger = document.querySelector('[data-burger]');
   const toggle = (open: boolean) => {
     drawer?.classList.toggle('is-open', open);
     scrim?.classList.toggle('is-open', open);
@@ -103,4 +145,5 @@ import { concerns } from '@data/concerns';
   };
   burger?.addEventListener('click', () => toggle(!drawer?.classList.contains('is-open')));
   scrim?.addEventListener('click', () => toggle(false));
+  drawer?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => toggle(false)));
 </script>
