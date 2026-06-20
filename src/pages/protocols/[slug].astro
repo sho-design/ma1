@@ -120,7 +120,7 @@ const breadcrumbLd = {
           <p class="sidecard__line">Take this protocol to a consult.</p>
           <p class="meta">We confirm candidacy and tailor each step to you.</p>
           <a class="btn sidecard__cta" href={bookHref}>Book a consult</a>
-          <button class="btn btn--ghost sidecard__plan" data-add-plan data-tx={txNames.join('|')} type="button">Add to my plan</button>
+          <button class="btn btn--ghost sidecard__plan" data-add-plan data-slugs={steps.map((s) => s.tx!.slug).join(',')} data-label-added="Protocol in plan" type="button">Add to my plan</button>
           {concern && <a class="link-arrow" href={`/concerns/${concern.slug}`}>More on {concern.label} &rarr;</a>}
           <p class="sidecard__member meta">Protocols often pair with a <a href="/memberships">membership</a>. We will walk you through it.</p>
         </div>

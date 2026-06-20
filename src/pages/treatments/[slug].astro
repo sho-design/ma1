@@ -259,6 +259,7 @@ const breadcrumbLd = {
             </fieldset>
           )}
           <a class="btn sidecard__cta" data-book data-tx={treatment.name} href="/contact">Book a consult</a>
+          <button class="btn btn--ghost sidecard__plan" data-add-plan data-slugs={treatment.slug} type="button">Add to my plan</button>
           <a class="link-arrow" href="/candidacy">Is this right for me? &rarr;</a>
           <p class="sidecard__member meta">Regulars can save with a <a href="/memberships">membership</a>. We will walk you through it at your consult.</p>
         </div>
@@ -355,6 +356,8 @@ const breadcrumbLd = {
   .sidecard--plain { background: var(--cloud); }
   .sidecard__line { font-family: var(--display); font-size: var(--step-1); line-height: 1.2; }
   .sidecard__cta { justify-content: center; margin-top: 0.4rem; }
+  .sidecard__plan { justify-content: center; }
+  .sidecard__plan.is-added { color: var(--accent-text); border-color: var(--accent); }
   .sidecard__list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.6rem; }
   .sidecard__goals { border: 0; padding: 0; margin: 0; display: grid; gap: 0.6rem; }
   .sidecard__goals legend { padding: 0; }

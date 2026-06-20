@@ -46,6 +46,11 @@ const txMap = Object.fromEntries(
           <div><dt>Downtime</dt><dd data-out="downtime">Not set</dd></div>
         </dl>
 
+        <div class="saved-head" data-saved-head hidden>
+          <p class="planner__label">Saved treatments</p>
+          <div class="saved" data-saved></div>
+        </div>
+
         <p class="planner__label">Suggested treatments</p>
         <div class="suggest" data-suggest>
           <p class="meta">Pick a goal to see related treatments.</p>
@@ -73,6 +78,12 @@ const txMap = Object.fromEntries(
   .suggest__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex: none; }
   .suggest__name { font-size: var(--step--1); }
   .suggest__arrow { margin-left: auto; color: var(--mist); font-family: var(--mono); font-size: 0.8rem; }
+  .saved { display: grid; gap: 0.35rem; }
+  .saved__row { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 0.6rem; margin-inline: -0.6rem; border-radius: var(--radius); }
+  .saved__name { font-size: var(--step--1); color: var(--ink); text-decoration: none; }
+  .saved__name:hover { color: var(--accent-text); }
+  .saved__rm { margin-left: auto; border: 0; background: none; color: var(--mist); font-size: 1.1rem; line-height: 1; cursor: pointer; padding: 0.1rem 0.3rem; border-radius: 6px; }
+  .saved__rm:hover { color: var(--ink); background: var(--cloud); }
   .planner__out { margin: 1.4rem 0; display: grid; gap: 0.9rem; border-top: 1px solid var(--line); padding-top: 1.4rem; }
   .planner__out dt { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--mist); }
   .planner__out dd { margin: 0.2rem 0 0; color: var(--ink); line-height: 1.5; }
@@ -80,14 +91,32 @@ const txMap = Object.fromEntries(
 </style>
 
 <script>
+  import { getPlan, removeFromPlan } from '../scripts/plan';
+
   type Info = { name: string; accent: string };
   const txMap: Record<string, Info> = JSON.parse(document.getElementById('tx-map')?.textContent || '{}');
   const form = document.querySelector('.planner__form');
   const cta = document.querySelector<HTMLAnchorElement>('[data-plan-cta]');
   const suggestBox = document.querySelector<HTMLElement>('[data-suggest]');
+  const savedBox = document.querySelector<HTMLElement>('[data-saved]');
+  const savedHead = document.querySelector<HTMLElement>('[data-saved-head]');
 
   const collect = (name: string) =>
     Array.from(document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`));
+
+  const renderSaved = () => {
+    const saved = getPlan().filter((s) => txMap[s]);
+    if (savedHead) savedHead.hidden = saved.length === 0;
+    if (savedBox) {
+      savedBox.innerHTML = saved
+        .map((slug) => {
+          const t = txMap[slug];
+          return `<div class="saved__row" style="--accent: var(--accent-${t.accent})"><span class="suggest__dot"></span><a class="saved__name" href="/treatments/${slug}">${t.name}</a><button class="saved__rm" type="button" data-rm="${slug}" aria-label="Remove ${t.name}">&times;</button></div>`;
+        })
+        .join('');
+    }
+    return saved;
+  };
 
   const update = () => {
     const goalEls = collect('goal');
@@ -119,12 +148,21 @@ const txMap = Object.fromEntries(
         : '<p class="meta">Pick a goal to see related treatments.</p>';
     }
 
+    // CTA carries saved treatments first, then goal-driven suggestions.
+    const saved = renderSaved();
+    const txSlugs = [...new Set([...saved, ...seen])];
     const params = new URLSearchParams();
     if (goals.length) params.set('goals', goals.join('|'));
     if (downtime.length) params.set('downtime', downtime[0]);
-    if (seen.length) params.set('tx', seen.map((s) => txMap[s].name).join('|'));
+    if (txSlugs.length) params.set('tx', txSlugs.map((s) => txMap[s].name).join('|'));
     if (cta) cta.href = `/contact${params.toString() ? `?${params}` : ''}`;
   };
+
+  savedBox?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-rm]');
+    if (btn) removeFromPlan(btn.dataset.rm!);
+  });
+  document.addEventListener('plan:change', update);
   form?.addEventListener('change', update);
   update();
 </script>
