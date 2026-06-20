@@ -26,7 +26,7 @@ const treatmentFamilies = families.filter((f) => f.slug !== 'clinical');
             <ul class="mega__list mega__list--two">
               {concerns.map((c) => (
                 <li>
-                  <a class="mega__item mega__item--concern" href={`/concerns#${c.slug}`} style={`--accent: var(--accent-${c.accent}-vivid); --accent-text: var(--accent-${c.accent}-text)`}>
+                  <a class="mega__item mega__item--concern" href={`/concerns/${c.slug}`} style={`--accent: var(--accent-${c.accent}-vivid); --accent-text: var(--accent-${c.accent}-text)`}>
                     <ConcernIcon slug={c.icon} size={18} class="mega__cicon" />
                     <span class="mega__name">{c.label}</span>
                     <span class="mega__desc">{c.line}</span>
@@ -94,7 +94,7 @@ const treatmentFamilies = families.filter((f) => f.slug !== 'clinical');
       <summary class="drawer__sum">By Concern</summary>
       <div class="drawer__panel drawer__cols">
         {concerns.map((c) => (
-          <a class="drawer__sublink" href={`/concerns#${c.slug}`} style={`--accent: var(--accent-${c.accent}-vivid)`}>
+          <a class="drawer__sublink" href={`/concerns/${c.slug}`} style={`--accent: var(--accent-${c.accent}-vivid)`}>
             <ConcernIcon slug={c.icon} size={20} class="drawer__cicon" />{c.label}
           </a>
         ))}

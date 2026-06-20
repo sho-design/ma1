@@ -6,7 +6,7 @@ const { concern } = Astro.props;
 const av = concern.accent;
 const style = `--accent: var(--accent-${av}); --accent-text: var(--accent-${av}-text); --accent-vivid: var(--accent-${av}-vivid)`;
 ---
-<a class="tile" id={concern.slug} href={`/concerns#${concern.slug}`} style={style}>
+<a class="tile" id={concern.slug} href={`/concerns/${concern.slug}`} style={style}>
   <span class="tile__icon" aria-hidden="true">
     <ConcernIcon slug={concern.icon} size={28} class="tile__cicon" />
   </span>

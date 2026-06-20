@@ -2,16 +2,14 @@
 import Base from '@layouts/Base.astro';
 import PageHeader from '@components/PageHeader.astro';
 import ConcernTile from '@components/ConcernTile.astro';
-import TreatmentCard from '@components/TreatmentCard.astro';
 import CtaBand from '@components/CtaBand.astro';
 import { concerns } from '@data/concerns';
-import { treatmentsByConcern } from '@data/treatments';
 ---
 <Base title="By Concern" description="Start with what you notice: fine lines, volume, texture, pigmentation, redness, laxity, hair, and aging well.">
   <PageHeader
     eyebrow="By Concern"
     title="Start with what you notice."
-    lead="An empathetic way in. Tell us the concern; we map it to the right modality, never the other way round."
+    lead="An empathetic way in. Tell us the concern; we map it to the right modality, never the other way round. Each opens its own page with the treatments and modalities we would consider."
     ripple
   />
 
@@ -22,24 +20,6 @@ import { treatmentsByConcern } from '@data/treatments';
       </div>
     </div>
   </section>
-
-  {concerns.map((c) => {
-    const items = treatmentsByConcern(c.slug);
-    if (!items.length) return null;
-    return (
-      <section class="section-tight" id={`${c.slug}-treatments`}>
-        <div class="wrap">
-          <header class="reveal" style="max-width:var(--measure)">
-            <span class="eyebrow">{c.label}</span>
-            <h2 style="font-size:var(--step-2)">{c.line}</h2>
-          </header>
-          <div class="grid grid--cards reveal" style="margin-top:1.6rem">
-            {items.map((t) => <TreatmentCard treatment={t} />)}
-          </div>
-        </div>
-      </section>
-    );
-  })}
 
   <CtaBand />
 </Base>

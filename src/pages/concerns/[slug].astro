@@ -1,0 +1,100 @@
+---
+import Base from '@layouts/Base.astro';
+import PageHeader from '@components/PageHeader.astro';
+import TreatmentCard from '@components/TreatmentCard.astro';
+import EvidenceTag from '@components/EvidenceTag.astro';
+import Advisory from '@components/Advisory.astro';
+import CtaBand from '@components/CtaBand.astro';
+import { concerns, type Concern } from '@data/concerns';
+import { treatmentsByConcern } from '@data/treatments';
+import { modalities } from '@data/modalities';
+
+export function getStaticPaths() {
+  return concerns.map((c) => ({ params: { slug: c.slug }, props: { concern: c } }));
+}
+
+interface Props { concern: Concern; }
+const { concern } = Astro.props;
+const av = concern.accent;
+const accent = `--accent: var(--accent-${av}); --accent-text: var(--accent-${av}-text); --accent-vivid: var(--accent-${av}-vivid)`;
+
+const treats = treatmentsByConcern(concern.slug);
+const activeSlugs = [...new Set(treats.flatMap((t) => t.actives))];
+const acts = modalities.filter((m) => activeSlugs.includes(m.slug));
+---
+<Base title={concern.label} description={`${concern.label}: ${concern.line}`}>
+  <div style={accent} class="concern-page">
+    <PageHeader eyebrow="By Concern" title={concern.headline} lead={concern.line} ripple />
+
+    <!-- How we may help -->
+    <section class="section-tight">
+      <div class="wrap-narrow reveal">
+        <span class="eyebrow">How we may help</span>
+        <p class="lede" style="margin-top:0.6rem">{concern.help}</p>
+        <Advisory title="Honest by default">
+          What helps varies from person to person. We screen for candidacy and your
+          physician finalises any plan. Results vary.
+        </Advisory>
+      </div>
+    </section>
+
+    <!-- Treatments to consider -->
+    {treats.length > 0 && (
+      <section class="section-tight fill">
+        <div class="wrap">
+          <header class="section-head reveal">
+            <span class="eyebrow">Treatments to consider</span>
+            <h2>A few good places to start.</h2>
+          </header>
+          <div class="grid grid--cards reveal" style="margin-top:2rem">
+            {treats.map((t) => <TreatmentCard treatment={t} />)}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Modalities / actives -->
+    {acts.length > 0 && (
+      <section class="section-tight">
+        <div class="wrap">
+          <header class="section-head reveal">
+            <span class="eyebrow">Modalities &amp; actives</span>
+            <h2>What does the work.</h2>
+          </header>
+          <ul class="actives reveal">
+            {acts.map((m) => (
+              <li class="actives__row">
+                <div class="actives__main">
+                  <span class="actives__dot" aria-hidden="true"></span>
+                  <div>
+                    <h3 class="actives__name">{m.name}</h3>
+                    <p class="actives__may">{m.maySupport}</p>
+                  </div>
+                </div>
+                <div class="actives__meta">
+                  <EvidenceTag level={m.evidence} />
+                  <span class="meta">Downtime: {m.downtime}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <p style="margin-top:1.6rem"><a class="link-arrow" href="/modalities">All modalities &amp; actives &rarr;</a></p>
+        </div>
+      </section>
+    )}
+
+    <CtaBand title="Let’s look at what fits you." body="Bring this concern to a consult. We screen first and tailor to you, and your physician finalises the plan." />
+  </div>
+</Base>
+
+<style>
+  .concern-page .section-head h2 { font-size: var(--step-3); }
+  .actives { list-style: none; margin: 1.5rem 0 0; padding: 0; border-top: 1px solid var(--line); }
+  .actives__row { display: flex; justify-content: space-between; gap: var(--space-m); flex-wrap: wrap; padding: var(--space-s) 0; border-bottom: 1px solid var(--line); }
+  .actives__main { display: flex; gap: 0.9rem; max-width: 60ch; }
+  .actives__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); flex: none; margin-top: 0.5rem; }
+  .actives__name { font-size: var(--step-1); margin: 0 0 0.2rem; }
+  .actives__may { color: var(--graphite); margin: 0; }
+  .actives__meta { display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end; text-align: right; min-width: 220px; }
+  @media (max-width: 640px) { .actives__meta { align-items: flex-start; text-align: left; } }
+</style>
