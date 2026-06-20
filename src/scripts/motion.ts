@@ -45,8 +45,12 @@ function initDroplet() {
   const spawnSparkle = (px: number, py: number, accent: string) => {
     const s = document.createElement('div');
     s.className = 'sparkle';
-    s.style.left = `${px + (Math.random() - 0.5) * 22}px`;
-    s.style.top = `${py + (Math.random() - 0.5) * 22}px`;
+    const size = 7 + Math.random() * 14; // 7–21px, so sparkles vary in size
+    s.style.width = `${size}px`;
+    s.style.height = `${size}px`;
+    s.style.margin = `${-size / 2}px 0 0 ${-size / 2}px`;
+    s.style.left = `${px + (Math.random() - 0.5) * 24}px`;
+    s.style.top = `${py + (Math.random() - 0.5) * 24}px`;
     if (accent) s.style.setProperty('--spark', accent);
     document.body.appendChild(s);
     s.addEventListener('animationend', () => s.remove());
