@@ -32,6 +32,8 @@ export const goalGroups: GoalGroup[] = [
       { label: 'Oily skin', treatments: ['hydrafacial', 'medical-peel', 'skin-health-plan'] },
       { label: 'Dry / dehydrated skin', treatments: ['hydrafacial', 'vamp-glass-facial', 'skin-health-plan'] },
       { label: 'Redness / rosacea / sensitivity', treatments: ['clarity-ii', 'vascular-lesions', 'skin-health-plan'] },
+      { label: 'Facial veins / broken capillaries', treatments: ['clarity-ii', 'vascular-lesions'] },
+      { label: 'Crepey skin', treatments: ['xerf', 'eco2', 'biostimulator'] },
     ],
   },
   {
@@ -42,6 +44,10 @@ export const goalGroups: GoalGroup[] = [
       { label: 'Thin lips / lip enhancement', treatments: ['dermal-filler'] },
       { label: 'Nasolabial folds (smile lines)', treatments: ['dermal-filler', 'biostimulator'] },
       { label: 'Marionette lines', treatments: ['dermal-filler', 'neuromodulator'] },
+      { label: 'Gummy smile', treatments: ['neuromodulator'] },
+      { label: 'Lip flip', treatments: ['neuromodulator'] },
+      { label: 'Hooded / heavy eyelids', treatments: ['plexr-blepharoplasty'] },
+      { label: 'Brow position / heavy brows', treatments: ['neuromodulator'] },
     ],
   },
   {
@@ -50,6 +56,7 @@ export const goalGroups: GoalGroup[] = [
       { label: 'Jawline definition', treatments: ['dermal-filler', 'biostimulator', 'neuromodulator'] },
       { label: 'Chin projection / weak chin', treatments: ['dermal-filler'] },
       { label: 'Facial contouring', treatments: ['dermal-filler', 'biostimulator'] },
+      { label: 'Jaw slimming / teeth grinding', treatments: ['neuromodulator'] },
     ],
   },
   {
@@ -64,6 +71,9 @@ export const goalGroups: GoalGroup[] = [
       { label: 'Scars', treatments: ['eco2', 'picosure', 'xerf'] },
       { label: 'Buttock contouring', treatments: ['biostimulator', 'xerf'] },
       { label: 'Hip dips', treatments: ['dermal-filler', 'biostimulator'] },
+      { label: 'Excessive sweating (hyperhidrosis)', treatments: ['neuromodulator'] },
+      { label: 'Neck bands', treatments: ['neuromodulator'] },
+      { label: 'Tattoo removal', treatments: ['picosure'] },
     ],
   },
   {
