@@ -1,14 +1,14 @@
-// Service families for the Medical Aesthetics line (DESIGN_SYSTEM §6.1, §6.3).
-// Accents are referenced by token name, one source of colour, never hard-coded
-// hex in components (DESIGN_SYSTEM §7).
+// Service families for the Medical Aesthetics line (DESIGN_SYSTEM §6.1).
+// Mapped to the real Restoration Medical menu. Slugs and accent tokens are kept
+// stable; only the names/essences reflect the actual categories.
 
 export type FamilySlug =
   | 'injectables'
-  | 'skin'
-  | 'energy'
   | 'body'
-  | 'health'
-  | 'clinical';
+  | 'energy'
+  | 'clinical'
+  | 'skin'
+  | 'health';
 
 export interface Family {
   slug: FamilySlug;
@@ -24,44 +24,44 @@ export const families: Family[] = [
   {
     slug: 'injectables',
     name: 'Injectables',
-    essence: 'Neuromodulators and dermal fillers: softening, balancing, restoring.',
+    essence: 'Neuromodulators, dermal fillers, and biostimulators, by injector.',
     accentVar: 'injectables',
     reads: 'refined, considered',
   },
   {
-    slug: 'skin',
-    name: 'Skin & Resurfacing',
-    essence: 'Peels, microneedling, and resurfacing for texture and renewal.',
-    accentVar: 'skin',
+    slug: 'body',
+    name: 'Regenerative & Boosters',
+    essence: 'PDRN, exosomes, PRP and PRF, micro-infused or injected for radiance.',
+    accentVar: 'body',
     reads: 'renewal',
   },
   {
     slug: 'energy',
     name: 'Energy & Laser',
-    essence: 'IPL, radiofrequency, and laser: light and energy, precisely placed.',
+    essence: 'RF microneedling and laser: XERF, eCO₂, PicoSure and Clarity II.',
     accentVar: 'energy',
     reads: 'light / energy',
   },
   {
-    slug: 'body',
-    name: 'Body & Contour',
-    essence: 'Non-surgical contouring and skin tightening for the body.',
-    accentVar: 'body',
-    reads: 'natural',
+    slug: 'clinical',
+    name: 'Plasma & Lesions',
+    essence: 'PlexR® Plus plasma soft surgery and vascular or lesion removal.',
+    accentVar: 'clinical',
+    reads: 'medical',
+  },
+  {
+    slug: 'skin',
+    name: 'Facials & Peels',
+    essence: 'HydraFacial®, medical peels, and prep facials in a clinical setting.',
+    accentVar: 'skin',
+    reads: 'glow',
   },
   {
     slug: 'health',
     name: 'Skin Health',
-    essence: 'Medical-grade actives and routines, prescribed and reviewed.',
+    essence: 'SkinCeuticals® medical-grade actives, prescribed and reviewed.',
     accentVar: 'health',
     reads: 'clarity',
-  },
-  {
-    slug: 'clinical',
-    name: 'Clinical / Consult',
-    essence: 'Medical dermatology and scar revision: the clinic, not the counter.',
-    accentVar: 'clinical',
-    reads: 'medical',
   },
 ];
 

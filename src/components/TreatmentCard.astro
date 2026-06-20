@@ -10,10 +10,13 @@ const accent = fam
   : '';
 ---
 <article class="card" style={accent}>
-  <span class="card__family">{fam?.name}</span>
+  <span class="card__family">{treatment.brand ?? fam?.name}</span>
   <h3 class="card__name">{treatment.name}</h3>
   <p class="card__essence">{treatment.essence}</p>
-  <div class="card__actives">
-    {treatment.actives.map((slug) => <ActiveChip slug={slug} />)}
+  <div class="card__foot">
+    <div class="card__actives">
+      {treatment.actives.map((slug) => <ActiveChip slug={slug} />)}
+    </div>
+    <span class="card__price">{treatment.price}</span>
   </div>
 </article>

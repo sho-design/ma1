@@ -1,0 +1,119 @@
+---
+import Base from '@layouts/Base.astro';
+import PageHeader from '@components/PageHeader.astro';
+import CtaBand from '@components/CtaBand.astro';
+import Advisory from '@components/Advisory.astro';
+import { families } from '@data/families';
+import { treatmentsByFamily } from '@data/treatments';
+import { site } from '@data/site';
+---
+<Base title="Menu & pricing" description="The Restoration Medical aesthetics menu: injectables, regenerative boosters, energy and laser, plasma, facials and skin health, with list pricing.">
+  <PageHeader
+    eyebrow="Menu & pricing"
+    title="The Menu."
+    lead="Delivered under physician supervision by our Registered Nurses, Registered Practical Nurses and physicians. Every treatment begins with a complimentary consultation and a written plan."
+    ripple
+  />
+
+  <section class="section-tight">
+    <div class="wrap-narrow">
+      <Advisory title="A note on the “Baby” tier">
+        A “Baby” option is offered on select laser treatments: a lighter,
+        lower-commitment session, ideal for first-timers and maintenance.
+      </Advisory>
+    </div>
+  </section>
+
+  {families.map((fam) => {
+    const items = treatmentsByFamily(fam.slug);
+    if (!items.length) return null;
+    return (
+      <section
+        class="section-tight menu-fam"
+        id={fam.slug}
+        style={`--accent: var(--accent-${fam.accentVar}); --accent-text: var(--accent-${fam.accentVar}-text)`}
+      >
+        <div class="wrap">
+          <header class="reveal" style="max-width:var(--measure)">
+            <span class="eyebrow">{fam.name}</span>
+            <p class="lede" style="margin-top:0.4rem">{fam.essence}</p>
+          </header>
+
+          <div class="menu-list reveal">
+            {items.map((t) => (
+              <article class="menu-item">
+                <div class="menu-item__head">
+                  <div>
+                    {t.brand && <span class="menu-item__brand">{t.brand}</span>}
+                    <h3 class="menu-item__name">{t.name}</h3>
+                  </div>
+                  <span class="menu-item__price">{t.price}</span>
+                </div>
+                <p class="menu-item__essence">{t.essence}</p>
+
+                {t.variants && (
+                  <ul class="menu-rows">
+                    {t.variants.map((v) => (
+                      <li class="menu-row">
+                        <span class="menu-row__label">
+                          {v.label}
+                          {v.note && <span class="menu-row__note">{v.note}</span>}
+                        </span>
+                        <span class="menu-row__meta">
+                          {v.time && <span class="meta">{v.time}</span>}
+                          <span class="menu-row__price">{v.price}</span>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                <div class="menu-item__foot">
+                  {t.time && !t.variants && <span class="meta">{t.time}</span>}
+                  {t.series && <span class="meta">{t.series}</span>}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  })}
+
+  <section class="section-tight">
+    <div class="wrap-narrow">
+      <p class="meta">
+        All treatments require consultation and medical screening. Prices are
+        subject to change. {site.locations.map((l) => l.city).join(' · ')}.
+      </p>
+    </div>
+  </section>
+
+  <CtaBand title="Start with a complimentary consult." body="Every plan begins with screening and a written plan. Your physician finalises what is right for you." />
+</Base>
+
+<style>
+  .menu-fam + .menu-fam { border-top: 1px solid var(--line); }
+  .menu-list { margin-top: 2rem; display: grid; gap: var(--space-m); }
+  .menu-item {
+    background-color: var(--white-pure);
+    background-image: var(--gloss-white);
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--accent);
+    border-radius: var(--radius);
+    padding: var(--space-m);
+  }
+  .menu-item__head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+  .menu-item__brand { font-family: var(--mono); font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent-text); }
+  .menu-item__name { font-family: var(--display); font-size: var(--step-2); margin: 0.2rem 0 0; }
+  .menu-item__price { font-family: var(--display); font-size: var(--step-2); color: var(--ink); white-space: nowrap; }
+  .menu-item__essence { color: var(--graphite); max-width: var(--measure); margin: 0.7rem 0 0; }
+  .menu-rows { list-style: none; padding: 0; margin: 1.1rem 0 0; border-top: 1px solid var(--line); }
+  .menu-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
+  .menu-row__label { display: flex; flex-direction: column; gap: 0.15rem; color: var(--ink); }
+  .menu-row__note { color: var(--mist); font-size: var(--step--1); }
+  .menu-row__meta { display: inline-flex; align-items: baseline; gap: 1rem; white-space: nowrap; }
+  .menu-row__price { font-family: var(--display); font-size: var(--step-1); }
+  .menu-item__foot { display: flex; gap: 1.4rem; flex-wrap: wrap; margin-top: 0.9rem; }
+  @media (max-width: 560px) { .menu-row { flex-direction: column; gap: 0.2rem; } }
+</style>
