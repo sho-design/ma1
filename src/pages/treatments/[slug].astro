@@ -1,10 +1,6 @@
 ---
 import Base from '@layouts/Base.astro';
-import PageHeader from '@components/PageHeader.astro';
 import TreatmentCard from '@components/TreatmentCard.astro';
-import EvidenceTag from '@components/EvidenceTag.astro';
-import Advisory from '@components/Advisory.astro';
-import CtaBand from '@components/CtaBand.astro';
 import { treatments, treatmentsByFamily, type Treatment } from '@data/treatments';
 import { familyBySlug } from '@data/families';
 import { modalities } from '@data/modalities';
@@ -22,6 +18,8 @@ const av = fam?.accentVar ?? 'injectables';
 const accent = `--accent: var(--accent-${av}); --accent-text: var(--accent-${av}-text); --accent-vivid: var(--accent-${av}-vivid)`;
 
 const acts = modalities.filter((m) => treatment.actives.includes(m.slug));
+const supports = [...new Set(acts.map((m) => m.maySupport))];
+const whatItIs = acts.map((m) => m.essence).join(' ') || treatment.essence;
 const relatedConcerns = concerns.filter((c) => treatment.concerns.includes(c.slug));
 const related = treatmentsByFamily(treatment.family).filter((t) => t.slug !== treatment.slug).slice(0, 3);
 
@@ -39,125 +37,171 @@ const jsonLd = {
 };
 ---
 <Base title={treatment.name} description={`${treatment.name}: ${treatment.essence}`}>
-  <div style={accent} class="tx-page">
-    <PageHeader eyebrow={treatment.brand ?? fam?.name} title={treatment.name} lead={treatment.essence} ripple />
-
-    <section class="section-tight">
-      <div class="wrap-narrow reveal">
-        <div class="tx-facts">
-          {fam && <a class="tx-fact" href={`/treatments#${fam.slug}`}>{fam.name}</a>}
-          {treatment.time && <span class="tx-fact">{treatment.time}</span>}
-          {treatment.series && <span class="tx-fact">{treatment.series}</span>}
-          {acts.map((m) => <EvidenceTag level={m.evidence} />)}
-        </div>
+  <article class="detail" style={accent}>
+    <header class="detail__head reveal">
+      <div class="wrap">
+        <a class="detail__back link-arrow" href="/treatments">&larr; All treatments</a>
+        <p class="eyebrow detail__eyebrow">
+          <span class="detail__dot" aria-hidden="true"></span>
+          {fam?.name}{treatment.brand && <> · {treatment.brand}</>}
+        </p>
+        <h1 class="detail__title ripple">{treatment.name}</h1>
+        <p class="lede detail__essence">{treatment.essence}</p>
       </div>
-    </section>
+    </header>
 
-    {relatedConcerns.length > 0 && (
-      <section class="section-tight">
-        <div class="wrap-narrow reveal">
-          <span class="eyebrow">What it helps</span>
-          <div class="tx-chips">
-            {relatedConcerns.map((c) => (
-              <a class="tx-chip" href={`/concerns/${c.slug}`} style={`--accent: var(--accent-${c.accent}-vivid)`}>
-                <span class="tx-chip__dot"></span>{c.label}
-              </a>
-            ))}
+    <div class="wrap detail__grid">
+      <div class="detail__main">
+        <section class="reveal detail__block">
+          <h2 class="detail__h">What it is</h2>
+          <p class="detail__p measure">{whatItIs}</p>
+        </section>
+
+        {supports.length > 0 && (
+          <section class="reveal detail__block">
+            <h2 class="detail__h">Designed to support</h2>
+            <ul class="supports">
+              {supports.map((s) => (
+                <li class="supports__item"><span class="supports__tick" aria-hidden="true"></span>{s}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {acts.length > 0 && (
+          <section class="reveal detail__block">
+            <p class="eyebrow ix__heading">What does the work</p>
+            <ul class="ix__list">
+              {acts.map((m) => (
+                <li>
+                  <a class="ix" href={`/modalities#${m.slug}`}>
+                    <span class="ix__dot" aria-hidden="true"></span>
+                    <span class="ix__name">{m.name}</span>
+                    <span class="ix__line">{m.essence}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <p class="ix__note meta">Each active is held to an honest, evidence-rated standard. A consult and screening confirm what is right for you.</p>
+          </section>
+        )}
+
+        {treatment.variants && (
+          <section class="reveal detail__block">
+            <h2 class="detail__h">Options</h2>
+            <ul class="opts">
+              {treatment.variants.map((v) => (
+                <li class="opts__row">
+                  <span class="opts__label">{v.label}{v.note && <span class="opts__note">{v.note}</span>}</span>
+                  {v.time && <span class="meta">{v.time}</span>}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <section class="reveal detail__block">
+          <h2 class="detail__h">What to expect</h2>
+          <p class="detail__p measure">
+            We confirm the right approach at your complimentary consult.
+            {treatment.series && <> {treatment.series}</>}
+            {acts[0] && <> Downtime: {acts[0].downtime}</>}
+          </p>
+        </section>
+
+        <section class="reveal detail__block detail__note">
+          <h2 class="detail__h">Good to know</h2>
+          <p class="detail__p measure">
+            We describe what {treatment.name} may support, never a guaranteed
+            outcome. It is an elective medical service, delivered under physician
+            supervision. Results vary and are confirmed in person.
+          </p>
+        </section>
+      </div>
+
+      <aside class="detail__side reveal">
+        <div class="sidecard">
+          <p class="eyebrow">Begin</p>
+          <p class="sidecard__line">A consult confirms this is right for you.</p>
+          <a class="btn sidecard__cta" href="/contact">Book a consult</a>
+          <a class="link-arrow" href="/candidacy">Is this right for me? &rarr;</a>
+        </div>
+        {relatedConcerns.length > 0 && (
+          <div class="sidecard sidecard--plain">
+            <p class="eyebrow">Helps with</p>
+            <ul class="sidecard__list">
+              {relatedConcerns.map((c) => (
+                <li><a class="link-arrow" href={`/concerns/${c.slug}`}>{c.label} &rarr;</a></li>
+              ))}
+            </ul>
           </div>
-        </div>
-      </section>
-    )}
-
-    {treatment.variants && (
-      <section class="section-tight fill">
-        <div class="wrap-narrow">
-          <header class="reveal"><span class="eyebrow">Options</span><h2>How it is offered.</h2></header>
-          <ul class="tx-opts reveal">
-            {treatment.variants.map((v) => (
-              <li class="tx-opt">
-                <span class="tx-opt__label">{v.label}{v.note && <span class="tx-opt__note">{v.note}</span>}</span>
-                {v.time && <span class="meta">{v.time}</span>}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-    )}
-
-    {acts.length > 0 && (
-      <section class="section-tight">
-        <div class="wrap-narrow">
-          <header class="reveal"><span class="eyebrow">What does the work</span><h2>The active behind it.</h2></header>
-          <ul class="tx-acts reveal">
-            {acts.map((m) => (
-              <li class="tx-act">
-                <div class="tx-act__main">
-                  <span class="tx-act__dot" aria-hidden="true"></span>
-                  <div>
-                    <h3 class="tx-act__name">{m.name}</h3>
-                    <p class="tx-act__essence">{m.essence}</p>
-                    <p class="tx-act__may"><strong>May support:</strong> {m.maySupport}</p>
-                  </div>
-                </div>
-                <div class="tx-act__meta">
-                  <EvidenceTag level={m.evidence} />
-                  <span class="meta">Downtime: {m.downtime}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-    )}
-
-    <section class="section-tight">
-      <div class="wrap-narrow reveal">
-        <Advisory title="Honest by default">
-          Whether this is right for you is confirmed in person. We screen for
-          candidacy and your physician finalises any plan. Results vary, and we
-          never guarantee outcomes.
-        </Advisory>
-      </div>
-    </section>
+        )}
+      </aside>
+    </div>
 
     {related.length > 0 && (
       <section class="section-tight fill">
         <div class="wrap">
-          <header class="section-head reveal"><span class="eyebrow">{fam?.name}</span><h2>Related treatments.</h2></header>
-          <div class="grid grid--cards reveal" style="margin-top:2rem">
+          <div class="reveal sec-head">
+            <p class="eyebrow">{fam?.name}</p>
+            <h2 class="detail__related-h">Often chosen together.</h2>
+          </div>
+          <div class="related reveal">
             {related.map((t) => <TreatmentCard treatment={t} />)}
           </div>
-          <p style="margin-top:1.6rem"><a class="link-arrow" href="/treatments">All treatments &rarr;</a></p>
         </div>
       </section>
     )}
-
-    <CtaBand title="Is this right for you?" body="Bring it to a complimentary consult. We screen first and tailor to you, and your physician finalises the plan." />
-  </div>
+  </article>
 
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
 </Base>
 
 <style>
-  .tx-page .section-head h2, .tx-page header h2 { font-size: var(--step-3); }
-  .tx-facts { display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; align-items: center; }
-  .tx-fact { font-family: var(--mono); font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.08em; color: var(--mist); text-decoration: none; }
-  a.tx-fact { color: var(--accent-text); }
-  .tx-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
-  .tx-chip { display: inline-flex; align-items: center; gap: 0.5em; font-size: var(--step--1); color: var(--graphite); border: 1px solid var(--line); border-radius: 999px; padding: 0.35em 0.85em; text-decoration: none; transition: border-color var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease); }
-  .tx-chip__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
-  .tx-chip:hover { border-color: var(--accent); color: var(--ink); }
-  .tx-opts, .tx-acts { list-style: none; padding: 0; margin: 1.5rem 0 0; border-top: 1px solid var(--line); }
-  .tx-opt { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
-  .tx-opt__label { display: flex; flex-direction: column; gap: 0.15rem; color: var(--ink); }
-  .tx-opt__note { color: var(--mist); font-size: var(--step--1); }
-  .tx-act { display: flex; justify-content: space-between; gap: var(--space-m); flex-wrap: wrap; padding: var(--space-s) 0; border-bottom: 1px solid var(--line); }
-  .tx-act__main { display: flex; gap: 0.9rem; max-width: 60ch; }
-  .tx-act__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); flex: none; margin-top: 0.5rem; }
-  .tx-act__name { font-size: var(--step-1); margin: 0 0 0.2rem; }
-  .tx-act__essence { color: var(--graphite); margin: 0 0 0.3rem; }
-  .tx-act__may { color: var(--mist); font-size: var(--step--1); margin: 0; }
-  .tx-act__may strong { color: var(--accent-text); }
-  .tx-act__meta { display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end; text-align: right; min-width: 220px; }
-  @media (max-width: 640px) { .tx-act__meta { align-items: flex-start; text-align: left; } }
+  .detail__head { padding-top: var(--space-l); padding-bottom: var(--space-m); border-bottom: 1px solid var(--line); background: linear-gradient(to top, color-mix(in srgb, var(--accent) 13%, transparent), transparent 60%); }
+  .detail__back { display: inline-block; margin-bottom: 1.4rem; }
+  .detail__eyebrow { color: var(--accent-text); margin-bottom: 1.2rem; display: inline-flex; align-items: center; gap: 0.6em; }
+  .detail__eyebrow::before { display: none; }
+  .detail__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+  .detail__title { font-family: var(--display); font-weight: 400; letter-spacing: -0.015em; line-height: 1.04; font-size: var(--step-4); margin: 0; }
+  .detail__essence { margin-top: 1.4rem; }
+
+  .detail__grid { display: grid; grid-template-columns: 1fr 320px; gap: 3rem; padding-block: var(--space-l); }
+  .detail__main { display: grid; gap: var(--space-l); }
+  .detail__h { font-size: var(--step-2); margin-bottom: 1rem; }
+  .detail__p { color: var(--graphite); }
+
+  .supports { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.8rem; max-width: var(--measure); }
+  .supports__item { display: grid; grid-template-columns: auto 1fr; gap: 0.8rem; align-items: baseline; color: var(--graphite); }
+  .supports__tick { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); transform: translateY(-1px); }
+
+  .ix__heading { margin-bottom: 1.2rem; }
+  .ix__list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.6rem; }
+  .ix { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 0.7rem; border: 1px solid var(--line); border-radius: var(--radius); padding: 0.7rem 0.9rem; text-decoration: none; transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease); }
+  .ix__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); grid-row: span 2; align-self: center; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
+  .ix__name { color: color-mix(in srgb, var(--accent) 70%, var(--ink)); font-size: var(--step-0); }
+  .ix__line { grid-column: 2; font-family: var(--mono); font-size: 0.72rem; color: var(--mist); letter-spacing: 0.01em; }
+  .ix:hover { border-color: var(--accent); }
+  .ix__note { margin-top: 1.2rem; }
+
+  .opts { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); max-width: var(--measure); }
+  .opts__row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
+  .opts__label { display: flex; flex-direction: column; gap: 0.15rem; color: var(--ink); }
+  .opts__note { color: var(--mist); font-size: var(--step--1); }
+
+  .detail__side { align-self: start; position: sticky; top: calc(var(--header-h) + 1.5rem); display: grid; gap: 1rem; }
+  .sidecard { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem 1.5rem; display: grid; gap: 0.8rem; background: var(--paper); }
+  .sidecard--plain { background: var(--cloud); }
+  .sidecard__line { font-family: var(--display); font-size: var(--step-1); line-height: 1.2; }
+  .sidecard__cta { justify-content: center; margin-top: 0.4rem; }
+  .sidecard__list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.6rem; }
+
+  .sec-head { max-width: 60ch; margin-bottom: var(--space-m); display: grid; gap: 1rem; }
+  .detail__related-h { font-size: var(--step-3); }
+  .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; }
+
+  @media (max-width: 900px) {
+    .detail__grid { grid-template-columns: 1fr; gap: 2rem; }
+    .detail__side { position: static; }
+  }
 </style>
