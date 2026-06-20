@@ -42,6 +42,15 @@
   --accent-clinical: #8c3b3b;          /* shared clinical accent */
   --accent-clinical-text: #7a3030;
 
+  /* Vivid variants — used only for concern icons, where a little more
+     saturation reads better (siblings of the muted line accents). */
+  --accent-injectables-vivid: #b85c8a;
+  --accent-skin-vivid: #cc6b4a;
+  --accent-energy-vivid: #cf9e1f;
+  --accent-body-vivid: #6e9b4e;
+  --accent-health-vivid: #2e8a8c;
+  --accent-clinical-vivid: #b0413f;
+
   /* the "current line" accent, overridden per family via [data-family] */
   --accent: var(--accent-injectables);
   --accent-text: var(--accent-injectables-text);
@@ -355,31 +364,38 @@ img, svg, canvas { display: block; max-width: 100%; }
 .chip:hover { border-color: var(--accent); color: var(--accent-text); }
 .chip:hover .chip__dot { background: var(--accent); }
 
-/* ---- ConcernTile (liquid-drop border) ------------------------------------ */
-.concern {
+/* ---- ConcernTile (.tile) -------------------------------------------------- */
+.tile {
   position: relative;
-  display: flex; flex-direction: column; gap: 0.6rem;
-  padding: var(--space-m);
-  background: var(--paper);
-  border-radius: var(--radius);
+  display: flex; flex-direction: column; gap: 0.5rem;
+  padding: 1.6rem 1.5rem;
+  background-color: var(--white-pure);
+  background-image: var(--gloss-white), var(--sparkle);
   border: 1px solid var(--line);
+  border-radius: var(--radius);
+  text-decoration: none;
   overflow: hidden;
-  transition: transform var(--dur-hover) var(--ease);
+  transition: transform var(--dur-hover) var(--ease), box-shadow var(--dur-hover) var(--ease);
 }
-.concern:hover { transform: translateY(-3px); }
-.concern__icon { color: var(--accent); }
-.concern__label { font-family: var(--display); font-size: var(--step-1); }
-.concern__line { color: var(--mist); font-size: var(--step--1); }
-/* travelling drop on the edge */
-.concern__drop { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); top: -4px; left: -4px; opacity: 0; box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 60%, transparent); }
-.concern:hover .concern__drop { opacity: 1; animation: drop-travel 2.4s var(--ease) infinite; }
-@keyframes drop-travel {
-  0%   { top: -4px; left: -4px; }
-  25%  { top: -4px; left: calc(100% - 4px); }
-  50%  { top: calc(100% - 4px); left: calc(100% - 4px); }
-  75%  { top: calc(100% - 4px); left: -4px; }
-  100% { top: -4px; left: -4px; }
+/* accent ring revealed on hover (mask leaves only the border) */
+.tile::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 2px;
+  background: var(--accent);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0; transition: opacity var(--dur-hover) var(--ease); pointer-events: none;
 }
+.tile > * { position: relative; z-index: 1; }
+.tile__icon { color: var(--accent-vivid, var(--accent)); line-height: 0; margin-bottom: 0.3rem; transition: transform var(--dur-hover) var(--ease); }
+.tile__label { font-family: var(--display); font-size: var(--step-1); line-height: 1.15; color: var(--ink); }
+.tile__line { color: var(--graphite); font-size: var(--step--1); line-height: 1.5; flex: 1; }
+.tile__more { border-color: transparent; margin-top: 0.5rem; }
+.tile:hover { transform: translateY(-2px); box-shadow: 0 18px 30px -24px rgba(26,27,29,0.25); }
+.tile:hover::before { opacity: 0.55; }
+.tile:hover .tile__icon { transform: translateY(-2px); }
+.tile:hover .tile__more { color: var(--accent-text); border-color: var(--accent); }
 
 /* ---- PageHeader ----------------------------------------------------------- */
 .page-header { padding-block: var(--space-l) var(--space-m); }
@@ -483,7 +499,7 @@ img, svg, canvas { display: block; max-width: 100%; }
 /* ---- Generic grids -------------------------------------------------------- */
 .grid { display: grid; gap: var(--space-m); }
 .grid--cards { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-.grid--concerns { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.grid--concerns { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
 .lede { font-size: var(--step-1); color: var(--graphite); max-width: var(--measure); }
 
 /* =============================================================================

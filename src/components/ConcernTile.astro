@@ -5,11 +5,16 @@ import ConcernIcon from './ConcernIcon.astro';
 interface Props { concern: Concern; }
 const { concern } = Astro.props;
 const fam = familyBySlug(concern.families[0]);
-const accent = fam ? `--accent: var(--accent-${fam.accentVar})` : '';
+const av = fam?.accentVar;
+const style = av
+  ? `--accent: var(--accent-${av}); --accent-text: var(--accent-${av}-text); --accent-vivid: var(--accent-${av}-vivid)`
+  : '';
 ---
-<a class="concern" id={concern.slug} href={`/concerns#${concern.slug}`} style={accent}>
-  <span class="concern__drop" aria-hidden="true"></span>
-  <ConcernIcon slug={concern.icon} />
-  <span class="concern__label">{concern.label}</span>
-  <span class="concern__line">{concern.line}</span>
+<a class="tile" id={concern.slug} href={`/concerns#${concern.slug}`} style={style}>
+  <span class="tile__icon" aria-hidden="true">
+    <ConcernIcon slug={concern.icon} size={28} class="tile__cicon" />
+  </span>
+  <span class="tile__label">{concern.label}</span>
+  <span class="tile__line">{concern.line}</span>
+  <span class="tile__more link-arrow">Explore &rarr;</span>
 </a>
