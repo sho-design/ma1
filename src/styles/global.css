@@ -201,19 +201,41 @@ img, svg, canvas { display: block; max-width: 100%; }
 }
 
 /* ---- Droplet cursor (fine-pointer only) ---------------------------------- */
+/* Sized to match the sibling line: 16px resting, 42px over interactive. */
 .droplet {
+  position: fixed;
+  top: 0; left: 0;
+  width: 16px; height: 16px;
+  margin: -8px 0 0 -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent) 85%, transparent), color-mix(in srgb, var(--accent) 0%, transparent) 70%);
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.35s var(--ease), width 0.3s var(--ease), height 0.3s var(--ease), margin 0.3s var(--ease);
+  mix-blend-mode: multiply;
+}
+.droplet.is-active { opacity: 0.55; }
+.droplet.is-hot { width: 42px; height: 42px; margin: -21px 0 0 -21px; opacity: 0.32; }
+
+/* Sparkle emitted while hovering interactive elements (aesthetics radiance) */
+.sparkle {
   position: fixed;
   top: 0; left: 0;
   width: 14px; height: 14px;
   margin: -7px 0 0 -7px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--accent) 75%, white), var(--accent));
-  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 45%, transparent);
+  background: var(--spark, var(--accent));
+  clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--spark, var(--accent)) 55%, transparent));
   pointer-events: none;
   z-index: 9999;
   opacity: 0;
-  transition: opacity var(--dur-hover) var(--ease), width var(--dur-hover) var(--ease), height var(--dur-hover) var(--ease);
-  mix-blend-mode: multiply;
+  animation: sparkle-pop 0.62s var(--ease) forwards;
+}
+@keyframes sparkle-pop {
+  0%   { opacity: 0; transform: scale(0.2) rotate(0deg); }
+  35%  { opacity: 0.95; transform: scale(1) rotate(35deg); }
+  100% { opacity: 0; transform: scale(0.35) rotate(85deg); }
 }
 
 /* ---- Skip link ------------------------------------------------------------ */

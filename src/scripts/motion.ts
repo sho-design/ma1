@@ -38,6 +38,19 @@ function initDroplet() {
   let tx = x;
   let ty = y;
   let shown = false;
+  let lastSpark = 0;
+  const INTERACTIVE = 'a, button, .card, .tile, .chip, summary, input, select, textarea, [role="radio"], label';
+
+  // A short-lived champagne sparkle, tinted to the hovered element's accent.
+  const spawnSparkle = (px: number, py: number, accent: string) => {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.left = `${px + (Math.random() - 0.5) * 22}px`;
+    s.style.top = `${py + (Math.random() - 0.5) * 22}px`;
+    if (accent) s.style.setProperty('--spark', accent);
+    document.body.appendChild(s);
+    s.addEventListener('animationend', () => s.remove());
+  };
 
   window.addEventListener('pointermove', (e) => {
     if (e.pointerType !== 'mouse') return;
@@ -45,18 +58,28 @@ function initDroplet() {
     ty = e.clientY;
     if (!shown) {
       shown = true;
-      dot.style.opacity = '0.9';
+      dot.classList.add('is-active');
     }
-    // swell over interactive elements
-    const interactive = (e.target as HTMLElement)?.closest('a, button, .card, .concern, input, select, textarea');
-    dot.style.width = interactive ? '30px' : '14px';
-    dot.style.height = interactive ? '30px' : '14px';
-  });
+    // swell + sparkle over interactive elements
+    const interactive = (e.target as HTMLElement)?.closest<HTMLElement>(INTERACTIVE);
+    dot.classList.toggle('is-hot', !!interactive);
+    if (interactive) {
+      const now = performance.now();
+      if (now - lastSpark > 85) {
+        lastSpark = now;
+        const accent = getComputedStyle(interactive).getPropertyValue('--accent-vivid').trim()
+          || getComputedStyle(interactive).getPropertyValue('--accent').trim();
+        spawnSparkle(e.clientX, e.clientY, accent);
+      }
+    }
+  }, { passive: true });
+
+  window.addEventListener('pointerleave', () => dot.classList.remove('is-active'));
 
   const loop = () => {
     x += (tx - x) * 0.18;
     y += (ty - y) * 0.18;
-    dot.style.transform = `translate(${x}px, ${y}px)`;
+    dot.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
     requestAnimationFrame(loop);
   };
   requestAnimationFrame(loop);
