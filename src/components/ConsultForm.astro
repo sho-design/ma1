@@ -3,6 +3,12 @@ import { concerns } from '@data/concerns';
 import Advisory from './Advisory.astro';
 ---
 <form class="consult-form" novalidate>
+  <div class="interest-banner" data-interest-banner hidden>
+    <p class="interest-banner__label">Treatments you're interested in</p>
+    <div class="interest-banner__chips" data-interest-chips></div>
+    <p class="interest-banner__note">We have noted these for your consult. Add anything else below.</p>
+  </div>
+
   <div class="field">
     <label for="name">Name</label>
     <input id="name" name="name" type="text" autocomplete="name" required />
@@ -45,6 +51,15 @@ import Advisory from './Advisory.astro';
     arrange screening. (This demo form has no endpoint; nothing was sent.)
   </div>
 </form>
+
+<style>
+  .interest-banner { border: 1px solid var(--accent-injectables); border-left: 3px solid var(--accent-injectables); background: color-mix(in srgb, var(--accent-injectables) 8%, var(--white-pure)); border-radius: var(--radius); padding: 1rem 1.2rem; margin-bottom: 1.6rem; }
+  .interest-banner__label { font-family: var(--mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent-injectables-text); margin: 0 0 0.6rem; }
+  .interest-banner__chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .interest-chip { display: inline-flex; align-items: center; gap: 0.4em; font-size: var(--step--1); background: var(--white-pure); border: 1px solid var(--line); border-radius: 999px; padding: 0.3em 0.8em; }
+  .interest-chip::before { content: '\2605'; color: var(--accent-injectables-text); font-size: 0.7em; }
+  .interest-banner__note { font-size: var(--step--1); color: var(--graphite); margin: 0.7rem 0 0; }
+</style>
 
 <script>
   // Graceful no-endpoint confirmation (DESIGN_SYSTEM §3 Forms).

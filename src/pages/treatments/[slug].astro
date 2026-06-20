@@ -298,7 +298,7 @@ const breadcrumbLd = {
             document.querySelectorAll('[data-helps] input[name="goal"]:checked')
           ).map((i) => i.value);
           const p = new URLSearchParams();
-          p.set('tx', tx);
+          p.set('interest', tx);
           if (goals.length) p.set('goals', goals.join('|'));
           btn.setAttribute('href', '/contact?' + p.toString());
         };
@@ -323,7 +323,7 @@ const breadcrumbLd = {
     <div class="bookbar" aria-hidden="false">
       <div class="bookbar__in">
         <span class="bookbar__name">{treatment.name}</span>
-        <a class="btn bookbar__cta" href={`/contact?tx=${encodeURIComponent(treatment.name)}`}>Book a consult</a>
+        <a class="btn bookbar__cta" href={`/contact?interest=${encodeURIComponent(treatment.name)}`}>Book a consult</a>
       </div>
     </div>
   </article>

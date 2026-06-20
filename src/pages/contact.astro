@@ -47,21 +47,42 @@ import { site } from '@data/site';
 
 <script>
   // Carry planner selections (DESIGN_SYSTEM §6.3 configurator → consult).
+  // `interest` = treatments the patient actively saved or arrived on (a strong
+  // signal we flag clearly); `tx` = softer, goal-driven suggestions.
   const params = new URLSearchParams(window.location.search);
   const goals = params.get('goals');
   const downtime = params.get('downtime');
   const families = params.get('families');
+  const interest = params.get('interest');
   const tx = params.get('tx');
-  if (goals || downtime || families || tx) {
+  const productsParam = params.get('products');
+  if (goals || downtime || families || interest || tx || productsParam) {
     const concern = document.querySelector<HTMLSelectElement>('#concern');
     const message = document.querySelector<HTMLTextAreaElement>('#message');
+    const list = (s: string) => s.split('|').join(', ');
     const lines = [
-      goals && `Goals: ${goals.split('|').join(', ')}`,
-      tx && `Treatments to explore: ${tx.split('|').join(', ')}`,
-      families && `Interested in: ${families.split('|').join(', ')}`,
+      interest && `★ Treatments I'm interested in: ${list(interest)}`,
+      goals && `Goals: ${list(goals)}`,
+      tx && `Also exploring: ${list(tx)}`,
+      families && `Interested in: ${list(families)}`,
+      productsParam && `SkinCeuticals to discuss: ${list(productsParam)}`,
       downtime && `Comfortable downtime: ${downtime}`,
     ].filter(Boolean);
     if (message && lines.length) message.value = `From my plan:\n${lines.join('\n')}`;
+
+    // Visibly highlight the treatments of interest above the form.
+    if (interest) {
+      const banner = document.querySelector<HTMLElement>('[data-interest-banner]');
+      const chips = document.querySelector<HTMLElement>('[data-interest-chips]');
+      if (banner && chips) {
+        chips.innerHTML = interest
+          .split('|')
+          .map((n) => `<span class="interest-chip">${n}</span>`)
+          .join('');
+        banner.hidden = false;
+      }
+    }
+
     if (concern && goals) {
       const first = goals.split('|')[0].toLowerCase();
       const match = Array.from(concern.options).find((o) => o.textContent?.toLowerCase() === first);

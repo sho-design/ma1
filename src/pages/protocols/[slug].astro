@@ -22,7 +22,7 @@ const steps = protocol.steps
   .filter((s) => s.tx);
 
 const txNames = steps.map((s) => s.tx!.name);
-const bookHref = `/contact?tx=${encodeURIComponent(txNames.join('|'))}`;
+const bookHref = `/contact?interest=${encodeURIComponent(txNames.join('|'))}`;
 
 const crumbs = [
   { name: 'Home', href: '/' },
