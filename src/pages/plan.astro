@@ -2,7 +2,6 @@
 import Base from '@layouts/Base.astro';
 import PageHeader from '@components/PageHeader.astro';
 import Advisory from '@components/Advisory.astro';
-import BodyMap from '@components/BodyMap.astro';
 import GoalsChecklist from '@components/GoalsChecklist.astro';
 import { treatments } from '@data/treatments';
 import { familyBySlug } from '@data/families';
@@ -23,8 +22,6 @@ const txMap = Object.fromEntries(
   <section class="section-tight">
     <div class="wrap planner">
       <div class="planner__form reveal">
-        <BodyMap />
-
         <GoalsChecklist />
 
         <fieldset class="goals__group" style="margin-top:var(--space-m)">
