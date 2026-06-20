@@ -10,7 +10,7 @@ import { site } from '@data/site';
 import { treatments } from '@data/treatments';
 import { concerns } from '@data/concerns';
 
-const featured = treatments.slice(0, 6);
+const featured = treatments.slice(0, 8);
 const featuredConcerns = concerns.slice(0, 8);
 ---
 <Base>
@@ -65,7 +65,7 @@ const featuredConcerns = concerns.slice(0, 8);
         <h2>Six families, one clinical standard.</h2>
         <p class="lede">From injectables to medical-grade skin health, each held to the same physician oversight.</p>
       </header>
-      <div class="grid grid--cards reveal" style="margin-top:2.5rem">
+      <div class="treat-grid reveal" style="margin-top:2.5rem">
         {featured.map((t) => <TreatmentCard treatment={t} />)}
       </div>
       <p style="margin-top:2rem"><a class="btn btn--ghost" href="/treatments">All treatments →</a></p>
@@ -123,4 +123,8 @@ const featuredConcerns = concerns.slice(0, 8);
   .section-head h2 { font-size: var(--step-3); }
   .section-head .lede { margin-top: 0.6rem; }
   .trust { max-width: var(--measure); }
+  /* 4 treatment cards per row, collapsing on smaller screens */
+  .treat-grid { display: grid; gap: var(--space-m); grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 1000px) { .treat-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .treat-grid { grid-template-columns: 1fr; } }
 </style>
