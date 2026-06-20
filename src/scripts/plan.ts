@@ -67,4 +67,17 @@ function initPlanButtons() {
   sync();
 }
 
-document.addEventListener('DOMContentLoaded', initPlanButtons);
+// Saved-count badge in the nav (present on every page).
+function updateCounts() {
+  const n = read().length;
+  document.querySelectorAll<HTMLElement>('[data-plan-count]').forEach((el) => {
+    el.textContent = String(n);
+    el.hidden = n === 0;
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initPlanButtons();
+  updateCounts();
+});
+document.addEventListener('plan:change', updateCounts);

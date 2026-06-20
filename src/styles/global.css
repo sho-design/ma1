@@ -282,6 +282,9 @@ img, svg, canvas { display: block; max-width: 100%; }
 .nav__chev { width: 9px; height: 6px; transition: transform var(--dur-hover) var(--ease); }
 [data-dropdown].is-open .nav__chev { transform: rotate(180deg); }
 .nav__cta { padding: 0.6em 1.1em; }
+.nav__plan { display: inline-flex; align-items: center; gap: 0.45em; }
+.nav__count { display: inline-grid; place-content: center; min-width: 1.25em; height: 1.25em; padding: 0 0.35em; border-radius: 999px; background: var(--accent-injectables); color: var(--white-pure); font-family: var(--mono); font-size: 0.62rem; line-height: 1; }
+.drawer__link .nav__count { margin-left: 0.5em; }
 .nav__has-panel { position: static; }
 
 /* mega-menu panel */

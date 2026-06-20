@@ -1,0 +1,112 @@
+---
+import Base from '@layouts/Base.astro';
+import PageHeader from '@components/PageHeader.astro';
+import Advisory from '@components/Advisory.astro';
+import CtaBand from '@components/CtaBand.astro';
+
+interface Faq { q: string; a: string; }
+interface FaqGroup { title: string; items: Faq[]; }
+
+const groups: FaqGroup[] = [
+  {
+    title: 'Getting started',
+    items: [
+      { q: 'How do I book?', a: 'Request a consult through our booking form and the clinic will be in touch to arrange screening. The consult is a conversation, with no pressure to proceed.' },
+      { q: 'What happens at a consult?', a: 'We review your goals, health and history, screen for candidacy, and your physician outlines realistic options and what to expect. You decide from there.' },
+      { q: 'Is the consult an obligation?', a: 'No. A consult helps us understand your goals and confirm what is safe and suitable. Nothing is booked or charged on the spot.' },
+    ],
+  },
+  {
+    title: 'Safety & candidacy',
+    items: [
+      { q: 'Who is care supervised by?', a: 'Every plan is reviewed by a physician (CPSO) and delivered by Registered Nurses, Registered Practical Nurses and physicians.' },
+      { q: 'How do you decide if a treatment is right for me?', a: 'We screen first: your history, medications, skin and goals. Some treatments are not suitable in pregnancy, with certain conditions, or over active infections. Your physician confirms candidacy.' },
+      { q: 'Are the devices and products approved?', a: 'We use Health Canada–licensed devices and products only, chosen for an honest, evidence-rated standard.' },
+    ],
+  },
+  {
+    title: 'Treatments & results',
+    items: [
+      { q: 'Will it look natural?', a: 'That is our priority. We treat with restraint and aim for a rested, balanced result rather than an obvious one. Results vary from person to person.' },
+      { q: 'How much downtime is there?', a: 'It depends on the treatment, from none to several days. Each treatment page lists a downtime range, and we set expectations at consult.' },
+      { q: 'How long do results last?', a: 'It varies by treatment, product and person. Your provider gives you a realistic range, and many results are maintained over time.' },
+      { q: 'Do you guarantee results?', a: 'No. We describe what a treatment may support, never a guaranteed outcome. Medicine does not deal in guarantees, and we will always be honest about that.' },
+    ],
+  },
+  {
+    title: 'Pricing & memberships',
+    items: [
+      { q: 'How is pricing handled?', a: 'Pricing is shared at your complimentary consult and depends on the plan your physician recommends. We do not list prices online because the right plan is individual.' },
+      { q: 'Do you offer memberships?', a: 'Yes. Regulars can save with a membership, which we walk you through at your consult. See the Memberships page for how it works.' },
+      { q: 'Are treatments covered by OHIP?', a: 'Medical aesthetic services are elective and are not covered by OHIP.' },
+    ],
+  },
+  {
+    title: 'Your visit',
+    items: [
+      { q: 'Who will perform my treatment?', a: 'A qualified clinician under physician supervision. Who performs a given treatment is confirmed at your consult. See the Care team page.' },
+      { q: 'Where are you located?', a: 'We see patients by appointment in Thornhill and Woodbridge. See the Locations page for details.' },
+      { q: 'What about aftercare?', a: 'You leave with clear aftercare, and we check in on how your result settles. Each treatment page also lists before and after guidance.' },
+    ],
+  },
+];
+
+const allFaqs = groups.flatMap((g) => g.items);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: allFaqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+<Base title="FAQs" description="Common questions about consults, safety, results, pricing, memberships and your visit at Medical Aesthetics at Restoration Medical.">
+  <PageHeader
+    eyebrow="FAQs"
+    title="Questions, answered honestly."
+    lead="The things people ask most, from how a consult works to how we think about safety, results and pricing."
+    ripple
+  />
+
+  <section class="section-tight">
+    <div class="wrap faq-wrap">
+      {groups.map((g) => (
+        <div class="faq-group reveal">
+          <h2 class="faq-group__title">{g.title}</h2>
+          <div class="faqs">
+            {g.items.map((f) => (
+              <details class="faq">
+                <summary>{f.q}</summary>
+                <p class="faq__a">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <Advisory title="Still not sure?">
+        A consult is the best way to get specific answers about your skin and
+        goals. We screen first, and your physician finalises any plan. Results vary.
+      </Advisory>
+    </div>
+  </section>
+
+  <CtaBand />
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+</Base>
+
+<style>
+  .faq-wrap { max-width: var(--measure); }
+  .faq-group { margin-bottom: var(--space-l); }
+  .faq-group__title { font-size: var(--step-2); margin-bottom: 0.6rem; }
+  .faqs { border-top: 1px solid var(--line); }
+  .faq { border-bottom: 1px solid var(--line); }
+  .faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 1rem 0; font-family: var(--display); font-size: var(--step-1); }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; font-family: var(--mono); color: var(--mist); }
+  .faq[open] summary::after { content: '\2013'; }
+  .faq__a { color: var(--graphite); margin: 0; padding: 0 0 1.1rem; }
+</style>

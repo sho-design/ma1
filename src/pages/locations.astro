@@ -1,0 +1,71 @@
+---
+import Base from '@layouts/Base.astro';
+import PageHeader from '@components/PageHeader.astro';
+import CtaBand from '@components/CtaBand.astro';
+import { site } from '@data/site';
+
+const tel = site.phone.replace(/[^0-9+]/g, '');
+const mapsHref = (loc: typeof site.locations[number]) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${loc.name}, ${loc.city}`)}`;
+
+const jsonLd = site.locations.map((loc) => ({
+  '@context': 'https://schema.org',
+  '@type': 'MedicalClinic',
+  name: loc.name,
+  url: `${site.url}/locations`,
+  parentOrganization: { '@type': 'Organization', name: site.brand },
+  address: { '@type': 'PostalAddress', addressLocality: loc.city, addressCountry: 'CA' },
+  telephone: site.phone,
+  email: site.email,
+  medicalSpecialty: 'CosmeticDermatology',
+  availableService: { '@type': 'MedicalProcedure', name: 'Medical aesthetics consult' },
+}));
+---
+<Base title="Locations" description="Visit Medical Aesthetics at Restoration Medical in Thornhill and Woodbridge. By appointment, physician-led, screened first.">
+  <PageHeader
+    eyebrow="Visit"
+    title="Two clinics, one standard of care."
+    lead="We see patients by appointment across our Thornhill and Woodbridge locations. Screening comes first, then your physician shapes a plan."
+    ripple
+  />
+
+  <section class="section-tight">
+    <div class="wrap">
+      <div class="locs reveal">
+        {site.locations.map((loc) => (
+          <article class="loc">
+            <h2 class="loc__city">{loc.city}</h2>
+            <p class="loc__name">{loc.name}</p>
+            <dl class="loc__rows">
+              <div><dt>Address</dt><dd>{loc.address}</dd></div>
+              <div><dt>Hours</dt><dd>{loc.hours}</dd></div>
+              <div><dt>Phone</dt><dd><a href={`tel:${tel}`}>{site.phone}</a></dd></div>
+              <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+            </dl>
+            <div class="loc__actions">
+              <a class="btn" href="/contact">Book a consult</a>
+              <a class="link-arrow" href={mapsHref(loc)} target="_blank" rel="noopener">Get directions &rarr;</a>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p class="meta" style="margin-top:var(--space-m)">Exact addresses are confirmed when you book. For anything urgent or medical, contact your physician or local emergency services.</p>
+    </div>
+  </section>
+
+  <CtaBand />
+
+  {jsonLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)}></script>)}
+</Base>
+
+<style>
+  .locs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
+  .loc { background: var(--white-pure); background-image: var(--gloss-white); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.8rem; }
+  .loc__city { font-size: var(--step-3); margin: 0; }
+  .loc__name { color: var(--graphite); margin: 0.3rem 0 1.2rem; }
+  .loc__rows { display: grid; gap: 0.9rem; margin: 0 0 1.4rem; border-top: 1px solid var(--line); padding-top: 1.2rem; }
+  .loc__rows dt { font-family: var(--mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mist); }
+  .loc__rows dd { margin: 0.2rem 0 0; color: var(--ink); }
+  .loc__actions { display: flex; align-items: center; gap: 1.4rem; flex-wrap: wrap; }
+  @media (max-width: 760px) { .locs { grid-template-columns: 1fr; } }
+</style>

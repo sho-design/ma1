@@ -1,0 +1,75 @@
+---
+import Base from '@layouts/Base.astro';
+import PageHeader from '@components/PageHeader.astro';
+import Advisory from '@components/Advisory.astro';
+import CtaBand from '@components/CtaBand.astro';
+import { team } from '@data/team';
+import { site } from '@data/site';
+
+const physician = team[0];
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalClinic',
+  name: `${site.line} at ${site.brand}`,
+  url: `${site.url}/team`,
+  employee: team.map((p) => ({
+    '@type': 'Person',
+    name: p.name,
+    jobTitle: p.role,
+  })),
+  medicalSpecialty: 'CosmeticDermatology',
+};
+---
+<Base title="Care team" description="Physician-led, clinician-delivered. Meet the physicians, nurses and skin-health specialists behind your care.">
+  <PageHeader
+    eyebrow="Care team"
+    title="Physician-led, clinician-delivered."
+    lead="Every plan is reviewed by a physician and carried out by qualified clinicians. We screen first, treat with restraint, and stay honest about what each option can do."
+    ripple
+  />
+
+  <section class="section-tight">
+    <div class="wrap">
+      <div class="team reveal">
+        {team.map((p) => (
+          <article class="member" style={`--accent: var(--accent-${p.accent}); --accent-text: var(--accent-${p.accent}-text)`}>
+            <div class="member__avatar" aria-hidden="true">{p.initials}</div>
+            <div class="member__body">
+              <h2 class="member__name">{p.name}</h2>
+              <p class="member__role">{p.role}</p>
+              <p class="member__cred">{p.credentials}</p>
+              <p class="member__bio">{p.bio}</p>
+              <ul class="member__focus">
+                {p.focus.map((f) => <li>{f}</li>)}
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <Advisory title="Supervision, every time">
+        Care is delivered under physician supervision. Provider availability and
+        who performs a given treatment is confirmed at your consult. Photos and
+        full bios to follow.
+      </Advisory>
+    </div>
+  </section>
+
+  <CtaBand title="Meet us in person." body="Book a complimentary consult. We screen first, then your physician shapes a plan around you." />
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+</Base>
+
+<style>
+  .team { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem; margin-bottom: var(--space-l); }
+  .member { display: grid; grid-template-columns: auto 1fr; gap: 1.4rem; background: var(--white-pure); background-image: var(--gloss-white); border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: var(--radius); padding: 1.6rem; }
+  .member__avatar { width: 76px; height: 76px; border-radius: 50%; display: grid; place-content: center; font-family: var(--display); font-size: var(--step-2); color: var(--accent-text); background: color-mix(in srgb, var(--accent) 16%, var(--white-pure)); border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+  .member__name { font-size: var(--step-2); margin: 0; }
+  .member__role { color: var(--accent-text); font-size: var(--step-0); margin: 0.2rem 0 0; }
+  .member__cred { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mist); margin: 0.3rem 0 0; }
+  .member__bio { color: var(--graphite); margin: 0.9rem 0 0; }
+  .member__focus { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0; margin: 1rem 0 0; }
+  .member__focus li { font-size: var(--step--1); border: 1px solid var(--line); border-radius: 999px; padding: 0.25em 0.75em; color: var(--graphite); }
+  @media (max-width: 860px) { .team { grid-template-columns: 1fr; } }
+  @media (max-width: 460px) { .member { grid-template-columns: 1fr; } }
+</style>

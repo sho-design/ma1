@@ -38,7 +38,7 @@ const treatmentFamilies = families.filter((f) => f.slug !== 'clinical');
         </div>
       </div>
 
-      <a class="nav__link" href="/plan">Plan your treatment</a>
+      <a class="nav__link nav__plan" href="/plan">Plan your treatment<span class="nav__count" data-plan-count hidden></span></a>
 
       <!-- Treatments -->
       <div class="nav__has-panel" data-dropdown>
@@ -70,6 +70,7 @@ const treatmentFamilies = families.filter((f) => f.slug !== 'clinical');
                 <li><a class="mega__item mega__item--plain" href="/menu"><span class="mega__name">Treatment menu</span></a></li>
                 <li><a class="mega__item mega__item--plain" href="/plan"><span class="mega__name">Plan your treatment</span></a></li>
                 <li><a class="mega__item mega__item--plain" href="/modalities"><span class="mega__name">Modalities &amp; actives</span></a></li>
+                <li><a class="mega__item mega__item--plain" href="/team"><span class="mega__name">Care team</span></a></li>
                 <li><a class="mega__item mega__item--plain" href="/candidacy"><span class="mega__name">Candidacy &amp; safety</span></a></li>
               </ul>
             </div>
@@ -113,7 +114,10 @@ const treatmentFamilies = families.filter((f) => f.slug !== 'clinical');
     <a class="drawer__link" href="/protocols">Protocols</a>
     <a class="drawer__link" href="/menu">Treatment menu</a>
     <a class="drawer__link" href="/modalities">Modalities &amp; actives</a>
-    <a class="drawer__link" href="/plan">Plan your treatment</a>
+    <a class="drawer__link" href="/plan">Plan your treatment<span class="nav__count" data-plan-count hidden></span></a>
+    <a class="drawer__link" href="/team">Care team</a>
+    <a class="drawer__link" href="/locations">Locations</a>
+    <a class="drawer__link" href="/faqs">FAQs</a>
     <a class="drawer__link" href="/candidacy">Candidacy &amp; safety</a>
     <a class="drawer__link" href="/memberships">Memberships</a>
     <a class="btn drawer__cta" href="/contact">Book a consult</a>
