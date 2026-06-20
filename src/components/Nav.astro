@@ -117,28 +117,61 @@ const treatmentFamilies = families.filter((f) => f.slug !== 'clinical');
 </aside>
 
 <script>
+  // Mega-menu behaviour mirrors the sibling line: hover opens with a short
+  // close delay, a click pins the panel open (so it stays up until you click
+  // out / Escape / open the other), opening one closes the other.
   const dropdowns = Array.from(document.querySelectorAll<HTMLElement>('[data-dropdown]'));
-  const closeAll = (except?: HTMLElement) => {
-    for (const d of dropdowns) {
-      if (d === except) continue;
-      d.classList.remove('is-open');
-      d.querySelector('[data-trigger]')?.setAttribute('aria-expanded', 'false');
-      d.querySelector('[data-panel]')?.setAttribute('hidden', '');
-    }
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const CLOSE_DELAY = 260;
+  let openD: HTMLElement | null = null;
+  let pinned = false;
+  let closeTimer: number | undefined;
+  const clearTimer = () => { if (closeTimer) { window.clearTimeout(closeTimer); closeTimer = undefined; } };
+
+  const close = (d: HTMLElement | null) => {
+    if (!d) return;
+    clearTimer();
+    d.classList.remove('is-open');
+    d.querySelector('[data-trigger]')?.setAttribute('aria-expanded', 'false');
+    d.querySelector('[data-panel]')?.setAttribute('hidden', '');
+    if (openD === d) openD = null;
+    pinned = false;
   };
-  // Click to toggle; the panel STAYS open until you click the trigger again,
-  // click outside, press Escape, or open the other panel. (No hover-close.)
+  const open = (d: HTMLElement) => {
+    clearTimer();
+    if (openD && openD !== d) close(openD);
+    d.classList.add('is-open');
+    d.querySelector('[data-trigger]')?.setAttribute('aria-expanded', 'true');
+    d.querySelector('[data-panel]')?.removeAttribute('hidden');
+    openD = d;
+  };
+  const scheduleClose = (d: HTMLElement) => {
+    if (pinned) return;
+    clearTimer();
+    closeTimer = window.setTimeout(() => close(d), CLOSE_DELAY);
+  };
+
   for (const d of dropdowns) {
     const trigger = d.querySelector<HTMLButtonElement>('[data-trigger]');
-    const panel = d.querySelector<HTMLElement>('[data-panel]');
-    if (!trigger || !panel) continue;
-    const open = () => { closeAll(d); d.classList.add('is-open'); trigger.setAttribute('aria-expanded', 'true'); panel.removeAttribute('hidden'); };
-    const close = () => { d.classList.remove('is-open'); trigger.setAttribute('aria-expanded', 'false'); panel.setAttribute('hidden', ''); };
-    trigger.addEventListener('click', (e) => { e.preventDefault(); d.classList.contains('is-open') ? close() : open(); });
+    if (!trigger) continue;
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      d.classList.contains('is-open') ? close(d) : (open(d), (pinned = true));
+    });
+    if (canHover) {
+      d.addEventListener('mouseenter', () => open(d));
+      d.addEventListener('mouseleave', () => scheduleClose(d));
+    }
   }
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); });
   document.addEventListener('click', (e) => {
-    if (!(e.target as HTMLElement).closest('[data-dropdown]')) closeAll();
+    if (openD && !openD.contains(e.target as Node)) close(openD);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && openD) {
+      const t = openD.querySelector<HTMLElement>('[data-trigger]');
+      close(openD);
+      t?.focus();
+    }
   });
 
   // Mobile drawer
