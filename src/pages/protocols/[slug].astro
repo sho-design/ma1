@@ -1,0 +1,182 @@
+---
+import Base from '@layouts/Base.astro';
+import Advisory from '@components/Advisory.astro';
+import { protocols, type Protocol } from '@data/protocols';
+import { treatments } from '@data/treatments';
+import { concerns } from '@data/concerns';
+import { familyBySlug } from '@data/families';
+import { site } from '@data/site';
+
+export function getStaticPaths() {
+  return protocols.map((p) => ({ params: { slug: p.slug }, props: { protocol: p } }));
+}
+
+interface Props { protocol: Protocol; }
+const { protocol } = Astro.props;
+const concern = concerns.find((c) => c.slug === protocol.concern);
+const av = concern?.accent ?? 'injectables';
+const accent = `--accent: var(--accent-${av}); --accent-text: var(--accent-${av}-text); --accent-vivid: var(--accent-${av}-vivid)`;
+
+const steps = protocol.steps
+  .map((s) => ({ ...s, tx: treatments.find((t) => t.slug === s.treatment) }))
+  .filter((s) => s.tx);
+
+const txNames = steps.map((s) => s.tx!.name);
+const bookHref = `/contact?tx=${encodeURIComponent(txNames.join('|'))}`;
+
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Protocols', href: '/protocols' },
+  { name: protocol.name, href: `/protocols/${protocol.slug}` },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalProcedure',
+  name: protocol.name,
+  description: protocol.summary,
+  url: `${site.url}/protocols/${protocol.slug}`,
+  provider: {
+    '@type': 'MedicalClinic',
+    name: `${site.line} at ${site.brand}`,
+    areaServed: site.locations.map((l) => l.city),
+  },
+};
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: `${site.url}${c.href}` })),
+};
+---
+<Base title={protocol.name} description={protocol.tagline}>
+  <article class="detail proto" style={accent}>
+    <header class="detail__head reveal">
+      <div class="wrap">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <ol>
+            {crumbs.map((c, i) => (
+              <li>{i < crumbs.length - 1 ? <a href={c.href}>{c.name}</a> : <span aria-current="page">{c.name}</span>}</li>
+            ))}
+          </ol>
+        </nav>
+        <p class="eyebrow detail__eyebrow">
+          <span class="detail__dot" aria-hidden="true"></span>
+          Protocol{concern && <> &middot; for {concern.label}</>}
+        </p>
+        <h1 class="detail__title ripple">{protocol.name}</h1>
+        <p class="lede detail__essence">{protocol.tagline}</p>
+      </div>
+    </header>
+
+    <div class="wrap detail__grid">
+      <div class="detail__main">
+        <section class="reveal detail__block">
+          <h2 class="detail__h">The idea</h2>
+          <p class="detail__p measure">{protocol.summary}</p>
+        </section>
+
+        <section class="reveal detail__block">
+          <h2 class="detail__h">How it comes together</h2>
+          <ol class="steps">
+            {steps.map((s, i) => {
+              const fam = familyBySlug(s.tx!.family);
+              return (
+                <li class="step">
+                  <span class="step__num" aria-hidden="true">{i + 1}</span>
+                  <div class="step__body">
+                    <a class="step__name link-arrow" href={`/treatments/${s.tx!.slug}`}>{s.tx!.name} &rarr;</a>
+                    {fam && <span class="step__fam">{fam.name}{s.tx!.brand && <> &middot; {s.tx!.brand}</>}</span>}
+                    <p class="step__role">{s.role}</p>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+
+        <section class="reveal detail__block">
+          <h2 class="detail__h">What it may support</h2>
+          <ul class="supports">
+            {protocol.maySupport.map((m) => (
+              <li class="supports__item"><span class="supports__tick" aria-hidden="true"></span>{m}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="reveal detail__block">
+          <h2 class="detail__h">Rhythm</h2>
+          <p class="detail__p measure">{protocol.rhythm}</p>
+          <Advisory title="A framework, not a prescription">
+            This protocol is a starting point, not a treatment plan. We screen for
+            candidacy and your physician finalises the sequence, timing and intensity.
+            Results vary.
+          </Advisory>
+        </section>
+      </div>
+
+      <aside class="detail__side reveal">
+        <div class="sidecard">
+          <p class="eyebrow">Begin</p>
+          <p class="sidecard__line">Take this protocol to a consult.</p>
+          <p class="meta">We confirm candidacy and tailor each step to you.</p>
+          <a class="btn sidecard__cta" href={bookHref}>Book a consult</a>
+          <button class="btn btn--ghost sidecard__plan" data-add-plan data-tx={txNames.join('|')} type="button">Add to my plan</button>
+          {concern && <a class="link-arrow" href={`/concerns/${concern.slug}`}>More on {concern.label} &rarr;</a>}
+          <p class="sidecard__member meta">Protocols often pair with a <a href="/memberships">membership</a>. We will walk you through it.</p>
+        </div>
+      </aside>
+    </div>
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)}></script>
+</Base>
+
+<style>
+  .detail__head { padding-top: var(--space-l); padding-bottom: var(--space-m); border-bottom: 1px solid var(--line); background: linear-gradient(to top, color-mix(in srgb, var(--accent) 13%, transparent), transparent 60%); }
+  .detail__eyebrow { color: var(--accent-text); margin-bottom: 1.2rem; display: inline-flex; align-items: center; gap: 0.6em; }
+  .detail__eyebrow::before { display: none; }
+  .detail__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+  .detail__title { font-family: var(--display); font-weight: 400; letter-spacing: -0.015em; line-height: 1.04; font-size: var(--step-4); margin: 0; }
+  .detail__essence { margin-top: 1.4rem; }
+
+  .detail__grid { display: grid; grid-template-columns: 1fr 320px; gap: 3rem; padding-block: var(--space-l); }
+  .detail__main { display: grid; gap: var(--space-l); }
+  .detail__h { font-size: var(--step-2); margin-bottom: 1rem; }
+  .detail__p { color: var(--graphite); }
+
+  .crumbs { margin-bottom: 1.2rem; }
+  .crumbs ol { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0; margin: 0; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.04em; }
+  .crumbs li { display: flex; align-items: center; gap: 0.5rem; }
+  .crumbs li + li::before { content: '\203A'; color: var(--mist); }
+  .crumbs a { color: var(--mist); text-decoration: none; transition: color var(--dur-hover) var(--ease); }
+  .crumbs a:hover { color: var(--accent-text); }
+  .crumbs [aria-current] { color: var(--ink); }
+
+  .steps { list-style: none; counter-reset: step; padding: 0; margin: 0; display: grid; gap: 0; max-width: var(--measure); }
+  .step { display: grid; grid-template-columns: auto 1fr; gap: 1.1rem; padding: 1.2rem 0; border-bottom: 1px solid var(--line); position: relative; }
+  .step:first-child { padding-top: 0; }
+  .step__num { width: 2rem; height: 2rem; border-radius: 50%; display: grid; place-content: center; font-family: var(--mono); font-size: 0.85rem; color: var(--accent-text); background: color-mix(in srgb, var(--accent) 14%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+  .step__body { display: grid; gap: 0.3rem; align-content: start; }
+  .step__name { font-family: var(--display); font-size: var(--step-1); }
+  .step__fam { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mist); }
+  .step__role { color: var(--graphite); margin: 0.2rem 0 0; }
+
+  .supports { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.8rem; max-width: var(--measure); }
+  .supports__item { display: grid; grid-template-columns: auto 1fr; gap: 0.8rem; align-items: baseline; color: var(--graphite); }
+  .supports__tick { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); transform: translateY(-1px); }
+
+  .detail__side { align-self: start; position: sticky; top: calc(var(--header-h) + 1.5rem); display: grid; gap: 1rem; }
+  .sidecard { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem 1.5rem; display: grid; gap: 0.8rem; background: var(--paper); }
+  .sidecard__line { font-family: var(--display); font-size: var(--step-1); line-height: 1.2; }
+  .sidecard__cta { justify-content: center; margin-top: 0.4rem; }
+  .sidecard__plan { justify-content: center; }
+  .sidecard__plan.is-added { color: var(--accent-text); border-color: var(--accent); }
+  .sidecard__member { margin: 0.2rem 0 0; }
+  .sidecard__member a { color: var(--accent-text); text-decoration: underline; text-underline-offset: 2px; }
+
+  @media (max-width: 900px) {
+    .detail__grid { grid-template-columns: 1fr; gap: 2rem; }
+    .detail__side { position: static; }
+  }
+</style>

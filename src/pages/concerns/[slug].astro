@@ -6,7 +6,8 @@ import EvidenceTag from '@components/EvidenceTag.astro';
 import Advisory from '@components/Advisory.astro';
 import CtaBand from '@components/CtaBand.astro';
 import { concerns, type Concern } from '@data/concerns';
-import { treatmentsByConcern } from '@data/treatments';
+import { treatmentsByConcern, treatments } from '@data/treatments';
+import { protocolsByConcern } from '@data/protocols';
 import { modalities } from '@data/modalities';
 
 export function getStaticPaths() {
@@ -19,6 +20,8 @@ const av = concern.accent;
 const accent = `--accent: var(--accent-${av}); --accent-text: var(--accent-${av}-text); --accent-vivid: var(--accent-${av}-vivid)`;
 
 const treats = treatmentsByConcern(concern.slug);
+const protos = protocolsByConcern(concern.slug);
+const txName = (slug: string) => treatments.find((t) => t.slug === slug)?.name ?? slug;
 const activeSlugs = [...new Set(treats.flatMap((t) => t.actives))];
 const acts = modalities.filter((m) => activeSlugs.includes(m.slug));
 ---
@@ -48,6 +51,28 @@ const acts = modalities.filter((m) => activeSlugs.includes(m.slug));
           </header>
           <div class="grid grid--cards reveal" style="margin-top:2rem">
             {treats.map((t) => <TreatmentCard treatment={t} />)}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Protocols for this concern -->
+    {protos.length > 0 && (
+      <section class="section-tight">
+        <div class="wrap">
+          <header class="section-head reveal">
+            <span class="eyebrow">Protocols</span>
+            <h2>When more than one treatment works better together.</h2>
+          </header>
+          <div class="proto-links reveal" style="margin-top:2rem">
+            {protos.map((p) => (
+              <a class="proto-link" href={`/protocols/${p.slug}`}>
+                <span class="proto-link__name">{p.name}</span>
+                <span class="proto-link__tag">{p.tagline}</span>
+                <span class="proto-link__steps">{p.steps.map((s) => txName(s.treatment)).join('  +  ')}</span>
+                <span class="proto-link__more link-arrow">See the protocol &rarr;</span>
+              </a>
+            ))}
           </div>
         </div>
       </section>
@@ -97,4 +122,12 @@ const acts = modalities.filter((m) => activeSlugs.includes(m.slug));
   .actives__may { color: var(--graphite); margin: 0; }
   .actives__meta { display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end; text-align: right; min-width: 220px; }
   @media (max-width: 640px) { .actives__meta { align-items: flex-start; text-align: left; } }
+
+  .proto-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.2rem; }
+  .proto-link { display: grid; gap: 0.4rem; align-content: start; background: var(--white-pure); background-image: var(--gloss-white); border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: var(--radius); padding: 1.4rem 1.4rem 1.2rem; text-decoration: none; color: var(--ink); transition: box-shadow var(--dur-hover) var(--ease), transform var(--dur-hover) var(--ease); }
+  .proto-link:hover { box-shadow: 0 12px 30px -18px color-mix(in srgb, var(--accent) 55%, transparent); transform: translateY(-2px); }
+  .proto-link__name { font-family: var(--display); font-size: var(--step-1); line-height: 1.15; }
+  .proto-link__tag { color: var(--graphite); font-size: var(--step--1); }
+  .proto-link__steps { font-family: var(--mono); font-size: 0.7rem; color: var(--mist); letter-spacing: 0.02em; margin-top: 0.3rem; }
+  .proto-link__more { margin-top: 0.6rem; }
 </style>

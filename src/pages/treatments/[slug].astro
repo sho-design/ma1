@@ -7,6 +7,7 @@ import { familyBySlug } from '@data/families';
 import { modalities } from '@data/modalities';
 import { concerns } from '@data/concerns';
 import { careByFamily, sharedFaqs } from '@data/care';
+import { protocolsByTreatment } from '@data/protocols';
 import { site } from '@data/site';
 
 export function getStaticPaths() {
@@ -27,6 +28,7 @@ const related = treatmentsByFamily(treatment.family).filter((t) => t.slug !== tr
 
 const care = careByFamily[treatment.family];
 const faqs = [...care.faqs, ...sharedFaqs];
+const protos = protocolsByTreatment(treatment.slug);
 
 const crumbs = [
   { name: 'Home', url: `${site.url}/` },
@@ -113,6 +115,20 @@ const breadcrumbLd = {
               {relatedConcerns.map((c) => (
                 <a class="help-chip" href={`/concerns/${c.slug}`} style={`--accent: var(--accent-${c.accent}-vivid)`}>
                   <span class="help-chip__dot" aria-hidden="true"></span>{c.label}
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {protos.length > 0 && (
+          <section class="reveal detail__block">
+            <h2 class="detail__h">Part of these protocols</h2>
+            <p class="detail__p measure" style="margin-bottom:1rem">Combined with other treatments, {treatment.name} is part of these curated courses.</p>
+            <div class="help-chips">
+              {protos.map((p) => (
+                <a class="help-chip" href={`/protocols/${p.slug}`}>
+                  <span class="help-chip__dot" aria-hidden="true"></span>{p.name}
                 </a>
               ))}
             </div>

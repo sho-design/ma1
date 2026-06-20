@@ -1,0 +1,79 @@
+---
+import Base from '@layouts/Base.astro';
+import PageHeader from '@components/PageHeader.astro';
+import Advisory from '@components/Advisory.astro';
+import CtaBand from '@components/CtaBand.astro';
+import { protocols } from '@data/protocols';
+import { concerns } from '@data/concerns';
+import { treatments } from '@data/treatments';
+
+const concernBy = (slug: string) => concerns.find((c) => c.slug === slug);
+const txName = (slug: string) => treatments.find((t) => t.slug === slug)?.name ?? slug;
+---
+<Base title="Protocols" description="Curated combinations of more than one treatment, sequenced toward a single concern. Starting frameworks, finalised by your physician at consult.">
+  <PageHeader
+    eyebrow="Protocols"
+    title="Treatments that work better together."
+    lead="Some concerns respond best to more than one treatment, sequenced over time. These are our starting frameworks. We screen first, and your physician shapes the final plan around you."
+    ripple
+  />
+
+  <section class="section-tight">
+    <div class="wrap">
+      <div class="protos reveal">
+        {protocols.map((p) => {
+          const c = concernBy(p.concern);
+          const av = c?.accent ?? 'injectables';
+          return (
+            <a class="proto-card" href={`/protocols/${p.slug}`} style={`--accent: var(--accent-${av}); --accent-text: var(--accent-${av}-text)`}>
+              <span class="proto-card__top">
+                <span class="proto-card__count">{p.steps.length} treatments</span>
+                {c && <span class="proto-card__concern">{c.label}</span>}
+              </span>
+              <span class="proto-card__name">{p.name}</span>
+              <span class="proto-card__tag">{p.tagline}</span>
+              <span class="proto-card__steps">
+                {p.steps.map((s, i) => (
+                  <>
+                    {i > 0 && <span class="proto-card__plus" aria-hidden="true">+</span>}
+                    <span class="proto-card__step">{txName(s.treatment)}</span>
+                  </>
+                ))}
+              </span>
+              <span class="proto-card__more link-arrow">See the protocol &rarr;</span>
+            </a>
+          );
+        })}
+      </div>
+
+      <Advisory title="A framework, not a prescription">
+        Protocols are starting points that combine treatments we often use together.
+        What is right for you depends on screening and your physician's assessment. Results vary.
+      </Advisory>
+    </div>
+  </section>
+
+  <CtaBand title="Not sure which protocol fits?" body="Bring your goals to a consult. We screen first, then your physician shapes a plan around you." />
+</Base>
+
+<style>
+  .protos { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.2rem; margin-bottom: var(--space-l); }
+  .proto-card {
+    display: grid; gap: 0.5rem; align-content: start;
+    background: var(--white-pure); background-image: var(--gloss-white);
+    border: 1px solid var(--line); border-top: 3px solid var(--accent);
+    border-radius: var(--radius); padding: 1.6rem 1.5rem 1.4rem;
+    text-decoration: none; color: var(--ink);
+    transition: border-color var(--dur-hover) var(--ease), box-shadow var(--dur-hover) var(--ease), transform var(--dur-hover) var(--ease);
+  }
+  .proto-card:hover { box-shadow: 0 12px 30px -18px color-mix(in srgb, var(--accent) 55%, transparent); transform: translateY(-2px); }
+  .proto-card__top { display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; font-family: var(--mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.12em; }
+  .proto-card__count { color: var(--accent-text); }
+  .proto-card__concern { color: var(--mist); }
+  .proto-card__name { font-family: var(--display); font-size: var(--step-2); line-height: 1.1; margin-top: 0.2rem; }
+  .proto-card__tag { color: var(--graphite); font-size: var(--step--1); }
+  .proto-card__steps { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.5rem; margin-top: 0.6rem; }
+  .proto-card__step { font-size: var(--step--1); border: 1px solid var(--line); border-radius: 999px; padding: 0.2em 0.7em; }
+  .proto-card__plus { color: var(--mist); font-family: var(--mono); }
+  .proto-card__more { margin-top: 0.8rem; }
+</style>
