@@ -68,6 +68,19 @@ const jsonLd = {
           </section>
         )}
 
+        {relatedConcerns.length > 0 && (
+          <section class="reveal detail__block">
+            <h2 class="detail__h">What it helps with</h2>
+            <div class="help-chips">
+              {relatedConcerns.map((c) => (
+                <a class="help-chip" href={`/concerns/${c.slug}`} style={`--accent: var(--accent-${c.accent}-vivid)`}>
+                  <span class="help-chip__dot" aria-hidden="true"></span>{c.label}
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+
         {acts.length > 0 && (
           <section class="reveal detail__block">
             <p class="eyebrow ix__heading">What does the work</p>
@@ -123,21 +136,43 @@ const jsonLd = {
         <div class="sidecard">
           <p class="eyebrow">Begin</p>
           <p class="sidecard__line">A consult confirms this is right for you.</p>
-          <a class="btn sidecard__cta" href="/contact">Book a consult</a>
+          {relatedConcerns.length > 0 && (
+            <fieldset class="sidecard__goals" data-helps>
+              <legend class="meta">What would you like to address?</legend>
+              <div class="goals__items">
+                {relatedConcerns.map((c) => (
+                  <label class="goal-chip">
+                    <input type="checkbox" name="goal" value={c.label} checked />
+                    <span>{c.label}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          )}
+          <a class="btn sidecard__cta" data-book data-tx={treatment.name} href="/contact">Book a consult</a>
           <a class="link-arrow" href="/candidacy">Is this right for me? &rarr;</a>
         </div>
-        {relatedConcerns.length > 0 && (
-          <div class="sidecard sidecard--plain">
-            <p class="eyebrow">Helps with</p>
-            <ul class="sidecard__list">
-              {relatedConcerns.map((c) => (
-                <li><a class="link-arrow" href={`/concerns/${c.slug}`}>{c.label} &rarr;</a></li>
-              ))}
-            </ul>
-          </div>
-        )}
       </aside>
     </div>
+
+    <script is:inline define:vars={{ tx: treatment.name }}>
+      (function () {
+        const btn = document.querySelector('[data-book]');
+        const helps = document.querySelector('[data-helps]');
+        if (!btn) return;
+        const build = () => {
+          const goals = Array.from(
+            document.querySelectorAll('[data-helps] input[name="goal"]:checked')
+          ).map((i) => i.value);
+          const p = new URLSearchParams();
+          p.set('tx', tx);
+          if (goals.length) p.set('goals', goals.join('|'));
+          btn.setAttribute('href', '/contact?' + p.toString());
+        };
+        helps && helps.addEventListener('change', build);
+        build();
+      })();
+    </script>
 
     {related.length > 0 && (
       <section class="section-tight fill">
@@ -195,6 +230,13 @@ const jsonLd = {
   .sidecard__line { font-family: var(--display); font-size: var(--step-1); line-height: 1.2; }
   .sidecard__cta { justify-content: center; margin-top: 0.4rem; }
   .sidecard__list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.6rem; }
+  .sidecard__goals { border: 0; padding: 0; margin: 0; display: grid; gap: 0.6rem; }
+  .sidecard__goals legend { padding: 0; }
+
+  .help-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .help-chip { display: inline-flex; align-items: center; gap: 0.5em; font-size: var(--step--1); color: var(--graphite); border: 1px solid var(--line); border-radius: 999px; padding: 0.35em 0.85em; text-decoration: none; transition: border-color var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease); }
+  .help-chip__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .help-chip:hover { border-color: var(--accent); color: var(--ink); }
 
   .sec-head { max-width: 60ch; margin-bottom: var(--space-m); display: grid; gap: 1rem; }
   .detail__related-h { font-size: var(--step-3); }
