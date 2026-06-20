@@ -113,7 +113,7 @@ const txMap = Object.fromEntries(
         ? seen
             .map((slug) => {
               const t = txMap[slug];
-              return `<a class="suggest__row" href="/menu#${slug}" style="--accent: var(--accent-${t.accent})"><span class="suggest__dot"></span><span class="suggest__name">${t.name}</span><span class="suggest__arrow">&rarr;</span></a>`;
+              return `<a class="suggest__row" href="/treatments/${slug}" style="--accent: var(--accent-${t.accent})"><span class="suggest__dot"></span><span class="suggest__name">${t.name}</span><span class="suggest__arrow">&rarr;</span></a>`;
             })
             .join('')
         : '<p class="meta">Pick a goal to see related treatments.</p>';

@@ -1,0 +1,163 @@
+---
+import Base from '@layouts/Base.astro';
+import PageHeader from '@components/PageHeader.astro';
+import TreatmentCard from '@components/TreatmentCard.astro';
+import EvidenceTag from '@components/EvidenceTag.astro';
+import Advisory from '@components/Advisory.astro';
+import CtaBand from '@components/CtaBand.astro';
+import { treatments, treatmentsByFamily, type Treatment } from '@data/treatments';
+import { familyBySlug } from '@data/families';
+import { modalities } from '@data/modalities';
+import { concerns } from '@data/concerns';
+import { site } from '@data/site';
+
+export function getStaticPaths() {
+  return treatments.map((t) => ({ params: { slug: t.slug }, props: { treatment: t } }));
+}
+
+interface Props { treatment: Treatment; }
+const { treatment } = Astro.props;
+const fam = familyBySlug(treatment.family);
+const av = fam?.accentVar ?? 'injectables';
+const accent = `--accent: var(--accent-${av}); --accent-text: var(--accent-${av}-text); --accent-vivid: var(--accent-${av}-vivid)`;
+
+const acts = modalities.filter((m) => treatment.actives.includes(m.slug));
+const relatedConcerns = concerns.filter((c) => treatment.concerns.includes(c.slug));
+const related = treatmentsByFamily(treatment.family).filter((t) => t.slug !== treatment.slug).slice(0, 3);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalProcedure',
+  name: treatment.name,
+  description: treatment.essence,
+  url: `${site.url}/treatments/${treatment.slug}`,
+  provider: {
+    '@type': 'MedicalClinic',
+    name: `${site.line} at ${site.brand}`,
+    areaServed: site.locations.map((l) => l.city),
+  },
+};
+---
+<Base title={treatment.name} description={`${treatment.name}: ${treatment.essence}`}>
+  <div style={accent} class="tx-page">
+    <PageHeader eyebrow={treatment.brand ?? fam?.name} title={treatment.name} lead={treatment.essence} ripple />
+
+    <section class="section-tight">
+      <div class="wrap-narrow reveal">
+        <div class="tx-facts">
+          {fam && <a class="tx-fact" href={`/treatments#${fam.slug}`}>{fam.name}</a>}
+          {treatment.time && <span class="tx-fact">{treatment.time}</span>}
+          {treatment.series && <span class="tx-fact">{treatment.series}</span>}
+          {acts.map((m) => <EvidenceTag level={m.evidence} />)}
+        </div>
+      </div>
+    </section>
+
+    {relatedConcerns.length > 0 && (
+      <section class="section-tight">
+        <div class="wrap-narrow reveal">
+          <span class="eyebrow">What it helps</span>
+          <div class="tx-chips">
+            {relatedConcerns.map((c) => (
+              <a class="tx-chip" href={`/concerns/${c.slug}`} style={`--accent: var(--accent-${c.accent}-vivid)`}>
+                <span class="tx-chip__dot"></span>{c.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    {treatment.variants && (
+      <section class="section-tight fill">
+        <div class="wrap-narrow">
+          <header class="reveal"><span class="eyebrow">Options</span><h2>How it is offered.</h2></header>
+          <ul class="tx-opts reveal">
+            {treatment.variants.map((v) => (
+              <li class="tx-opt">
+                <span class="tx-opt__label">{v.label}{v.note && <span class="tx-opt__note">{v.note}</span>}</span>
+                {v.time && <span class="meta">{v.time}</span>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    {acts.length > 0 && (
+      <section class="section-tight">
+        <div class="wrap-narrow">
+          <header class="reveal"><span class="eyebrow">What does the work</span><h2>The active behind it.</h2></header>
+          <ul class="tx-acts reveal">
+            {acts.map((m) => (
+              <li class="tx-act">
+                <div class="tx-act__main">
+                  <span class="tx-act__dot" aria-hidden="true"></span>
+                  <div>
+                    <h3 class="tx-act__name">{m.name}</h3>
+                    <p class="tx-act__essence">{m.essence}</p>
+                    <p class="tx-act__may"><strong>May support:</strong> {m.maySupport}</p>
+                  </div>
+                </div>
+                <div class="tx-act__meta">
+                  <EvidenceTag level={m.evidence} />
+                  <span class="meta">Downtime: {m.downtime}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    <section class="section-tight">
+      <div class="wrap-narrow reveal">
+        <Advisory title="Honest by default">
+          Whether this is right for you is confirmed in person. We screen for
+          candidacy and your physician finalises any plan. Results vary, and we
+          never guarantee outcomes.
+        </Advisory>
+      </div>
+    </section>
+
+    {related.length > 0 && (
+      <section class="section-tight fill">
+        <div class="wrap">
+          <header class="section-head reveal"><span class="eyebrow">{fam?.name}</span><h2>Related treatments.</h2></header>
+          <div class="grid grid--cards reveal" style="margin-top:2rem">
+            {related.map((t) => <TreatmentCard treatment={t} />)}
+          </div>
+          <p style="margin-top:1.6rem"><a class="link-arrow" href="/treatments">All treatments &rarr;</a></p>
+        </div>
+      </section>
+    )}
+
+    <CtaBand title="Is this right for you?" body="Bring it to a complimentary consult. We screen first and tailor to you, and your physician finalises the plan." />
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+</Base>
+
+<style>
+  .tx-page .section-head h2, .tx-page header h2 { font-size: var(--step-3); }
+  .tx-facts { display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; align-items: center; }
+  .tx-fact { font-family: var(--mono); font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.08em; color: var(--mist); text-decoration: none; }
+  a.tx-fact { color: var(--accent-text); }
+  .tx-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+  .tx-chip { display: inline-flex; align-items: center; gap: 0.5em; font-size: var(--step--1); color: var(--graphite); border: 1px solid var(--line); border-radius: 999px; padding: 0.35em 0.85em; text-decoration: none; transition: border-color var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease); }
+  .tx-chip__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .tx-chip:hover { border-color: var(--accent); color: var(--ink); }
+  .tx-opts, .tx-acts { list-style: none; padding: 0; margin: 1.5rem 0 0; border-top: 1px solid var(--line); }
+  .tx-opt { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
+  .tx-opt__label { display: flex; flex-direction: column; gap: 0.15rem; color: var(--ink); }
+  .tx-opt__note { color: var(--mist); font-size: var(--step--1); }
+  .tx-act { display: flex; justify-content: space-between; gap: var(--space-m); flex-wrap: wrap; padding: var(--space-s) 0; border-bottom: 1px solid var(--line); }
+  .tx-act__main { display: flex; gap: 0.9rem; max-width: 60ch; }
+  .tx-act__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); flex: none; margin-top: 0.5rem; }
+  .tx-act__name { font-size: var(--step-1); margin: 0 0 0.2rem; }
+  .tx-act__essence { color: var(--graphite); margin: 0 0 0.3rem; }
+  .tx-act__may { color: var(--mist); font-size: var(--step--1); margin: 0; }
+  .tx-act__may strong { color: var(--accent-text); }
+  .tx-act__meta { display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end; text-align: right; min-width: 220px; }
+  @media (max-width: 640px) { .tx-act__meta { align-items: flex-start; text-align: left; } }
+</style>
