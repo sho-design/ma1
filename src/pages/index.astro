@@ -5,7 +5,6 @@ import TreatmentCard from '@components/TreatmentCard.astro';
 import ConcernTile from '@components/ConcernTile.astro';
 import PullQuote from '@components/PullQuote.astro';
 import CtaBand from '@components/CtaBand.astro';
-import EvidenceTag from '@components/EvidenceTag.astro';
 import TrustStrip from '@components/TrustStrip.astro';
 import PartnersStrip from '@components/PartnersStrip.astro';
 import { site } from '@data/site';
@@ -73,26 +72,6 @@ const featuredConcerns = concerns.slice(0, 8);
 
   <PullQuote />
 
-  <!-- Trust / medical anchor -->
-  <section class="section-tight">
-    <div class="wrap trust reveal">
-      <div>
-        <span class="eyebrow">The clinic, not the counter</span>
-        <h2>Trust is a design feature.</h2>
-        <p class="lede">
-          Every option is reviewed by a physician and delivered by clinicians.
-          We show our evidence rather than imply it, and we keep a genuine
-          medical anchor in dermatology and scar revision.
-        </p>
-        <p style="margin-top:1.4rem; display:flex; gap:1.4rem; flex-wrap:wrap; align-items:center">
-          <EvidenceTag level="established" />
-          <EvidenceTag level="emerging" />
-        </p>
-        <p class="meta" style="margin-top:1rem">Hover the tags: every benefit claim is rated and honest.</p>
-      </div>
-    </div>
-  </section>
-
   <CtaBand />
 </Base>
 
@@ -119,7 +98,6 @@ const featuredConcerns = concerns.slice(0, 8);
   }
   .section-head h2 { font-size: var(--step-3); }
   .section-head .lede { margin-top: 0.6rem; }
-  .trust { max-width: var(--measure); }
   /* same grid as the sibling drip-grid */
   .treat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; }
 </style>
