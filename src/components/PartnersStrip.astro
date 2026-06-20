@@ -29,14 +29,17 @@ const loop = [...partners, ...partners];
 </section>
 
 <style>
-  .partners-sec { padding-block: var(--space-m); overflow: hidden; }
+  .partners-sec { position: relative; padding-block: var(--space-m); overflow: hidden; }
   .partners__eyebrow { text-align: center; margin-bottom: 1.6rem; }
 
-  .marquee {
-    position: relative;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  /* Edge fades as overlays (no mask/compositing layer, which can leak a hairline) */
+  .partners-sec::before, .partners-sec::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 7%; z-index: 2; pointer-events: none;
   }
+  .partners-sec::before { left: 0; background: linear-gradient(90deg, var(--cloud), transparent); }
+  .partners-sec::after { right: 0; background: linear-gradient(270deg, var(--cloud), transparent); }
+
+  .marquee { position: relative; }
   .marquee__track {
     display: flex; width: max-content; gap: 1rem;
     animation: partners-scroll 46s linear infinite;
@@ -57,8 +60,8 @@ const loop = [...partners, ...partners];
   }
   .partner::before {
     content: ''; position: absolute; inset: 0 0 auto 0; height: 3px; border-radius: var(--radius) var(--radius) 0 0;
-    background: var(--accent); transform: scaleX(0); transform-origin: left;
-    transition: transform var(--dur-hover) var(--ease);
+    background: var(--accent); opacity: 0;
+    transition: opacity var(--dur-hover) var(--ease);
   }
   .partner__name {
     font-family: var(--display); font-size: var(--step-1); line-height: 1.1;
@@ -77,7 +80,7 @@ const loop = [...partners, ...partners];
     box-shadow: 0 16px 32px -22px color-mix(in srgb, var(--accent) 70%, transparent);
     transform: translateY(-3px); outline: none;
   }
-  .partner:hover::before, .partner:focus-visible::before { transform: scaleX(1); }
+  .partner:hover::before, .partner:focus-visible::before { opacity: 0.9; }
   .partner:hover .partner__name, .partner:focus-visible .partner__name { color: var(--accent-text); }
   .partner:hover .partner__go, .partner:focus-visible .partner__go { opacity: 1; transform: translateY(0); }
 
