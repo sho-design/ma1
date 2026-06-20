@@ -8,7 +8,7 @@ const accent = fam
   ? `--accent: var(--accent-${fam.accentVar}); --accent-text: var(--accent-${fam.accentVar}-text)`
   : '';
 ---
-<a class="card" href={`/treatments/${treatment.slug}`} style={accent}>
+<a class="card" href={`/treatments/${treatment.slug}`} style={accent} data-family={treatment.family} data-concerns={treatment.concerns.join(' ')}>
   <span class="card__top">
     <span class="card__family">{fam?.name}</span>
     {treatment.brand && <span class="card__type">{treatment.brand}</span>}

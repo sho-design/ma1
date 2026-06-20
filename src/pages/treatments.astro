@@ -4,7 +4,11 @@ import PageHeader from '@components/PageHeader.astro';
 import TreatmentCard from '@components/TreatmentCard.astro';
 import CtaBand from '@components/CtaBand.astro';
 import { families } from '@data/families';
-import { treatmentsByFamily } from '@data/treatments';
+import { treatmentsByFamily, treatmentsByConcern } from '@data/treatments';
+import { concerns } from '@data/concerns';
+
+// Only offer concern chips that actually match at least one treatment.
+const concernChips = concerns.filter((c) => treatmentsByConcern(c.slug).length > 0);
 ---
 <Base title="Treatments" description="Injectables, skin & resurfacing, energy & laser, body, and skin health. Every option reviewed by a physician.">
   <PageHeader
@@ -14,12 +18,33 @@ import { treatmentsByFamily } from '@data/treatments';
     ripple
   />
 
+  <div class="wrap filterbar reveal" data-filter>
+    <div class="filterbar__row">
+      <span class="filterbar__label">Family</span>
+      <button class="fchip is-active" type="button" data-type="all">All</button>
+      {families.map((fam) => (
+        treatmentsByFamily(fam.slug).length > 0 && (
+          <button class="fchip" type="button" data-type="family" data-value={fam.slug} style={`--accent: var(--accent-${fam.accentVar})`}>{fam.name}</button>
+        )
+      ))}
+    </div>
+    <div class="filterbar__row">
+      <span class="filterbar__label">Concern</span>
+      {concernChips.map((c) => (
+        <button class="fchip" type="button" data-type="concern" data-value={c.slug} style={`--accent: var(--accent-${c.accent}-vivid)`}>{c.label}</button>
+      ))}
+    </div>
+  </div>
+
+  <p class="wrap filter-empty" data-empty hidden>No treatments match that filter. <button class="link-arrow" type="button" data-reset>Show all &rarr;</button></p>
+
   {families.map((fam) => {
     const items = treatmentsByFamily(fam.slug);
     if (!items.length) return null;
     return (
       <section
-        class="section-tight"
+        class="section-tight fam-section"
+        data-section={fam.slug}
         id={fam.slug}
         style={`--accent: var(--accent-${fam.accentVar}); --accent-text: var(--accent-${fam.accentVar}-text)`}
       >
@@ -43,4 +68,49 @@ import { treatmentsByFamily } from '@data/treatments';
 <style>
   .fam-head h2 { font-size: var(--step-3); }
   .fam-head .lede { margin-top: 0.5rem; }
+
+  .filterbar { margin-top: var(--space-m); display: grid; gap: 0.7rem; }
+  .filterbar__row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+  .filterbar__label { font-family: var(--mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--mist); margin-right: 0.4rem; min-width: 4.2rem; }
+  .fchip { font-size: var(--step--1); color: var(--graphite); background: var(--white-pure); border: 1px solid var(--line); border-radius: 999px; padding: 0.35em 0.9em; cursor: pointer; transition: border-color var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease), background var(--dur-hover) var(--ease); }
+  .fchip:hover { border-color: var(--accent, var(--ink)); color: var(--ink); }
+  .fchip.is-active { color: var(--white-pure); background: var(--accent, var(--ink)); border-color: var(--accent, var(--ink)); }
+  .filter-empty { margin-top: var(--space-m); color: var(--graphite); }
+  .card.is-hidden, .fam-section.is-hidden { display: none; }
 </style>
+
+<script>
+  const bar = document.querySelector('[data-filter]');
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-section]'));
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+  const reset = document.querySelector<HTMLElement>('[data-reset]');
+  if (bar) {
+    const chips = Array.from(bar.querySelectorAll<HTMLButtonElement>('.fchip'));
+
+    const apply = (type: string, value: string) => {
+      let total = 0;
+      for (const sec of sections) {
+        const cards = Array.from(sec.querySelectorAll<HTMLElement>('.card'));
+        let shown = 0;
+        for (const card of cards) {
+          let match = true;
+          if (type === 'family') match = card.dataset.family === value;
+          else if (type === 'concern') match = (card.dataset.concerns || '').split(' ').includes(value);
+          card.classList.toggle('is-hidden', !match);
+          if (match) shown++;
+        }
+        sec.classList.toggle('is-hidden', shown === 0);
+        total += shown;
+      }
+      if (empty) empty.hidden = total !== 0;
+    };
+
+    const setActive = (chip: HTMLButtonElement) => {
+      chips.forEach((c) => c.classList.toggle('is-active', c === chip));
+      apply(chip.dataset.type || 'all', chip.dataset.value || '');
+    };
+
+    chips.forEach((chip) => chip.addEventListener('click', () => setActive(chip)));
+    reset?.addEventListener('click', () => setActive(chips[0]));
+  }
+</script>
