@@ -89,24 +89,51 @@ function initDroplet() {
   requestAnimationFrame(loop);
 }
 
-/* ---- Headline light-sweep: a champagne sheen glides across the letters
-   toward the cursor (the aesthetics line's "radiance" read). The gradient is
-   clipped to the text via CSS; here we just move the highlight position. */
-function initSheen() {
+/* ---- Headline illuminate trace: letters light into the section accent as the
+   cursor passes, then settle back. Splits text into per-letter spans while
+   preserving child elements (e.g. the italic fragment). */
+function splitChars(node: Node, out: HTMLElement[]) {
+  for (const child of Array.from(node.childNodes)) {
+    if (child.nodeType === Node.TEXT_NODE) {
+      const text = child.textContent ?? '';
+      if (!text) continue;
+      const frag = document.createDocumentFragment();
+      for (const ch of text) {
+        if (ch === ' ') { frag.appendChild(document.createTextNode(' ')); continue; }
+        const span = document.createElement('span');
+        span.className = 'il';
+        span.textContent = ch;
+        out.push(span);
+        frag.appendChild(span);
+      }
+      child.parentNode?.replaceChild(frag, child);
+    } else if (child.nodeType === Node.ELEMENT_NODE) {
+      splitChars(child, out);
+    }
+  }
+}
+
+function initIlluminate() {
   if (reduced || !finePointer) return;
+  const R = 95; // light radius in px
   document.querySelectorAll<HTMLElement>('.ripple').forEach((title) => {
-    title.classList.add('is-sheen');
-    title.style.setProperty('--sweep', '-30%');
+    if (title.dataset.split) return;
+    const letters: HTMLElement[] = [];
+    splitChars(title, letters);
+    title.dataset.split = 'true';
+
     title.addEventListener('pointermove', (e) => {
-      const rect = title.getBoundingClientRect();
-      const pct = ((e.clientX - rect.left) / rect.width) * 100;
-      title.style.setProperty('--sweep', `${Math.max(-30, Math.min(130, pct)).toFixed(1)}%`);
+      for (const s of letters) {
+        const r = s.getBoundingClientRect();
+        const d = Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2));
+        const t = Math.max(0, 1 - d / R);
+        s.style.color = t < 0.06
+          ? ''
+          : `color-mix(in srgb, var(--accent-vivid, var(--accent)) ${Math.round(t * 100)}%, var(--ink))`;
+      }
     });
-    // let the light finish its pass off the trailing edge
-    title.addEventListener('pointerleave', (e) => {
-      const rect = title.getBoundingClientRect();
-      const leftward = e.clientX < rect.left + rect.width / 2;
-      title.style.setProperty('--sweep', leftward ? '-30%' : '130%');
+    title.addEventListener('pointerleave', () => {
+      for (const s of letters) s.style.color = '';
     });
   });
 }
@@ -114,5 +141,5 @@ function initSheen() {
 document.addEventListener('DOMContentLoaded', () => {
   initReveal();
   initDroplet();
-  initSheen();
+  initIlluminate();
 });
