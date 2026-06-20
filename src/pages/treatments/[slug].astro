@@ -5,6 +5,7 @@ import { treatments, treatmentsByFamily, type Treatment } from '@data/treatments
 import { familyBySlug } from '@data/families';
 import { modalities } from '@data/modalities';
 import { concerns } from '@data/concerns';
+import { careByFamily, sharedFaqs } from '@data/care';
 import { site } from '@data/site';
 
 export function getStaticPaths() {
@@ -22,6 +23,9 @@ const supports = [...new Set(acts.map((m) => m.maySupport))];
 const whatItIs = acts.map((m) => m.essence).join(' ') || treatment.essence;
 const relatedConcerns = concerns.filter((c) => treatment.concerns.includes(c.slug));
 const related = treatmentsByFamily(treatment.family).filter((t) => t.slug !== treatment.slug).slice(0, 3);
+
+const care = careByFamily[treatment.family];
+const faqs = [...care.faqs, ...sharedFaqs];
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -122,6 +126,36 @@ const jsonLd = {
           </p>
         </section>
 
+        <section class="reveal detail__block">
+          <h2 class="detail__h">Before your visit</h2>
+          <ul class="supports">
+            {care.pre.map((p) => (
+              <li class="supports__item"><span class="supports__tick" aria-hidden="true"></span>{p}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="reveal detail__block">
+          <h2 class="detail__h">Aftercare</h2>
+          <ul class="supports">
+            {care.post.map((p) => (
+              <li class="supports__item"><span class="supports__tick" aria-hidden="true"></span>{p}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="reveal detail__block">
+          <h2 class="detail__h">Frequently asked</h2>
+          <div class="faqs">
+            {faqs.map((f) => (
+              <details class="faq">
+                <summary>{f.q}</summary>
+                <p class="faq__a">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
         <section class="reveal detail__block detail__note">
           <h2 class="detail__h">Good to know</h2>
           <p class="detail__p measure">
@@ -190,6 +224,15 @@ const jsonLd = {
   </article>
 
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  })}></script>
 </Base>
 
 <style>
@@ -237,6 +280,14 @@ const jsonLd = {
   .help-chip { display: inline-flex; align-items: center; gap: 0.5em; font-size: var(--step--1); color: var(--graphite); border: 1px solid var(--line); border-radius: 999px; padding: 0.35em 0.85em; text-decoration: none; transition: border-color var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease); }
   .help-chip__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
   .help-chip:hover { border-color: var(--accent); color: var(--ink); }
+
+  .faqs { border-top: 1px solid var(--line); max-width: var(--measure); }
+  .faq { border-bottom: 1px solid var(--line); }
+  .faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 1rem 0; font-family: var(--display); font-size: var(--step-1); }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; font-family: var(--mono); color: var(--mist); }
+  .faq[open] summary::after { content: '\2013'; }
+  .faq__a { color: var(--graphite); margin: 0; padding: 0 0 1.1rem; }
 
   .sec-head { max-width: 60ch; margin-bottom: var(--space-m); display: grid; gap: 1rem; }
   .detail__related-h { font-size: var(--step-3); }
