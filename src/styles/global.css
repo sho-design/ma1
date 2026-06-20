@@ -382,10 +382,7 @@ img, svg, canvas { display: block; max-width: 100%; }
 .card__type { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mist); text-align: right; }
 .card__name { font-family: var(--display); font-size: var(--step-1); line-height: 1.15; margin: 0; color: var(--ink); }
 .card__essence { color: var(--graphite); font-size: var(--step--1); line-height: 1.5; margin: 0; flex: 1; }
-.card__dots { display: flex; gap: 5px; margin-top: 0.4rem; }
-.card__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); opacity: 0.5; transition: opacity var(--dur-hover) var(--ease); }
 .card__more { margin-top: 0.6rem; border-color: transparent; color: var(--ink); }
-.card:hover .card__dot { opacity: 0.9; }
 .card:hover .card__more { border-color: var(--ink); }
 
 /* ---- ActiveChip (was IngredientChip) ------------------------------------- */
