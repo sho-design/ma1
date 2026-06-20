@@ -35,13 +35,6 @@ const featuredConcerns = concerns.slice(0, 8);
         <a class="link-arrow" href="/treatments">Explore treatments &rarr;</a>
       </div>
     </div>
-    <div class="wrap hero__meta">
-      <span class="meta">Physician-led</span>
-      <span class="hero__sep" aria-hidden="true"></span>
-      <span class="meta">Clinician-delivered</span>
-      <span class="hero__sep" aria-hidden="true"></span>
-      <span class="meta">Screened first</span>
-    </div>
   </section>
 
   <TrustStrip />
@@ -105,7 +98,7 @@ const featuredConcerns = concerns.slice(0, 8);
 
 <style>
   .hero { position: relative; overflow: hidden; padding-block: clamp(3.5rem, 8vh, 7rem) var(--space-l); }
-  .hero__inner, .hero__meta { position: relative; z-index: 2; }
+  .hero__inner { position: relative; z-index: 2; }
   .hero__motif {
     position: absolute; z-index: 1;
     top: 50%; right: clamp(0.5rem, 5vw, 5rem);
@@ -118,10 +111,8 @@ const featuredConcerns = concerns.slice(0, 8);
   .hero__title { font-size: var(--step-5); max-width: 16ch; margin: 0; }
   .hero__lead { margin-top: 2rem; }
   .hero__actions { margin-top: 2.5rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
-  .hero__meta { margin-top: 3.5rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 1.5rem; }
-  .hero__sep { width: 4px; height: 4px; border-radius: 50%; background: var(--line); }
   @media (min-width: 1000px) {
-    .hero__inner, .hero__meta { padding-right: clamp(280px, 28vw, 400px); }
+    .hero__inner { padding-right: clamp(280px, 28vw, 400px); }
   }
   @media (max-width: 999px) {
     .hero__motif { right: clamp(-60px, -4vw, -10px); opacity: 0.4; width: clamp(200px, 42vw, 280px); }
