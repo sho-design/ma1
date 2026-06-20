@@ -3,6 +3,7 @@ import { site } from '@data/site';
 import { families } from '@data/families';
 import { concerns } from '@data/concerns';
 import ConcernIcon from './ConcernIcon.astro';
+import Socials from './Socials.astro';
 
 const treatmentFamilies = families.filter((f) => f.slug !== 'clinical');
 ---
@@ -88,20 +89,31 @@ const treatmentFamilies = families.filter((f) => f.slug !== 'clinical');
 <!-- Mobile drawer + scrim -->
 <div class="scrim" data-drawer-close></div>
 <aside class="drawer" aria-label="Menu">
-  <details>
-    <summary>By Concern</summary>
-    {concerns.map((c) => <a href={`/concerns#${c.slug}`}>{c.label}</a>)}
-  </details>
-  <details>
-    <summary>Treatments</summary>
-    {treatmentFamilies.map((f) => <a href={`/treatments#${f.slug}`}>{f.name}</a>)}
-    <a href="/treatments">All treatments</a>
-  </details>
-  <a href="/modalities">Modalities &amp; actives</a>
-  <a href="/plan">Plan your treatment</a>
-  <a href="/candidacy">Candidacy &amp; safety</a>
-  <a href="/memberships">Memberships</a>
-  <a class="btn drawer__cta" href="/contact">Book a consult</a>
+  <div class="drawer__inner">
+    <details class="drawer__acc">
+      <summary class="drawer__sum">By Concern</summary>
+      <div class="drawer__panel drawer__cols">
+        {concerns.map((c) => (
+          <a class="drawer__sublink" href={`/concerns#${c.slug}`}>
+            <ConcernIcon slug={c.icon} size={16} class="drawer__cicon" />{c.label}
+          </a>
+        ))}
+      </div>
+    </details>
+    <details class="drawer__acc">
+      <summary class="drawer__sum">Treatments</summary>
+      <div class="drawer__panel">
+        {treatmentFamilies.map((f) => <a class="drawer__sublink" href={`/treatments#${f.slug}`}>{f.name}</a>)}
+        <a class="drawer__sublink drawer__sublink--learn" href="/treatments">All treatments</a>
+      </div>
+    </details>
+    <a class="drawer__link" href="/modalities">Modalities &amp; actives</a>
+    <a class="drawer__link" href="/plan">Plan your treatment</a>
+    <a class="drawer__link" href="/candidacy">Candidacy &amp; safety</a>
+    <a class="drawer__link" href="/memberships">Memberships</a>
+    <a class="btn btn--lg drawer__cta" href="/contact">Book a consult</a>
+    <div class="drawer__socials"><Socials /></div>
+  </div>
 </aside>
 
 <script>
@@ -114,8 +126,8 @@ const treatmentFamilies = families.filter((f) => f.slug !== 'clinical');
       d.querySelector('[data-panel]')?.setAttribute('hidden', '');
     }
   };
-  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
+  // Click to toggle; the panel STAYS open until you click the trigger again,
+  // click outside, press Escape, or open the other panel. (No hover-close.)
   for (const d of dropdowns) {
     const trigger = d.querySelector<HTMLButtonElement>('[data-trigger]');
     const panel = d.querySelector<HTMLElement>('[data-panel]');
@@ -123,10 +135,6 @@ const treatmentFamilies = families.filter((f) => f.slug !== 'clinical');
     const open = () => { closeAll(d); d.classList.add('is-open'); trigger.setAttribute('aria-expanded', 'true'); panel.removeAttribute('hidden'); };
     const close = () => { d.classList.remove('is-open'); trigger.setAttribute('aria-expanded', 'false'); panel.setAttribute('hidden', ''); };
     trigger.addEventListener('click', (e) => { e.preventDefault(); d.classList.contains('is-open') ? close() : open(); });
-    if (canHover) {
-      d.addEventListener('mouseenter', open);
-      d.addEventListener('mouseleave', close);
-    }
   }
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); });
   document.addEventListener('click', (e) => {

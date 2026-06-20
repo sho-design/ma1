@@ -286,14 +286,22 @@ img, svg, canvas { display: block; max-width: 100%; }
   .nav__burger { display: flex; }
   .scrim { display: block; position: fixed; inset: var(--header-h) 0 0; background: rgba(26,27,29,0.28); z-index: 55; opacity: 0; visibility: hidden; transition: opacity var(--dur-hover) var(--ease), visibility var(--dur-hover); }
   .scrim.is-open { opacity: 1; visibility: visible; }
-  .drawer { display: block; position: fixed; top: var(--header-h); right: 0; bottom: 0; width: min(86vw, 380px); background: var(--paper); z-index: 60; padding: 1.5rem 1.5rem 3rem; transform: translateX(100%); transition: transform 0.3s var(--ease); overflow-y: auto; border-left: 1px solid var(--line); }
+  .drawer { display: block; position: fixed; top: var(--header-h); right: 0; bottom: 0; width: min(86vw, 380px); background: var(--paper); z-index: 60; transform: translateX(100%); transition: transform 0.3s var(--ease); overflow-y: auto; border-left: 1px solid var(--line); }
   .drawer.is-open { transform: none; }
-  .drawer > a, .drawer summary { display: block; padding: 0.85rem 0; border-bottom: 1px solid var(--line); font-size: var(--step-1); font-family: var(--display); }
-  .drawer details { border-bottom: 1px solid var(--line); }
-  .drawer summary { list-style: none; cursor: pointer; border-bottom: 0; }
-  .drawer summary::-webkit-details-marker { display: none; }
-  .drawer details a { display: block; padding: 0.45em 0 0.45em 1em; color: var(--graphite); font-family: var(--body); font-size: var(--step-0); border: 0; }
+  .drawer__inner { display: flex; flex-direction: column; padding: 1.5rem 1.5rem 3rem; gap: 0.3rem; }
+  .drawer__link, .drawer__sum { padding: 0.85rem 0; border-bottom: 1px solid var(--line); font-family: var(--display); font-size: var(--step-1); text-decoration: none; color: var(--ink); }
+  .drawer__acc { border-bottom: 1px solid var(--line); }
+  .drawer__sum { display: flex; justify-content: space-between; align-items: center; list-style: none; cursor: pointer; border-bottom: 0; }
+  .drawer__sum::-webkit-details-marker { display: none; }
+  .drawer__sum::after { content: '+'; font-family: var(--mono); color: var(--mist); }
+  .drawer__acc[open] .drawer__sum::after { content: '\2013'; }
+  .drawer__panel { padding-bottom: 1rem; display: flex; flex-direction: column; gap: 0.1rem; }
+  .drawer__cols { display: grid; grid-template-columns: 1fr 1fr; column-gap: 1rem; }
+  .drawer__sublink { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0; text-decoration: none; color: var(--graphite); font-size: var(--step-0); }
+  .drawer__sublink--learn { color: var(--ink); }
+  .drawer__cicon { color: var(--mist); flex: none; }
   .drawer__cta { margin-top: 1.2rem; justify-content: center; }
+  .drawer__socials { margin-top: 1.5rem; padding-top: 1.3rem; border-top: 1px solid var(--line); display: flex; justify-content: center; }
 }
 
 /* ---- Card / panel recipe (TreatmentCard) --------------------------------- */
