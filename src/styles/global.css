@@ -486,6 +486,25 @@ img, svg, canvas { display: block; max-width: 100%; }
 .field textarea { resize: vertical; min-height: 120px; }
 .form__confirm { background: color-mix(in srgb, var(--accent-health) 10%, var(--paper)); border: 1px solid color-mix(in srgb, var(--accent-health) 30%, var(--line)); border-radius: var(--radius); padding: var(--space-s) var(--space-m); color: var(--graphite); }
 
+.form-goals { margin: var(--space-s) 0; border-top: 1px solid var(--line); padding-top: var(--space-s); }
+.form-goals > summary { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--mist); cursor: pointer; list-style: none; }
+.form-goals > summary::-webkit-details-marker { display: none; }
+.form-goals > summary::after { content: ' +'; }
+.form-goals[open] > summary::after { content: ' \2013'; }
+
+/* ---- Goals checklist ("select all that apply") --------------------------- */
+.goals { display: grid; gap: var(--space-m); }
+.goals--compact { gap: var(--space-s); }
+.goals__group { border: 0; padding: 0; margin: 0; }
+.goals__group legend { margin-bottom: 0.7rem; }
+.goals__items { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.goal-chip { position: relative; }
+.goal-chip input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.goal-chip span { display: inline-block; padding: 0.42em 0.85em; border: 1px solid var(--line); border-radius: 999px; font-size: var(--step--1); color: var(--graphite); cursor: pointer; transition: border-color var(--dur-hover) var(--ease), background var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease); }
+.goal-chip input:checked + span { border-color: var(--accent, var(--ink)); color: var(--ink); background: color-mix(in srgb, var(--accent, var(--ink)) 10%, var(--paper)); }
+.goal-chip input:focus-visible + span { outline: 2px solid var(--accent-text, var(--ink)); outline-offset: 2px; }
+.goal-chip input:disabled + span { opacity: 0.5; cursor: default; }
+
 /* ---- Footer (dark, gradient seam, matches the sibling line) ------------- */
 .footer {
   background:

@@ -1,0 +1,20 @@
+---
+import { goalGroups } from '@data/goals';
+interface Props { compact?: boolean; }
+const { compact = false } = Astro.props;
+---
+<div class={`goals${compact ? ' goals--compact' : ''}`}>
+  {goalGroups.map((g) => (
+    <fieldset class="goals__group">
+      <legend class="eyebrow">{g.title}</legend>
+      <div class="goals__items">
+        {g.items.map((item) => (
+          <label class="goal-chip">
+            <input type="checkbox" name="goal" value={item} />
+            <span>{item}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  ))}
+</div>

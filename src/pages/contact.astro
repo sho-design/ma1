@@ -65,5 +65,14 @@ import { site } from '@data/site';
       const match = Array.from(concern.options).find((o) => o.textContent?.toLowerCase() === first);
       if (match) concern.value = match.value;
     }
+    // Pre-check matching goal checkboxes carried from the Plan page, and reveal them.
+    if (goals) {
+      const wanted = new Set(goals.split('|'));
+      const boxes = document.querySelectorAll<HTMLInputElement>('input[name="goal"]');
+      let any = false;
+      boxes.forEach((b) => { if (wanted.has(b.value)) { b.checked = true; any = true; } });
+      const details = document.querySelector<HTMLDetailsElement>('.form-goals');
+      if (any && details) details.open = true;
+    }
   }
 </script>
