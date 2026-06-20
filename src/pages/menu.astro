@@ -7,11 +7,11 @@ import { families } from '@data/families';
 import { treatmentsByFamily } from '@data/treatments';
 import { site } from '@data/site';
 ---
-<Base title="Menu & pricing" description="The Restoration Medical aesthetics menu: injectables, regenerative boosters, energy and laser, plasma, facials and skin health, with list pricing.">
+<Base title="Treatment menu" description="The Restoration Medical aesthetics menu: injectables, regenerative boosters, energy and laser, plasma, facials and skin health. Pricing is shared at your complimentary consult.">
   <PageHeader
-    eyebrow="Menu & pricing"
+    eyebrow="Treatment menu"
     title="The Menu."
-    lead="Delivered under physician supervision by our Registered Nurses, Registered Practical Nurses and physicians. Every treatment begins with a complimentary consultation and a written plan."
+    lead="Delivered under physician supervision by our Registered Nurses, Registered Practical Nurses and physicians. Every treatment begins with a complimentary consultation and a written plan, where your pricing is set."
     ripple
   />
 
@@ -43,11 +43,8 @@ import { site } from '@data/site';
             {items.map((t) => (
               <article class="menu-item">
                 <div class="menu-item__head">
-                  <div>
-                    {t.brand && <span class="menu-item__brand">{t.brand}</span>}
-                    <h3 class="menu-item__name">{t.name}</h3>
-                  </div>
-                  <span class="menu-item__price">{t.price}</span>
+                  {t.brand && <span class="menu-item__brand">{t.brand}</span>}
+                  <h3 class="menu-item__name">{t.name}</h3>
                 </div>
                 <p class="menu-item__essence">{t.essence}</p>
 
@@ -59,10 +56,7 @@ import { site } from '@data/site';
                           {v.label}
                           {v.note && <span class="menu-row__note">{v.note}</span>}
                         </span>
-                        <span class="menu-row__meta">
-                          {v.time && <span class="meta">{v.time}</span>}
-                          <span class="menu-row__price">{v.price}</span>
-                        </span>
+                        {v.time && <span class="meta">{v.time}</span>}
                       </li>
                     ))}
                   </ul>
@@ -83,8 +77,9 @@ import { site } from '@data/site';
   <section class="section-tight">
     <div class="wrap-narrow">
       <p class="meta">
-        All treatments require consultation and medical screening. Prices are
-        subject to change. {site.locations.map((l) => l.city).join(' · ')}.
+        All treatments require consultation and medical screening. Pricing is
+        shared at your complimentary consult and depends on the plan your
+        physician recommends. {site.locations.map((l) => l.city).join(' · ')}.
       </p>
     </div>
   </section>
@@ -103,17 +98,12 @@ import { site } from '@data/site';
     border-radius: var(--radius);
     padding: var(--space-m);
   }
-  .menu-item__head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
   .menu-item__brand { font-family: var(--mono); font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent-text); }
   .menu-item__name { font-family: var(--display); font-size: var(--step-2); margin: 0.2rem 0 0; }
-  .menu-item__price { font-family: var(--display); font-size: var(--step-2); color: var(--ink); white-space: nowrap; }
   .menu-item__essence { color: var(--graphite); max-width: var(--measure); margin: 0.7rem 0 0; }
   .menu-rows { list-style: none; padding: 0; margin: 1.1rem 0 0; border-top: 1px solid var(--line); }
   .menu-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
   .menu-row__label { display: flex; flex-direction: column; gap: 0.15rem; color: var(--ink); }
   .menu-row__note { color: var(--mist); font-size: var(--step--1); }
-  .menu-row__meta { display: inline-flex; align-items: baseline; gap: 1rem; white-space: nowrap; }
-  .menu-row__price { font-family: var(--display); font-size: var(--step-1); }
   .menu-item__foot { display: flex; gap: 1.4rem; flex-wrap: wrap; margin-top: 0.9rem; }
-  @media (max-width: 560px) { .menu-row { flex-direction: column; gap: 0.2rem; } }
 </style>
