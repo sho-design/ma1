@@ -89,40 +89,24 @@ function initDroplet() {
   requestAnimationFrame(loop);
 }
 
-/* ---- Title ripple/warp: letters warp from the cursor like a fluid surface */
-function initRipple() {
+/* ---- Headline light-sweep: a champagne sheen glides across the letters
+   toward the cursor (the aesthetics line's "radiance" read). The gradient is
+   clipped to the text via CSS; here we just move the highlight position. */
+function initSheen() {
   if (reduced || !finePointer) return;
   document.querySelectorAll<HTMLElement>('.ripple').forEach((title) => {
-    // split into per-letter spans once
-    if (!title.dataset.split) {
-      const text = title.textContent ?? '';
-      title.textContent = '';
-      for (const ch of text) {
-        const span = document.createElement('span');
-        span.textContent = ch;
-        span.style.display = 'inline-block';
-        span.style.willChange = 'transform';
-        if (ch === ' ') span.style.width = '0.32em';
-        title.appendChild(span);
-      }
-      title.dataset.split = 'true';
-    }
-    const spans = Array.from(title.querySelectorAll('span'));
+    title.classList.add('is-sheen');
+    title.style.setProperty('--sweep', '-30%');
     title.addEventListener('pointermove', (e) => {
       const rect = title.getBoundingClientRect();
-      const mx = e.clientX - rect.left;
-      const my = e.clientY - rect.top;
-      for (const span of spans) {
-        const s = span as HTMLElement;
-        const cx = s.offsetLeft + s.offsetWidth / 2;
-        const cy = s.offsetTop + s.offsetHeight / 2;
-        const dist = Math.hypot(mx - cx, my - cy);
-        const pull = Math.max(0, 1 - dist / 140);
-        s.style.transform = `translateY(${-pull * 10}px) scale(${1 + pull * 0.06})`;
-      }
+      const pct = ((e.clientX - rect.left) / rect.width) * 100;
+      title.style.setProperty('--sweep', `${Math.max(-30, Math.min(130, pct)).toFixed(1)}%`);
     });
-    title.addEventListener('pointerleave', () => {
-      spans.forEach((s) => ((s as HTMLElement).style.transform = ''));
+    // let the light finish its pass off the trailing edge
+    title.addEventListener('pointerleave', (e) => {
+      const rect = title.getBoundingClientRect();
+      const leftward = e.clientX < rect.left + rect.width / 2;
+      title.style.setProperty('--sweep', leftward ? '-30%' : '130%');
     });
   });
 }
@@ -130,5 +114,5 @@ function initRipple() {
 document.addEventListener('DOMContentLoaded', () => {
   initReveal();
   initDroplet();
-  initRipple();
+  initSheen();
 });

@@ -121,6 +121,33 @@ img, svg, canvas { display: block; max-width: 100%; }
 /* italic emphasis fragment */
 .it { font-style: italic; font-weight: 360; }
 
+/* ---- Headline light-sweep (champagne sheen on hover) ---------------------- */
+/* JS adds .is-sheen on fine-pointer, non-reduced-motion devices and drives
+   --sweep (0–100% across the text). At rest the band sits off-screen so the
+   text renders as solid --ink at full contrast. */
+@property --sweep {
+  syntax: '<percentage>';
+  initial-value: -30%;
+  inherits: false;
+}
+.ripple.is-sheen {
+  --sweep: -30%;
+  --sheen-hi: #f4ecd2;   /* champagne highlight */
+  --sheen-mid: #cdb074;  /* warm gold edge */
+  background-image: linear-gradient(100deg,
+    var(--ink) 0,
+    var(--ink) calc(var(--sweep) - 16%),
+    var(--sheen-mid) calc(var(--sweep) - 5%),
+    var(--sheen-hi) var(--sweep),
+    var(--sheen-mid) calc(var(--sweep) + 5%),
+    var(--ink) calc(var(--sweep) + 16%),
+    var(--ink) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: --sweep 0.14s linear;
+}
+
 /* ---- Layout helpers ------------------------------------------------------- */
 .wrap { width: min(100% - 2.5rem, 1180px); margin-inline: auto; }
 .wrap-narrow { width: min(100% - 2.5rem, 760px); margin-inline: auto; }
