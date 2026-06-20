@@ -8,6 +8,8 @@ export interface Concern {
   icon: string;
   /** families most relevant to this concern */
   families: string[];
+  /** accent family used to colour the tile/icon; spread for visual variety */
+  accent: string;
 }
 
 export const concerns: Concern[] = [
@@ -17,6 +19,7 @@ export const concerns: Concern[] = [
     line: 'Soften expression lines while keeping your face yours.',
     icon: 'lines',
     families: ['injectables', 'skin', 'health'],
+    accent: 'injectables',
   },
   {
     slug: 'volume',
@@ -24,6 +27,7 @@ export const concerns: Concern[] = [
     line: 'Restore subtle structure where time has quietly taken it.',
     icon: 'contour',
     families: ['injectables', 'body'],
+    accent: 'body',
   },
   {
     slug: 'texture',
@@ -31,6 +35,7 @@ export const concerns: Concern[] = [
     line: 'Smoother surface, more even light across the skin.',
     icon: 'texture',
     families: ['skin', 'energy', 'health'],
+    accent: 'skin',
   },
   {
     slug: 'acne-scarring',
@@ -38,6 +43,7 @@ export const concerns: Concern[] = [
     line: 'Calm active skin and soften the marks it leaves behind.',
     icon: 'acne',
     families: ['skin', 'energy', 'clinical'],
+    accent: 'clinical',
   },
   {
     slug: 'pigmentation',
@@ -45,6 +51,7 @@ export const concerns: Concern[] = [
     line: 'Address sun and hormonal pigment with measured energy.',
     icon: 'pigment',
     families: ['energy', 'skin', 'health'],
+    accent: 'energy',
   },
   {
     slug: 'redness',
@@ -52,6 +59,7 @@ export const concerns: Concern[] = [
     line: 'Quiet diffuse redness and visible vessels.',
     icon: 'redness',
     families: ['energy', 'health'],
+    accent: 'health',
   },
   {
     slug: 'laxity',
@@ -59,6 +67,7 @@ export const concerns: Concern[] = [
     line: 'Encourage firmer, more defined contours without surgery.',
     icon: 'lift',
     families: ['energy', 'body'],
+    accent: 'body',
   },
   {
     slug: 'hair',
@@ -66,6 +75,7 @@ export const concerns: Concern[] = [
     line: 'Support thicker, healthier hair with evidence-led options.',
     icon: 'hair',
     families: ['clinical', 'health'],
+    accent: 'clinical',
   },
   {
     slug: 'aging-well',
@@ -73,5 +83,6 @@ export const concerns: Concern[] = [
     line: 'A considered, long-view plan, subtle by design.',
     icon: 'aging',
     families: ['injectables', 'skin', 'health', 'energy'],
+    accent: 'energy',
   },
 ];
