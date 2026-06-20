@@ -95,7 +95,7 @@ const treatmentFamilies = families.filter((f) => f.slug !== 'clinical');
       <div class="drawer__panel drawer__cols">
         {concerns.map((c) => (
           <a class="drawer__sublink" href={`/concerns#${c.slug}`}>
-            <ConcernIcon slug={c.icon} size={16} class="drawer__cicon" />{c.label}
+            <ConcernIcon slug={c.icon} size={20} class="drawer__cicon" />{c.label}
           </a>
         ))}
       </div>
@@ -111,7 +111,7 @@ const treatmentFamilies = families.filter((f) => f.slug !== 'clinical');
     <a class="drawer__link" href="/plan">Plan your treatment</a>
     <a class="drawer__link" href="/candidacy">Candidacy &amp; safety</a>
     <a class="drawer__link" href="/memberships">Memberships</a>
-    <a class="btn btn--lg drawer__cta" href="/contact">Book a consult</a>
+    <a class="btn drawer__cta" href="/contact">Book a consult</a>
     <div class="drawer__socials"><Socials /></div>
   </div>
 </aside>
