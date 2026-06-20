@@ -1,7 +1,6 @@
 ---
 import { concerns } from '@data/concerns';
 import Advisory from './Advisory.astro';
-import GoalsChecklist from './GoalsChecklist.astro';
 ---
 <form class="consult-form" novalidate>
   <div class="field">
@@ -29,11 +28,10 @@ import GoalsChecklist from './GoalsChecklist.astro';
     <textarea id="message" name="message" placeholder="Tell us a little about your goals. We screen first, then tailor."></textarea>
   </div>
 
-  <details class="form-goals">
-    <summary>Mark goals &amp; areas of concern (select all that apply)</summary>
-    <p class="meta" style="margin:0.6rem 0 1rem">Optional. A fuller version lives on <a class="footer__link" style="display:inline" href="/plan">Plan your treatment</a>.</p>
-    <GoalsChecklist compact />
-  </details>
+  <p class="meta" style="margin:0 0 1.4rem">
+    Want to map specific goals across face, body, hair and skin?
+    <a class="footer__link" style="display:inline" href="/plan">Plan your treatment &rarr;</a>
+  </p>
 
   <Advisory title="Not a prescription">
     A consult is a conversation, not a guarantee. Your physician screens for
