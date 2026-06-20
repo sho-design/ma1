@@ -1,0 +1,74 @@
+---
+// Photo placeholder: a styled, accessible stand-in for real photography the
+// clinic will supply later. Swap the whole element for an <img>/<picture> when
+// assets arrive — the data-photo-placeholder hook makes them easy to find.
+//
+//   <PhotoPlaceholder label="Clinic interior" ratio="16 / 9" />
+//   <PhotoPlaceholder shape="round" label="Dr. Smith portrait">JS</PhotoPlaceholder>
+interface Props {
+  label: string;            // what the real photograph should show
+  ratio?: string;           // CSS aspect-ratio, e.g. '16 / 9'
+  shape?: 'rect' | 'round';
+  class?: string;
+}
+const { label, ratio = '4 / 3', shape = 'rect', class: cls = '' } = Astro.props;
+const hasContent = Astro.slots.has('default');
+const cameraPath = '<rect x="3" y="7" width="18" height="13" rx="2" /><circle cx="12" cy="13.5" r="3.5" /><path d="M8 7l1.5-2h5L16 7" />';
+---
+<div
+  class:list={['photo', `photo--${shape}`, cls]}
+  style={`--photo-ratio: ${ratio}`}
+  role="img"
+  aria-label={`Photo placeholder — ${label}`}
+  data-photo-placeholder
+>
+  {hasContent ? (
+    <span class="photo__slot"><slot /></span>
+  ) : (
+    <span class="photo__inner">
+      <svg class="photo__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={cameraPath}></svg>
+      <span class="photo__label">{label}</span>
+      <span class="photo__tag">Photo placeholder</span>
+    </span>
+  )}
+  <svg class="photo__badge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={cameraPath}></svg>
+</div>
+
+<style>
+  .photo {
+    --pa: var(--accent, var(--accent-injectables));
+    --pa-text: var(--accent-text, var(--accent-injectables-text));
+    position: relative; overflow: hidden;
+    aspect-ratio: var(--photo-ratio);
+    border-radius: var(--radius); border: 1px solid var(--line);
+    background-color: var(--cloud);
+    background-image: linear-gradient(135deg, color-mix(in srgb, var(--pa) 9%, var(--cloud)), var(--cloud) 70%);
+    display: grid; place-content: center; text-align: center;
+  }
+  /* faint diagonal hatch so a placeholder never reads as a finished panel */
+  .photo::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+    background-image: repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--pa) 6%, transparent) 11px 12px);
+  }
+  .photo__inner { position: relative; display: grid; gap: 0.5rem; justify-items: center; padding: 1rem; }
+  .photo__icon { width: 30px; height: 30px; color: color-mix(in srgb, var(--pa-text) 65%, var(--mist)); }
+  .photo__label { font-family: var(--display); font-size: var(--step-0); line-height: 1.2; color: var(--graphite); max-width: 26ch; }
+  .photo__tag { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--mist); }
+
+  /* small corner badge marks it as a placeholder even when content fills it */
+  .photo__badge {
+    position: absolute; right: 0.5rem; bottom: 0.5rem; width: 18px; height: 18px;
+    color: var(--mist); opacity: 0.8;
+  }
+
+  /* round variant (avatars): icon/initials only, no caption */
+  .photo--round { border-radius: 50%; aspect-ratio: 1; }
+  .photo--round .photo__label, .photo--round .photo__tag { display: none; }
+  .photo--round .photo__inner { padding: 0; }
+  .photo--round .photo__badge { right: 2px; bottom: 2px; width: 14px; height: 14px; }
+  .photo__slot {
+    position: relative; display: grid; place-content: center;
+    width: 100%; height: 100%;
+    font-family: var(--display); font-size: var(--step-2); color: var(--pa-text);
+  }
+</style>

@@ -2,6 +2,7 @@
 import Base from '@layouts/Base.astro';
 import PageHeader from '@components/PageHeader.astro';
 import CtaBand from '@components/CtaBand.astro';
+import PhotoPlaceholder from '@components/PhotoPlaceholder.astro';
 import { site } from '@data/site';
 
 const tel = site.phone.replace(/[^0-9+]/g, '');
@@ -34,6 +35,7 @@ const jsonLd = site.locations.map((loc) => ({
       <div class="locs reveal">
         {site.locations.map((loc) => (
           <article class="loc">
+            <PhotoPlaceholder label={`${loc.name} — ${loc.city} clinic`} ratio="16 / 9" class="loc__photo" />
             <h2 class="loc__city">{loc.city}</h2>
             <p class="loc__name">{loc.name}</p>
             <dl class="loc__rows">
@@ -61,6 +63,7 @@ const jsonLd = site.locations.map((loc) => ({
 <style>
   .locs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
   .loc { background: var(--white-pure); background-image: var(--gloss-white); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.8rem; }
+  .loc :global(.loc__photo) { margin-bottom: 1.5rem; }
   .loc__city { font-size: var(--step-3); margin: 0; }
   .loc__name { color: var(--graphite); margin: 0.3rem 0 1.2rem; }
   .loc__rows { display: grid; gap: 0.9rem; margin: 0 0 1.4rem; border-top: 1px solid var(--line); padding-top: 1.2rem; }

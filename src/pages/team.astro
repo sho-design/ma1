@@ -3,6 +3,7 @@ import Base from '@layouts/Base.astro';
 import PageHeader from '@components/PageHeader.astro';
 import Advisory from '@components/Advisory.astro';
 import CtaBand from '@components/CtaBand.astro';
+import PhotoPlaceholder from '@components/PhotoPlaceholder.astro';
 import { team } from '@data/team';
 import { site } from '@data/site';
 
@@ -33,7 +34,7 @@ const jsonLd = {
       <div class="team reveal">
         {team.map((p) => (
           <article class="member" style={`--accent: var(--accent-${p.accent}); --accent-text: var(--accent-${p.accent}-text)`}>
-            <div class="member__avatar" aria-hidden="true">{p.initials}</div>
+            <PhotoPlaceholder shape="round" label={`${p.name} — portrait`} class="member__avatar">{p.initials}</PhotoPlaceholder>
             <div class="member__body">
               <h2 class="member__name">{p.name}</h2>
               <p class="member__role">{p.role}</p>
@@ -63,7 +64,7 @@ const jsonLd = {
 <style>
   .team { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem; margin-bottom: var(--space-l); }
   .member { display: grid; grid-template-columns: auto 1fr; gap: 1.4rem; background: var(--white-pure); background-image: var(--gloss-white); border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: var(--radius); padding: 1.6rem; }
-  .member__avatar { width: 76px; height: 76px; border-radius: 50%; display: grid; place-content: center; font-family: var(--display); font-size: var(--step-2); color: var(--accent-text); background: color-mix(in srgb, var(--accent) 16%, var(--white-pure)); border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+  .member :global(.member__avatar) { width: 76px; }
   .member__name { font-size: var(--step-2); margin: 0; }
   .member__role { color: var(--accent-text); font-size: var(--step-0); margin: 0.2rem 0 0; }
   .member__cred { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mist); margin: 0.3rem 0 0; }
