@@ -19,7 +19,7 @@ const txMap = Object.fromEntries(
     ripple
   />
 
-  <section class="section-tight">
+  <section class="section-tight planner-sec">
     <div class="wrap planner">
       <div class="planner__form reveal">
         <GoalsChecklist />
@@ -69,6 +69,7 @@ const txMap = Object.fromEntries(
 </Base>
 
 <style>
+  .planner-sec { padding-top: var(--space-s); }
   .planner { display: grid; grid-template-columns: 1.4fr 0.85fr; gap: var(--space-l); align-items: start; }
   .planner__summary { background: var(--white-pure); background-image: var(--gloss-white); border: 1px solid var(--line); border-radius: var(--radius); padding: var(--space-m); position: sticky; top: calc(var(--header-h) + 1rem); }
   .planner__label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--mist); margin: 1.4rem 0 0.6rem; }
