@@ -1,77 +1,85 @@
 // "Select all that apply" intake goals, grouped by area (digital version of the
-// clinic's aesthetic-goals sheet). Used by the Plan page and the consult form.
+// clinic's aesthetic-goals sheet). Each goal maps to the treatments that relate
+// to it (by slug) so the Plan page can suggest starting points. Used by the
+// Plan page and (label only) elsewhere.
+
+export interface Goal {
+  label: string;
+  /** related treatment slugs (see data/treatments.ts) */
+  treatments: string[];
+}
 
 export interface GoalGroup {
   title: string;
-  items: string[];
+  items: Goal[];
 }
 
 export const goalGroups: GoalGroup[] = [
   {
     title: 'Face & skin',
     items: [
-      'Fine lines / wrinkles',
-      'Deep wrinkles / folds',
-      'Loss of facial volume',
-      'Skin laxity / sagging',
-      'Dull or tired-looking skin',
-      'Uneven skin tone',
-      'Pigmentation / dark spots / melasma',
-      'Sun damage',
-      'Acne',
-      'Acne scars',
-      'Large pores',
-      'Oily skin',
-      'Dry / dehydrated skin',
-      'Redness / rosacea / sensitivity',
+      { label: 'Fine lines / wrinkles', treatments: ['neuromodulator', 'eco2', 'skin-health-plan'] },
+      { label: 'Deep wrinkles / folds', treatments: ['dermal-filler', 'eco2', 'neuromodulator'] },
+      { label: 'Loss of facial volume', treatments: ['dermal-filler', 'biostimulator'] },
+      { label: 'Skin laxity / sagging', treatments: ['xerf', 'eco2', 'biostimulator'] },
+      { label: 'Dull or tired-looking skin', treatments: ['vamp-glass-facial', 'hydrafacial', 'exosome-facial'] },
+      { label: 'Uneven skin tone', treatments: ['picosure', 'medical-peel', 'skin-health-plan'] },
+      { label: 'Pigmentation / dark spots / melasma', treatments: ['picosure', 'clarity-ii', 'medical-peel'] },
+      { label: 'Sun damage', treatments: ['picosure', 'medical-peel', 'skin-health-plan'] },
+      { label: 'Acne', treatments: ['clarity-ii', 'hydrafacial', 'medical-peel'] },
+      { label: 'Acne scars', treatments: ['eco2', 'picosure', 'xerf'] },
+      { label: 'Large pores', treatments: ['vamp-glass-facial', 'xerf', 'hydrafacial'] },
+      { label: 'Oily skin', treatments: ['hydrafacial', 'medical-peel', 'skin-health-plan'] },
+      { label: 'Dry / dehydrated skin', treatments: ['hydrafacial', 'vamp-glass-facial', 'skin-health-plan'] },
+      { label: 'Redness / rosacea / sensitivity', treatments: ['clarity-ii', 'vascular-lesions', 'skin-health-plan'] },
     ],
   },
   {
     title: 'Eyes, lips & folds',
     items: [
-      'Under-eye dark circles',
-      'Under-eye bags / hollowness',
-      'Thin lips / lip enhancement',
-      'Nasolabial folds (smile lines)',
-      'Marionette lines',
+      { label: 'Under-eye dark circles', treatments: ['prp', 'prf', 'dermal-filler'] },
+      { label: 'Under-eye bags / hollowness', treatments: ['prf', 'dermal-filler', 'plexr-blepharoplasty'] },
+      { label: 'Thin lips / lip enhancement', treatments: ['dermal-filler'] },
+      { label: 'Nasolabial folds (smile lines)', treatments: ['dermal-filler', 'biostimulator'] },
+      { label: 'Marionette lines', treatments: ['dermal-filler', 'neuromodulator'] },
     ],
   },
   {
     title: 'Face contouring',
     items: [
-      'Jawline definition',
-      'Chin projection / weak chin',
-      'Facial contouring',
+      { label: 'Jawline definition', treatments: ['dermal-filler', 'biostimulator', 'neuromodulator'] },
+      { label: 'Chin projection / weak chin', treatments: ['dermal-filler'] },
+      { label: 'Facial contouring', treatments: ['dermal-filler', 'biostimulator'] },
     ],
   },
   {
     title: 'Body',
     items: [
-      'Neck',
-      'Hands',
-      'Body contouring / fat reduction',
-      'Skin laxity (body)',
-      'Cellulite',
-      'Stretch marks',
-      'Scars',
-      'Buttock contouring',
-      'Hip dips',
+      { label: 'Neck', treatments: ['xerf', 'eco2', 'biostimulator'] },
+      { label: 'Hands', treatments: ['biostimulator', 'dermal-filler'] },
+      { label: 'Body contouring / fat reduction', treatments: ['xerf'] },
+      { label: 'Skin laxity (body)', treatments: ['xerf'] },
+      { label: 'Cellulite', treatments: ['xerf'] },
+      { label: 'Stretch marks', treatments: ['xerf', 'eco2', 'picosure'] },
+      { label: 'Scars', treatments: ['eco2', 'picosure', 'xerf'] },
+      { label: 'Buttock contouring', treatments: ['biostimulator', 'xerf'] },
+      { label: 'Hip dips', treatments: ['dermal-filler', 'biostimulator'] },
     ],
   },
   {
     title: 'Hair',
     items: [
-      'Unwanted hair / laser hair removal',
-      'Hair thinning / hair loss',
+      { label: 'Unwanted hair / laser hair removal', treatments: ['clarity-ii'] },
+      { label: 'Hair thinning / hair loss', treatments: ['prp'] },
     ],
   },
   {
     title: 'Skin lesions',
     items: [
-      'Moles',
-      'Skin tags',
-      'Warts',
-      'Benign skin lesions',
+      { label: 'Moles', treatments: ['plexr-blepharoplasty', 'vascular-lesions'] },
+      { label: 'Skin tags', treatments: ['vascular-lesions', 'plexr-blepharoplasty'] },
+      { label: 'Warts', treatments: ['vascular-lesions'] },
+      { label: 'Benign skin lesions', treatments: ['vascular-lesions', 'plexr-blepharoplasty'] },
     ],
   },
 ];

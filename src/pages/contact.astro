@@ -51,11 +51,13 @@ import { site } from '@data/site';
   const goals = params.get('goals');
   const downtime = params.get('downtime');
   const families = params.get('families');
-  if (goals || downtime || families) {
+  const tx = params.get('tx');
+  if (goals || downtime || families || tx) {
     const concern = document.querySelector<HTMLSelectElement>('#concern');
     const message = document.querySelector<HTMLTextAreaElement>('#message');
     const lines = [
       goals && `Goals: ${goals.split('|').join(', ')}`,
+      tx && `Treatments to explore: ${tx.split('|').join(', ')}`,
       families && `Interested in: ${families.split('|').join(', ')}`,
       downtime && `Comfortable downtime: ${downtime}`,
     ].filter(Boolean);

@@ -4,12 +4,19 @@ import PageHeader from '@components/PageHeader.astro';
 import Advisory from '@components/Advisory.astro';
 import BodyMap from '@components/BodyMap.astro';
 import GoalsChecklist from '@components/GoalsChecklist.astro';
+import { treatments } from '@data/treatments';
+import { familyBySlug } from '@data/families';
+
+// Slug -> display info for the live "suggested treatments" list (client-side).
+const txMap = Object.fromEntries(
+  treatments.map((t) => [t.slug, { name: t.name, accent: familyBySlug(t.family)?.accentVar ?? 'injectables' }])
+);
 ---
 <Base title="Plan your treatment" description="Mark your aesthetic goals and areas of concern, select all that apply, and we will shape a starting point for your consult. Not a prescription.">
   <PageHeader
     eyebrow="Plan your treatment"
     title="Mark what you would like to address."
-    lead="Select all that apply, across face, body, hair and skin. We will shape a starting point, and your physician finalises everything at consult."
+    lead="Select all that apply, across face, body, hair and skin. We will suggest starting points, and your physician finalises everything at consult."
     ripple
   />
 
@@ -36,48 +43,88 @@ import GoalsChecklist from '@components/GoalsChecklist.astro';
       <aside class="planner__summary reveal">
         <h2 style="font-size:var(--step-2)">Your starting point</h2>
         <p class="meta">Updates as you choose. Nothing is sent until you book.</p>
+
+        <p class="planner__label">Suggested treatments</p>
+        <div class="suggest" data-suggest>
+          <p class="meta">Pick a goal to see related treatments.</p>
+        </div>
+
         <dl class="planner__out">
           <div><dt>Goals &amp; areas</dt><dd data-out="goal">Not set</dd></div>
           <div><dt>Downtime</dt><dd data-out="downtime">Not set</dd></div>
         </dl>
         <Advisory title="Not a prescription">
-          This is a conversation-starter, not a treatment plan. We screen for
+          These are starting points, not a treatment plan. We screen for
           candidacy and your physician finalises everything. Results vary.
         </Advisory>
         <a class="btn btn--lg" href="/contact" data-plan-cta style="margin-top:1.4rem">Take this to a consult</a>
       </aside>
     </div>
   </section>
+
+  <script type="application/json" id="tx-map" set:html={JSON.stringify(txMap)}></script>
 </Base>
 
 <style>
   .planner { display: grid; grid-template-columns: 1.4fr 0.85fr; gap: var(--space-l); align-items: start; }
   .planner__summary { background: var(--white-pure); background-image: var(--gloss-white); border: 1px solid var(--line); border-radius: var(--radius); padding: var(--space-m); position: sticky; top: calc(var(--header-h) + 1rem); }
-  .planner__out { margin: 1.2rem 0; display: grid; gap: 0.9rem; }
+  .planner__label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--mist); margin: 1.4rem 0 0.6rem; }
+  .suggest { display: grid; gap: 0.35rem; }
+  .suggest__row { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 0.6rem; margin-inline: -0.6rem; border-radius: var(--radius); text-decoration: none; color: var(--ink); transition: background var(--dur-hover) var(--ease); }
+  .suggest__row:hover { background: var(--cloud); }
+  .suggest__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex: none; }
+  .suggest__name { font-size: var(--step--1); }
+  .suggest__arrow { margin-left: auto; color: var(--mist); font-family: var(--mono); font-size: 0.8rem; }
+  .planner__out { margin: 1.4rem 0; display: grid; gap: 0.9rem; border-top: 1px solid var(--line); padding-top: 1.4rem; }
   .planner__out dt { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--mist); }
   .planner__out dd { margin: 0.2rem 0 0; color: var(--ink); line-height: 1.5; }
   @media (max-width: 900px) { .planner { grid-template-columns: 1fr; } .planner__summary { position: static; } }
 </style>
 
 <script>
+  type Info = { name: string; accent: string };
+  const txMap: Record<string, Info> = JSON.parse(document.getElementById('tx-map')?.textContent || '{}');
   const form = document.querySelector('.planner__form');
   const cta = document.querySelector<HTMLAnchorElement>('[data-plan-cta]');
+  const suggestBox = document.querySelector<HTMLElement>('[data-suggest]');
+
   const collect = (name: string) =>
-    Array.from(document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`)).map((i) => i.value);
+    Array.from(document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`));
 
   const update = () => {
-    const goals = collect('goal');
-    const downtime = collect('downtime');
-    const set = (key: string, val: string[]) => {
+    const goalEls = collect('goal');
+    const goals = goalEls.map((i) => i.value);
+    const downtime = collect('downtime').map((i) => i.value);
+
+    const setOut = (key: string, val: string[]) => {
       const out = document.querySelector(`[data-out="${key}"]`);
       if (out) out.textContent = val.length ? val.join(', ') : 'Not set';
     };
-    set('goal', goals);
-    set('downtime', downtime);
+    setOut('goal', goals);
+    setOut('downtime', downtime);
+
+    // Union of related treatments across selected goals, in first-seen order.
+    const seen: string[] = [];
+    for (const el of goalEls) {
+      for (const slug of (el.dataset.treatments || '').split(',').filter(Boolean)) {
+        if (!seen.includes(slug) && txMap[slug]) seen.push(slug);
+      }
+    }
+    if (suggestBox) {
+      suggestBox.innerHTML = seen.length
+        ? seen
+            .map((slug) => {
+              const t = txMap[slug];
+              return `<a class="suggest__row" href="/menu#${slug}" style="--accent: var(--accent-${t.accent})"><span class="suggest__dot"></span><span class="suggest__name">${t.name}</span><span class="suggest__arrow">&rarr;</span></a>`;
+            })
+            .join('')
+        : '<p class="meta">Pick a goal to see related treatments.</p>';
+    }
 
     const params = new URLSearchParams();
     if (goals.length) params.set('goals', goals.join('|'));
     if (downtime.length) params.set('downtime', downtime[0]);
+    if (seen.length) params.set('tx', seen.map((s) => txMap[s].name).join('|'));
     if (cta) cta.href = `/contact${params.toString() ? `?${params}` : ''}`;
   };
   form?.addEventListener('change', update);
