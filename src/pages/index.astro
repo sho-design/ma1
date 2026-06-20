@@ -123,8 +123,6 @@ const featuredConcerns = concerns.slice(0, 8);
   .section-head h2 { font-size: var(--step-3); }
   .section-head .lede { margin-top: 0.6rem; }
   .trust { max-width: var(--measure); }
-  /* 4 treatment cards per row, collapsing on smaller screens */
-  .treat-grid { display: grid; gap: 2.6rem; grid-template-columns: repeat(4, 1fr); }
-  @media (max-width: 1000px) { .treat-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 560px) { .treat-grid { grid-template-columns: 1fr; } }
+  /* same grid as the sibling drip-grid */
+  .treat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; }
 </style>
