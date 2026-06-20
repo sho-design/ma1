@@ -33,7 +33,7 @@ export const modalities: Modality[] = [
   },
   {
     slug: 'ha-filler',
-    name: 'Hyaluronic acid filler',
+    name: 'HA filler (Stylage®)',
     family: 'injectables',
     essence: 'A modified hyaluronic acid with mannitol and built-in lidocaine for comfort.',
     maySupport: 'May restore volume, contour and structure; reversible if needed.',
@@ -42,7 +42,7 @@ export const modalities: Modality[] = [
   },
   {
     slug: 'biostimulator',
-    name: 'Biostimulator',
+    name: 'Biostimulator (Radiesse®)',
     family: 'injectables',
     essence: 'Calcium hydroxylapatite that prompts your own collagen over time.',
     maySupport: 'May rebuild gradual structural support and firmness.',
@@ -51,16 +51,16 @@ export const modalities: Modality[] = [
   },
   {
     slug: 'pdrn',
-    name: 'Polynucleotides (PDRN)',
+    name: 'PDRN (salmon DNA)',
     family: 'body',
-    essence: 'Polynucleotides micro-infused as a bio-revitalizing complex.',
+    essence: 'Polynucleotides micro-infused as a bio-revitalizing complex (VAMP™).',
     maySupport: 'May support glow, pore appearance and elasticity over a series.',
     evidence: 'emerging',
     downtime: 'Mild redness for a day.',
   },
   {
     slug: 'exosomes',
-    name: 'Exosomes',
+    name: 'Exosomes (Pluryal®)',
     family: 'body',
     essence: 'An exosome and peptide complex micro-infused into the skin.',
     maySupport: 'May support regeneration and radiance over a series.',
@@ -87,7 +87,7 @@ export const modalities: Modality[] = [
   },
   {
     slug: 'rf-microneedling',
-    name: 'RF microneedling',
+    name: 'RF microneedling (XERF)',
     family: 'energy',
     essence: 'Microneedling paired with radiofrequency energy at depth.',
     maySupport: 'May improve texture, pores and scarring, with a degree of tightening.',
@@ -96,7 +96,7 @@ export const modalities: Modality[] = [
   },
   {
     slug: 'co2',
-    name: 'Fractional CO₂ laser',
+    name: 'Fractional CO₂ (eCO₂)',
     family: 'energy',
     essence: 'Ablative fractional laser that resurfaces in controlled columns.',
     maySupport: 'May improve acne scars, texture, wrinkles and laxity.',
@@ -105,7 +105,7 @@ export const modalities: Modality[] = [
   },
   {
     slug: 'picosure',
-    name: 'Picosecond laser',
+    name: 'PicoSure® picosecond',
     family: 'energy',
     essence: 'A 755nm picosecond laser, gentle and safe across skin tones.',
     maySupport: 'May reduce pigment and the look of texture, scars and tattoos.',
@@ -114,7 +114,7 @@ export const modalities: Modality[] = [
   },
   {
     slug: 'clarity',
-    name: 'Dual-wavelength laser (Alexandrite + Nd:YAG)',
+    name: 'Clarity II™ (Alex + Nd:YAG)',
     family: 'energy',
     essence: 'A dual-wavelength platform, safe for all skin types.',
     maySupport: 'May address rejuvenation, acne, pigment and vascular concerns.',
@@ -123,7 +123,7 @@ export const modalities: Modality[] = [
   },
   {
     slug: 'plasma',
-    name: 'Plasma soft surgery',
+    name: 'Plasma (PlexR® Plus)',
     family: 'clinical',
     essence: 'Health Canada–licensed plasma for non-surgical lifting and lesions.',
     maySupport: 'May lift eyelid skin and remove lesions without incisions.',
@@ -132,7 +132,7 @@ export const modalities: Modality[] = [
   },
   {
     slug: 'hydrafacial',
-    name: 'Hydradermabrasion facial',
+    name: 'HydraFacial®',
     family: 'skin',
     essence: 'Cleanse, exfoliate, extract and hydrate in a medical setting.',
     maySupport: 'May leave skin clearer, smoother and more hydrated.',
@@ -141,7 +141,7 @@ export const modalities: Modality[] = [
   },
   {
     slug: 'peel',
-    name: 'Medical peel',
+    name: 'Medical peel (SkinCeuticals®)',
     family: 'skin',
     essence: 'A customized medical-grade acid exfoliation.',
     maySupport: 'May refine tone and texture and brighten dull skin.',
@@ -150,7 +150,7 @@ export const modalities: Modality[] = [
   },
   {
     slug: 'red-light',
-    name: 'Red light therapy',
+    name: 'Red light therapy (Healite II)',
     family: 'skin',
     essence: 'LED light used to calm and support recovery.',
     maySupport: 'May calm skin and support healing as an add-on.',
@@ -159,7 +159,7 @@ export const modalities: Modality[] = [
   },
   {
     slug: 'medical-actives',
-    name: 'Medical-grade actives',
+    name: 'Medical-grade actives (SkinCeuticals®)',
     family: 'health',
     essence: 'Prescribed antioxidants, correctives, and sun protection.',
     maySupport: 'May support long-term skin health when used consistently.',

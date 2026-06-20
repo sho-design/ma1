@@ -51,7 +51,7 @@ export const treatments: Treatment[] = [
     slug: 'dermal-filler',
     name: 'Dermal Filler',
     family: 'injectables',
-    brand: 'Hyaluronic acid',
+    brand: 'Stylage® (Vivacy)',
     essence: 'A modified HA with mannitol antioxidant and built-in lidocaine, for volume, contour and structure.',
     price: 'from $390',
     variants: [
@@ -68,6 +68,7 @@ export const treatments: Treatment[] = [
     slug: 'biostimulator',
     name: 'Biostimulator',
     family: 'injectables',
+    brand: 'Radiesse®',
     essence: 'A collagen-stimulating biostimulator for gradual, natural structural support.',
     price: 'from $950',
     time: 'by consult',
@@ -78,10 +79,10 @@ export const treatments: Treatment[] = [
   // ---- Regenerative & Boosters -------------------------------------------
   {
     slug: 'vamp-glass-facial',
-    name: 'Glass Facial',
+    name: 'VAMP™ Glass Facial',
     family: 'body',
-    brand: 'Polynucleotide (PDRN)',
-    essence: 'A polynucleotide (PDRN) bio-revitalizing complex micro-infused for glow, pores and elasticity. Known as “the glass facial.”',
+    brand: 'Salmon PDRN',
+    essence: 'Salmon-DNA PDRN bio-revitalizing complex micro-infused for glow, pores and elasticity. Known as “The Glass Facial.”',
     price: '$450',
     time: '60 min',
     series: 'Best in a series of 3.',
@@ -90,7 +91,7 @@ export const treatments: Treatment[] = [
   },
   {
     slug: 'exosome-facial',
-    name: 'Exosome Facial',
+    name: 'Pluryal® Exosome Facial',
     family: 'body',
     essence: 'An exosome and peptide complex micro-infused for regeneration and radiance.',
     price: '$450',
@@ -123,9 +124,9 @@ export const treatments: Treatment[] = [
   // ---- Energy & Laser -----------------------------------------------------
   {
     slug: 'xerf',
-    name: 'RF Microneedling',
+    name: 'XERF RF Microneedling',
     family: 'energy',
-    essence: 'Radiofrequency microneedling for tightening, texture, pores and scarring. Pairs beautifully with a glass facial or PRF.',
+    essence: 'Radiofrequency microneedling for tightening, texture, pores and scarring. Pairs beautifully with VAMP or PRF.',
     price: 'from $1,800',
     series: 'Series of 3 recommended.',
     variants: [
@@ -138,7 +139,7 @@ export const treatments: Treatment[] = [
   },
   {
     slug: 'eco2',
-    name: 'Fractional CO₂ Laser',
+    name: 'eCO₂ Fractional Laser',
     family: 'energy',
     essence: 'Ablative fractional CO₂ resurfacing for acne scars, deep texture, wrinkles and laxity.',
     price: 'from $600',
@@ -152,9 +153,9 @@ export const treatments: Treatment[] = [
   },
   {
     slug: 'picosure',
-    name: 'Picosecond Laser',
+    name: 'PicoSure® Picosecond Laser',
     family: 'energy',
-    essence: 'A picosecond laser for pigment, tone, texture, scars and tattoo removal, comparatively gentle across skin tones.',
+    essence: 'A 755nm picosecond laser for pigment, tone, texture, scars and tattoo removal, comparatively gentle across skin tones.',
     price: 'from $250',
     variants: [
       { label: 'Baby (revitalization / maintenance)', price: '$500', time: '60 min' },
@@ -169,7 +170,7 @@ export const treatments: Treatment[] = [
   },
   {
     slug: 'clarity-ii',
-    name: 'Dual-Wavelength Laser',
+    name: 'Clarity II™ Laser',
     family: 'energy',
     essence: 'An Alexandrite + Nd:YAG dual-wavelength platform for rejuvenation, acne, pigment and vascular concerns, safe for all skin types.',
     price: 'from $250',
@@ -185,7 +186,7 @@ export const treatments: Treatment[] = [
   // ---- Plasma & Lesions ---------------------------------------------------
   {
     slug: 'plexr-blepharoplasty',
-    name: 'Plasma Soft Surgery',
+    name: 'PlexR® Plus Plasma',
     family: 'clinical',
     essence: 'Health Canada–licensed plasma for non-surgical eyelid lifting and lesion removal: no incisions, no general anesthesia.',
     price: 'from $1,000',
@@ -203,7 +204,7 @@ export const treatments: Treatment[] = [
     slug: 'vascular-lesions',
     name: 'Vascular & Lesion Removal',
     family: 'clinical',
-    essence: 'Spider veins, facial vascular lesions, skin tags and seborrheic keratoses, via laser or plasma.',
+    essence: 'Spider veins, facial vascular lesions, skin tags and seborrheic keratoses, via Clarity II or PlexR.',
     price: 'from $250',
     variants: [
       { label: 'Spider vein / vascular lesions', price: 'from $400', time: '60 min' },
@@ -216,9 +217,9 @@ export const treatments: Treatment[] = [
   // ---- Facials & Peels ----------------------------------------------------
   {
     slug: 'hydrafacial',
-    name: 'Hydradermabrasion Facial',
+    name: 'HydraFacial®',
     family: 'skin',
-    essence: 'Cleanse, exfoliate, extract and hydrate in a medical setting, with prescriptive home protocols.',
+    essence: 'Cleanse, exfoliate, extract and hydrate in a medical setting, with prescriptive SkinCeuticals® home protocols.',
     price: 'from $225',
     variants: [
       { label: 'Signature', price: '$225', time: '75 min' },
@@ -229,7 +230,7 @@ export const treatments: Treatment[] = [
   },
   {
     slug: 'medical-peel',
-    name: 'Medical Peel',
+    name: 'SkinCeuticals® Medical Peel',
     family: 'skin',
     essence: 'A customized medical-grade peel, paired with a prescriptive home protocol to extend results.',
     price: '$180',
@@ -244,7 +245,7 @@ export const treatments: Treatment[] = [
     essence: 'Boosters that pair with any treatment.',
     price: 'from $50',
     variants: [
-      { label: 'Red Light Therapy', price: '$50', time: '20 min' },
+      { label: 'Red Light Therapy (Healite II)', price: '$50', time: '20 min' },
       { label: 'Lymphatic Drainage', price: '$55', time: '30 min' },
       { label: 'Prep Skin Facial', price: '$90', time: '35 min' },
     ],
@@ -257,7 +258,7 @@ export const treatments: Treatment[] = [
     slug: 'skin-health-plan',
     name: 'Skin Health Plan',
     family: 'health',
-    brand: 'Medical-grade',
+    brand: 'SkinCeuticals®',
     essence: 'A prescriptive home regimen included with every treatment plan. Full retail range available in-clinic.',
     price: 'By consult',
     actives: ['medical-actives'],
