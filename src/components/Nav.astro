@@ -94,7 +94,7 @@ const treatmentFamilies = families.filter((f) => f.slug !== 'clinical');
       <summary class="drawer__sum">By Concern</summary>
       <div class="drawer__panel drawer__cols">
         {concerns.map((c) => (
-          <a class="drawer__sublink" href={`/concerns#${c.slug}`}>
+          <a class="drawer__sublink" href={`/concerns#${c.slug}`} style={`--accent: var(--accent-${families.find((f) => f.slug === c.families[0])?.accentVar})`}>
             <ConcernIcon slug={c.icon} size={20} class="drawer__cicon" />{c.label}
           </a>
         ))}

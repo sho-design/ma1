@@ -42,23 +42,6 @@ const featuredConcerns = concerns.slice(0, 6);
     </div>
   </section>
 
-  <!-- Treatments -->
-  <section class="section-tight">
-    <div class="wrap">
-      <header class="section-head reveal">
-        <span class="eyebrow">Treatments</span>
-        <h2>Five families, one clinical standard.</h2>
-        <p class="lede">From injectables to medical-grade skin health — each held to the same physician oversight.</p>
-      </header>
-      <div class="grid grid--cards reveal" style="margin-top:2.5rem">
-        {featured.map((t) => <TreatmentCard treatment={t} />)}
-      </div>
-      <p style="margin-top:2rem"><a class="btn btn--ghost" href="/treatments">All treatments →</a></p>
-    </div>
-  </section>
-
-  <PullQuote />
-
   <!-- By Concern -->
   <section class="section-tight fill">
     <div class="wrap">
@@ -71,6 +54,23 @@ const featuredConcerns = concerns.slice(0, 6);
         {featuredConcerns.map((c) => <ConcernTile concern={c} />)}
       </div>
       <p style="margin-top:2rem"><a class="btn btn--ghost" href="/concerns">All concerns →</a></p>
+    </div>
+  </section>
+
+  <PullQuote />
+
+  <!-- Treatments -->
+  <section class="section-tight">
+    <div class="wrap">
+      <header class="section-head reveal">
+        <span class="eyebrow">Treatments</span>
+        <h2>Five families, one clinical standard.</h2>
+        <p class="lede">From injectables to medical-grade skin health — each held to the same physician oversight.</p>
+      </header>
+      <div class="grid grid--cards reveal" style="margin-top:2.5rem">
+        {featured.map((t) => <TreatmentCard treatment={t} />)}
+      </div>
+      <p style="margin-top:2rem"><a class="btn btn--ghost" href="/treatments">All treatments →</a></p>
     </div>
   </section>
 
