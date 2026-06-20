@@ -1,5 +1,5 @@
 /* =============================================================================
-   Restoration Medical — Design System
+   Restoration Medical Design System
    Shared tokens (neutrals, type, spacing, radius, motion) are line-agnostic.
    Only the ACCENT palette and signature motif change per line.
    This file is the Medical Aesthetics skin (see DESIGN_SYSTEM.md §6).
@@ -11,7 +11,7 @@
 
 /* ---- Tokens --------------------------------------------------------------- */
 :root {
-  /* 2.1 Neutrals (SHARED across all lines — do not change) */
+  /* 2.1 Neutrals (SHARED across all lines, do not change) */
   --ink: #1a1b1d;          /* primary text, dark surfaces (soft-touch matte black) */
   --paper: #fcfcfd;        /* page background (ultra-pure white walls) */
   --graphite: #3b3d40;     /* secondary text */
@@ -27,7 +27,7 @@
     radial-gradient(1.1px 1.1px at 72% 62%, rgba(26, 27, 29, 0.04) 50%, transparent 51%),
     radial-gradient(1px 1px at 44% 84%, rgba(26, 27, 29, 0.035) 50%, transparent 51%);
 
-  /* 6.1 Accent palette — Medical Aesthetics line (the ONLY colour that changes).
+  /* 6.1 Accent palette, Medical Aesthetics line (the ONLY colour that changes).
      Each family also carries a darker `-text` variant that passes AA on --paper. */
   --accent-injectables: #9c6b86;       /* muted plum */
   --accent-injectables-text: #7c4f69;
@@ -42,7 +42,7 @@
   --accent-clinical: #8c3b3b;          /* shared clinical accent */
   --accent-clinical-text: #7a3030;
 
-  /* the "current line" accent — overridden per family via [data-family] */
+  /* the "current line" accent, overridden per family via [data-family] */
   --accent: var(--accent-injectables);
   --accent-text: var(--accent-injectables-text);
 
@@ -51,7 +51,7 @@
   --body: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --mono: 'Spline Sans Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-  /* 2.3 Type scale — fluid clamp, --step--1 … --step-5 */
+  /* 2.3 Type scale, fluid clamp, --step--1 … --step-5 */
   --step--1: clamp(0.83rem, 0.80rem + 0.15vw, 0.92rem);
   --step-0:  clamp(1.00rem, 0.96rem + 0.20vw, 1.10rem);
   --step-1:  clamp(1.20rem, 1.12rem + 0.40vw, 1.45rem);
@@ -71,7 +71,7 @@
   --radius: 4px;
   --header-h: 68px;
 
-  /* 2.5 Motion — single house easing curve */
+  /* 2.5 Motion: single house easing curve */
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   --dur-micro: 0.2s;
   --dur-hover: 0.3s;
@@ -434,7 +434,7 @@ img, svg, canvas { display: block; max-width: 100%; }
 .field textarea { resize: vertical; min-height: 120px; }
 .form__confirm { background: color-mix(in srgb, var(--accent-health) 10%, var(--paper)); border: 1px solid color-mix(in srgb, var(--accent-health) 30%, var(--line)); border-radius: var(--radius); padding: var(--space-s) var(--space-m); color: var(--graphite); }
 
-/* ---- Footer (dark, gradient seam — matches the sibling line) ------------- */
+/* ---- Footer (dark, gradient seam, matches the sibling line) ------------- */
 .footer {
   background:
     linear-gradient(to right, transparent, rgba(252,252,253,0.22) 28%, rgba(252,252,253,0.22) 72%, transparent) top / 100% 1px no-repeat,
@@ -487,7 +487,7 @@ img, svg, canvas { display: block; max-width: 100%; }
 .lede { font-size: var(--step-1); color: var(--graphite); max-width: var(--measure); }
 
 /* =============================================================================
-   Reduced motion — every effect has a static fallback (DESIGN_SYSTEM §5)
+   Reduced motion: every effect has a static fallback (DESIGN_SYSTEM §5)
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition-duration: 0.001ms !important; }

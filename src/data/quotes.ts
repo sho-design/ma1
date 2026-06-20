@@ -6,7 +6,7 @@ export const quotes: { text: string; cite: string }[] = [
   { text: 'Subtle by design, never overdone.', cite: 'On injectables' },
   { text: 'We screen first, then we treat.', cite: 'On candidacy' },
   { text: 'Aging well is a plan, not a procedure.', cite: 'The long view' },
-  { text: 'Results vary — and we say so.', cite: 'On honesty' },
+  { text: 'Results vary, and we say so.', cite: 'On honesty' },
 ];
 
 export const randomQuote = () => quotes[Math.floor(Math.random() * quotes.length)];

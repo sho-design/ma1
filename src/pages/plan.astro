@@ -9,7 +9,7 @@ import { families } from '@data/families';
   <PageHeader
     eyebrow="Plan your treatment"
     title="Plan your treatment."
-    lead="Pick the areas and goals that matter to you. We’ll shape a starting point — your physician finalises everything at consult."
+    lead="Pick the areas and goals that matter to you. We’ll shape a starting point. Your physician finalises everything at consult."
     ripple
   />
 
@@ -57,9 +57,9 @@ import { families } from '@data/families';
         <h2 style="font-size:var(--step-2)">Your starting point</h2>
         <p class="meta">Updates as you choose. Nothing is sent until you book.</p>
         <dl class="planner__out" data-summary>
-          <div><dt>Goals</dt><dd data-out="goal">—</dd></div>
-          <div><dt>Downtime</dt><dd data-out="downtime">—</dd></div>
-          <div><dt>Families</dt><dd data-out="family">—</dd></div>
+          <div><dt>Goals</dt><dd data-out="goal">Not set</dd></div>
+          <div><dt>Downtime</dt><dd data-out="downtime">Not set</dd></div>
+          <div><dt>Families</dt><dd data-out="family">Not set</dd></div>
         </dl>
         <Advisory title="Not a prescription">
           This is a conversation-starter, not a treatment plan. We screen for
@@ -105,7 +105,7 @@ import { families } from '@data/families';
     const fams = collect('family');
     const set = (key: string, val: string[]) => {
       const out = document.querySelector(`[data-out="${key}"]`);
-      if (out) out.textContent = val.length ? val.join(', ') : '—';
+      if (out) out.textContent = val.length ? val.join(', ') : 'Not set';
     };
     set('goal', goals); set('downtime', downtime); set('family', fams);
 

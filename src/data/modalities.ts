@@ -1,4 +1,4 @@
-// Modalities / Actives library (DESIGN_SYSTEM §6.3) — the analogue of the
+// Modalities / Actives library (DESIGN_SYSTEM §6.3), the analogue of the
 // infusion line's ingredient library. KEEP the Established/Emerging evidence
 // tags: rare and very on-brand for aesthetics.
 
@@ -18,9 +18,9 @@ export interface Modality {
 
 export const evidenceCopy: Record<Evidence, string> = {
   established:
-    'Established — supported by consistent, higher-quality clinical evidence and long clinical use.',
+    'Established: supported by consistent, higher-quality clinical evidence and long clinical use.',
   emerging:
-    'Emerging — early or mixed evidence. Promising, but we set expectations honestly and results vary.',
+    'Emerging: early or mixed evidence. Promising, but we set expectations honestly and results vary.',
 };
 
 export const modalities: Modality[] = [
@@ -31,7 +31,7 @@ export const modalities: Modality[] = [
     essence: 'A purified protein that temporarily relaxes targeted muscles.',
     maySupport: 'May soften the look of dynamic expression lines.',
     evidence: 'established',
-    downtime: 'Minimal — small marks possible; results settle over 1–2 weeks.',
+    downtime: 'Minimal: small marks possible; results settle over 1–2 weeks.',
   },
   {
     slug: 'ha-filler',

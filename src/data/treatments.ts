@@ -1,4 +1,4 @@
-// Treatments — the product cards (DESIGN_SYSTEM §6.3, analogue of Drips & Shots).
+// Treatments: the product cards (DESIGN_SYSTEM §6.3, analogue of Drips & Shots).
 // `actives` reference modality slugs so the card can render ActiveChips.
 
 import type { FamilySlug } from './families';
@@ -26,7 +26,7 @@ export const treatments: Treatment[] = [
     slug: 'subtle-contour',
     name: 'Subtle Contour',
     family: 'injectables',
-    essence: 'Conservative filler placement to restore quiet structure — never overfilled.',
+    essence: 'Conservative filler placement to restore quiet structure, never overfilled.',
     actives: ['ha-filler'],
     concerns: ['volume', 'aging-well'],
   },

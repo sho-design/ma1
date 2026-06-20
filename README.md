@@ -13,9 +13,9 @@ content taxonomy.
 
 ## Stack
 
-- **Astro** (static, content-first) — no UI framework.
+- **Astro** (static, content-first), no UI framework.
 - **Vanilla CSS** with design tokens on `:root` (`src/styles/global.css`).
-- **Vanilla motion** — Canvas / SVG / `requestAnimationFrame` / `IntersectionObserver`,
+- **Vanilla motion**: Canvas / SVG / `requestAnimationFrame` / `IntersectionObserver`,
   no animation library. Every effect is fine-pointer gated and disabled under
   `prefers-reduced-motion` (§5).
 
@@ -51,14 +51,14 @@ src/
 
 ## What changed from the template (§6)
 
-1. **Accent palette** — skin-adjacent, warm-luxe families: injectables (muted
+1. **Accent palette**: skin-adjacent, warm-luxe families: injectables (muted
    plum), skin & resurfacing (warm clay), energy & laser (champagne gold), body
    (sage-olive), skin health (muted teal), clinical (shared). Neutrals and gloss
    are untouched so the two lines read as one family.
-2. **Signature motif** — the IV-bag fluid becomes a **luminous bloom / refraction**
+2. **Signature motif**: the IV-bag fluid becomes a **luminous bloom / refraction**
    (light through the diffusion canvas) in `HeroMotif.astro`. Droplet cursor,
    diffusion reveal, ripple, and grain are reused unchanged.
-3. **Content taxonomy** — Treatments / By Concern / Modalities & Actives (keeping
+3. **Content taxonomy**: Treatments / By Concern / Modalities & Actives (keeping
    the Established/Emerging evidence tags) / Plan your treatment / Candidacy &
    safety / Memberships.
 
@@ -66,7 +66,7 @@ src/
 
 - **One source of colour:** accents live only in data/token files; never
   hard-coded hex in components.
-- **Honesty:** soft “may support” language, no guarantees, no testimonials —
+- **Honesty:** soft “may support” language, no guarantees, no testimonials,
   checked against CPSO advertising rules. Results vary, and we say so.
-- **Compliance:** Ontario AODA / PHIPA / CPSO. Legal pages are templates —
+- **Compliance:** Ontario AODA / PHIPA / CPSO. Legal pages are templates,
   have them reviewed before publishing.

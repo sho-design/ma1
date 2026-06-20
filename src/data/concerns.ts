@@ -1,4 +1,4 @@
-// "By Concern" — empathetic entry points (DESIGN_SYSTEM §6.3).
+// "By Concern": empathetic entry points (DESIGN_SYSTEM §6.3).
 // `icon` maps to a slug in ConcernIcon.astro.
 
 export interface Concern {
@@ -70,7 +70,7 @@ export const concerns: Concern[] = [
   {
     slug: 'aging-well',
     label: 'Aging well',
-    line: 'A considered, long-view plan — subtle by design.',
+    line: 'A considered, long-view plan, subtle by design.',
     icon: 'aging',
     families: ['injectables', 'skin', 'health', 'energy'],
   },

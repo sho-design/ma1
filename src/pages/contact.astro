@@ -4,11 +4,11 @@ import PageHeader from '@components/PageHeader.astro';
 import ConsultForm from '@components/ConsultForm.astro';
 import { site } from '@data/site';
 ---
-<Base title="Book a consult" description="Request a consult. We screen first and tailor to you — your physician finalises any plan.">
+<Base title="Book a consult" description="Request a consult. We screen first and tailor to you. Your physician finalises any plan.">
   <PageHeader
     eyebrow="Book a consult"
     title="Let’s start with a conversation."
-    lead="Tell us a little about your goals. We screen first, then tailor — and your physician finalises everything."
+    lead="Tell us a little about your goals. We screen first, then tailor, and your physician finalises everything."
     ripple
   />
 
@@ -31,7 +31,7 @@ import { site } from '@data/site';
         <p><a class="footer__link" style="display:inline" href={`tel:${site.phone.replace(/[^0-9+]/g, '')}`}>{site.phone}</a></p>
         <p class="meta" style="margin-top:var(--space-m)">
           We respond during clinic hours. For anything urgent or medical, contact
-          your physician or local emergency services — this form is not monitored
+          your physician or local emergency services; this form is not monitored
           for emergencies.
         </p>
       </aside>
@@ -59,7 +59,7 @@ import { site } from '@data/site';
       families && `Interested in: ${families.split('|').join(', ')}`,
       downtime && `Comfortable downtime: ${downtime}`,
     ].filter(Boolean);
-    if (message && lines.length) message.value = `From my plan —\n${lines.join('\n')}`;
+    if (message && lines.length) message.value = `From my plan:\n${lines.join('\n')}`;
     if (concern && goals) {
       const first = goals.split('|')[0].toLowerCase();
       const match = Array.from(concern.options).find((o) => o.textContent?.toLowerCase() === first);

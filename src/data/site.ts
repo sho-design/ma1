@@ -4,19 +4,19 @@ export const site = {
   line: 'Medical Aesthetics',
   tagline: 'Refined by Medicine.',
   description:
-    'Physician-led medical aesthetics. Injectables, skin and resurfacing, energy and laser, body, and medical-grade skin health — screened first, tailored to you, and held to a clinical standard.',
+    'Physician-led medical aesthetics. Injectables, skin and resurfacing, energy and laser, body, and medical-grade skin health: screened first, tailored to you, and held to a clinical standard.',
   url: 'https://aesthetics.restorationmedical.example',
   email: 'aesthetics@restorationmedical.example',
   phone: '(000) 000-0000',
   locations: [
     {
-      name: 'Restoration Medical — Main Clinic',
+      name: 'Restoration Medical Main Clinic',
       address: '000 Example Avenue, Suite 200',
       city: 'Toronto, ON',
       hours: 'Mon–Fri 9–6 · Sat by appointment',
     },
   ],
-  // Ontario regulatory context (AODA, PHIPA, CPSO) — surfaced in legal + footer.
+  // Ontario regulatory context (AODA, PHIPA, CPSO), surfaced in legal + footer.
   legal: {
     regulators: ['AODA', 'PHIPA', 'CPSO'],
   },

@@ -1,5 +1,5 @@
 // Service families for the Medical Aesthetics line (DESIGN_SYSTEM §6.1, §6.3).
-// Accents are referenced by token name — one source of colour, never hard-coded
+// Accents are referenced by token name, one source of colour, never hard-coded
 // hex in components (DESIGN_SYSTEM §7).
 
 export type FamilySlug =
@@ -24,7 +24,7 @@ export const families: Family[] = [
   {
     slug: 'injectables',
     name: 'Injectables',
-    essence: 'Neuromodulators and dermal fillers — softening, balancing, restoring.',
+    essence: 'Neuromodulators and dermal fillers: softening, balancing, restoring.',
     accentVar: 'injectables',
     reads: 'refined, considered',
   },
@@ -38,7 +38,7 @@ export const families: Family[] = [
   {
     slug: 'energy',
     name: 'Energy & Laser',
-    essence: 'IPL, radiofrequency, and laser — light and energy, precisely placed.',
+    essence: 'IPL, radiofrequency, and laser: light and energy, precisely placed.',
     accentVar: 'energy',
     reads: 'light / energy',
   },
@@ -59,7 +59,7 @@ export const families: Family[] = [
   {
     slug: 'clinical',
     name: 'Clinical / Consult',
-    essence: 'Medical dermatology and scar revision — the clinic, not the counter.',
+    essence: 'Medical dermatology and scar revision: the clinic, not the counter.',
     accentVar: 'clinical',
     reads: 'medical',
   },
