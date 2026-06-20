@@ -59,7 +59,7 @@ export const concerns: Concern[] = [
     line: 'Quiet diffuse redness and visible vessels.',
     icon: 'redness',
     families: ['energy', 'health'],
-    accent: 'health',
+    accent: 'clinical',
   },
   {
     slug: 'laxity',
@@ -75,7 +75,7 @@ export const concerns: Concern[] = [
     line: 'Support thicker, healthier hair with evidence-led options.',
     icon: 'hair',
     families: ['clinical', 'health'],
-    accent: 'clinical',
+    accent: 'health',
   },
   {
     slug: 'aging-well',
