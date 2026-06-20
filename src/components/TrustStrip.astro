@@ -1,10 +1,11 @@
 ---
-// Trust-factor strip: the medical anchors that make this a clinic, not a
-// counter. Icons are inline line-art (stroke = currentColor). "Health Canada"
-// uses an en-dash in "Canada-licensed" by design.
+// Trust-factor bar: the medical anchors that make this a clinic, not a counter.
+// Rendered as one quiet inline credential line (icon + short label) rather than
+// a grid of cells; the fuller claim sits in each item's tooltip. Icons are
+// inline line-art (stroke = currentColor).
 const items = [
   {
-    label: 'Physician-supervised care',
+    label: 'Physician-supervised',
     note: 'Reviewed by a physician, delivered by clinicians.',
     path: '<path d="M5 3v5a5 5 0 0 0 10 0V3M10 13v3a5 5 0 0 0 5 5 4 4 0 0 0 4-4v-3" /><circle cx="19" cy="11" r="2" />',
   },
@@ -27,14 +28,11 @@ const items = [
 ---
 <section class="truststrip">
   <div class="wrap">
-    <ul class="trust-row reveal">
+    <ul class="trust-row reveal" aria-label="What makes this a clinic">
       {items.map((it) => (
-        <li class="trustf">
+        <li class="trustf" title={it.note}>
           <svg class="trustf__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={it.path}></svg>
-          <span class="trustf__text">
-            <span class="trustf__label">{it.label}</span>
-            <span class="trustf__note">{it.note}</span>
-          </span>
+          <span class="trustf__label">{it.label}</span>
         </li>
       ))}
     </ul>
@@ -42,27 +40,25 @@ const items = [
 </section>
 
 <style>
-  .truststrip { border-block: 1px solid var(--line); background: var(--white-pure); background-image: var(--gloss-white); }
+  .truststrip { border-bottom: 1px solid var(--line); background: var(--white-pure); background-image: var(--gloss-white); }
   .trust-row {
-    list-style: none; margin: 0; padding: 0;
-    display: grid; grid-template-columns: repeat(4, 1fr);
+    list-style: none; margin: 0; padding: 1rem 0;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 0.85rem 1.6rem;
   }
   .trustf {
-    display: flex; align-items: center; gap: 0.8rem;
-    padding: 1.3rem 1.4rem;
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    position: relative;
   }
-  .trustf + .trustf { border-left: 1px solid var(--line); }
-  .trustf__icon { width: 26px; height: 26px; flex: none; color: var(--accent-injectables-text); }
-  .trustf__text { display: grid; gap: 0.15rem; }
-  .trustf__label { font-size: var(--step-0); line-height: 1.2; color: var(--ink); }
-  .trustf__note { font-size: var(--step--1); color: var(--mist); line-height: 1.3; }
-  @media (max-width: 900px) {
-    .trust-row { grid-template-columns: repeat(2, 1fr); }
-    .trustf:nth-child(3) { border-left: 0; }
-    .trustf:nth-child(n+3) { border-top: 1px solid var(--line); }
+  /* Hairline separators between items instead of boxed cells */
+  .trustf + .trustf::before {
+    content: ''; position: absolute; left: -0.8rem; top: 50%; transform: translateY(-50%);
+    width: 1px; height: 1.05em; background: var(--line);
   }
-  @media (max-width: 520px) {
-    .trust-row { grid-template-columns: 1fr; }
-    .trustf + .trustf { border-left: 0; border-top: 1px solid var(--line); }
+  .trustf__icon { width: 19px; height: 19px; flex: none; color: var(--accent-injectables-text); }
+  .trustf__label { font-size: var(--step--1); line-height: 1.2; color: var(--ink); letter-spacing: 0.005em; }
+  @media (max-width: 640px) {
+    .trust-row { gap: 0.7rem 1.2rem; }
+    .trustf + .trustf::before { left: -0.6rem; }
   }
 </style>
