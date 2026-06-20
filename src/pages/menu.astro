@@ -41,7 +41,7 @@ import { site } from '@data/site';
 
           <div class="menu-list reveal">
             {items.map((t) => (
-              <article class="menu-item">
+              <article class="menu-item" id={t.slug}>
                 <div class="menu-item__head">
                   {t.brand && <span class="menu-item__brand">{t.brand}</span>}
                   <h3 class="menu-item__name">{t.name}</h3>
