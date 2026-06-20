@@ -1,0 +1,37 @@
+---
+// Compliant before/after gallery scaffold. Placeholder slots only until the
+// clinic supplies consented, unretouched photography (CPSO advertising rules:
+// real patients, written consent, no enhancement, representative results).
+interface Props { name: string; }
+const { name } = Astro.props;
+const slots = ['Before', 'After'];
+---
+<section class="reveal detail__block ba">
+  <h2 class="detail__h">Before &amp; after</h2>
+  <div class="ba__grid" aria-hidden="true">
+    {slots.map((label) => (
+      <figure class="ba__slot">
+        <span class="ba__tag">{label}</span>
+        <span class="ba__soon">Photos coming soon</span>
+      </figure>
+    ))}
+  </div>
+  <p class="ba__note meta">
+    We only publish real, consented and unretouched photos of {name}. Results
+    vary from person to person, and these are illustrative rather than a promise
+    of your outcome.
+  </p>
+</section>
+
+<style>
+  .ba__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; max-width: var(--measure); }
+  .ba__slot {
+    position: relative; margin: 0; aspect-ratio: 4 / 5; border-radius: var(--radius);
+    border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--line));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 7%, var(--cloud)), var(--cloud));
+    display: grid; place-content: center; gap: 0.4rem; text-align: center;
+  }
+  .ba__tag { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent-text); }
+  .ba__soon { font-size: var(--step--1); color: var(--mist); }
+  .ba__note { margin-top: 1rem; max-width: var(--measure); }
+</style>

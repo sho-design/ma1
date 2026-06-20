@@ -567,3 +567,8 @@ img, svg, canvas { display: block; max-width: 100%; }
   .card::after { display: none; }
   .concern__drop { display: none; }
 }
+
+/* Room for the sticky mobile "Book a consult" bar on treatment pages */
+@media (max-width: 760px) {
+  body:has(.bookbar) { padding-bottom: 4.5rem; }
+}

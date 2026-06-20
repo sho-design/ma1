@@ -1,6 +1,7 @@
 ---
 import Base from '@layouts/Base.astro';
 import TreatmentCard from '@components/TreatmentCard.astro';
+import BeforeAfter from '@components/BeforeAfter.astro';
 import { treatments, treatmentsByFamily, type Treatment } from '@data/treatments';
 import { familyBySlug } from '@data/families';
 import { modalities } from '@data/modalities';
@@ -27,6 +28,12 @@ const related = treatmentsByFamily(treatment.family).filter((t) => t.slug !== tr
 const care = careByFamily[treatment.family];
 const faqs = [...care.faqs, ...sharedFaqs];
 
+const crumbs = [
+  { name: 'Home', url: `${site.url}/` },
+  { name: 'Treatments', url: `${site.url}/treatments` },
+  { name: treatment.name, url: `${site.url}/treatments/${treatment.slug}` },
+];
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'MedicalProcedure',
@@ -39,18 +46,45 @@ const jsonLd = {
     areaServed: site.locations.map((l) => l.city),
   },
 };
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: crumbs.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.name,
+    item: c.url,
+  })),
+};
 ---
 <Base title={treatment.name} description={`${treatment.name}: ${treatment.essence}`}>
   <article class="detail" style={accent}>
     <header class="detail__head reveal">
       <div class="wrap">
-        <a class="detail__back link-arrow" href="/treatments">&larr; All treatments</a>
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <ol>
+            {crumbs.map((c, i) => (
+              <li>
+                {i < crumbs.length - 1
+                  ? <a href={c.url.replace(site.url, '') || '/'}>{c.name}</a>
+                  : <span aria-current="page">{c.name}</span>}
+              </li>
+            ))}
+          </ol>
+        </nav>
         <p class="eyebrow detail__eyebrow">
           <span class="detail__dot" aria-hidden="true"></span>
           {fam?.name}{treatment.brand && <> · {treatment.brand}</>}
         </p>
         <h1 class="detail__title ripple">{treatment.name}</h1>
         <p class="lede detail__essence">{treatment.essence}</p>
+
+        <dl class="facts">
+          <div class="facts__tile"><dt>Downtime</dt><dd>{care.facts.downtime}</dd></div>
+          <div class="facts__tile"><dt>Sessions</dt><dd>{care.facts.sessions}</dd></div>
+          <div class="facts__tile"><dt>Results</dt><dd>{care.facts.results}</dd></div>
+        </dl>
       </div>
     </header>
 
@@ -127,6 +161,29 @@ const jsonLd = {
         </section>
 
         <section class="reveal detail__block">
+          <h2 class="detail__h">Who it's for</h2>
+          <div class="cand">
+            <div class="cand__col">
+              <p class="cand__label cand__label--yes">A good fit if</p>
+              <ul class="supports">
+                {care.goodFor.map((g) => (
+                  <li class="supports__item"><span class="supports__tick" aria-hidden="true"></span>{g}</li>
+                ))}
+              </ul>
+            </div>
+            <div class="cand__col">
+              <p class="cand__label cand__label--wait">When we would wait</p>
+              <ul class="supports cand__wait">
+                {care.notNow.map((n) => (
+                  <li class="supports__item"><span class="supports__tick" aria-hidden="true"></span>{n}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <p class="meta cand__note">Screening at your consult is how we confirm candidacy. This is guidance, not a diagnosis.</p>
+        </section>
+
+        <section class="reveal detail__block">
           <h2 class="detail__h">Before your visit</h2>
           <ul class="supports">
             {care.pre.map((p) => (
@@ -143,6 +200,8 @@ const jsonLd = {
             ))}
           </ul>
         </section>
+
+        <BeforeAfter name={treatment.name} />
 
         <section class="reveal detail__block">
           <h2 class="detail__h">Frequently asked</h2>
@@ -185,6 +244,7 @@ const jsonLd = {
           )}
           <a class="btn sidecard__cta" data-book data-tx={treatment.name} href="/contact">Book a consult</a>
           <a class="link-arrow" href="/candidacy">Is this right for me? &rarr;</a>
+          <p class="sidecard__member meta">Regulars can save with a <a href="/memberships">membership</a>. We will walk you through it at your consult.</p>
         </div>
       </aside>
     </div>
@@ -221,9 +281,16 @@ const jsonLd = {
         </div>
       </section>
     )}
+    <div class="bookbar" aria-hidden="false">
+      <div class="bookbar__in">
+        <span class="bookbar__name">{treatment.name}</span>
+        <a class="btn bookbar__cta" href={`/contact?tx=${encodeURIComponent(treatment.name)}`}>Book a consult</a>
+      </div>
+    </div>
   </article>
 
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)}></script>
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -293,8 +360,54 @@ const jsonLd = {
   .detail__related-h { font-size: var(--step-3); }
   .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; }
 
+  /* Breadcrumb */
+  .crumbs { margin-bottom: 1.2rem; }
+  .crumbs ol { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0; margin: 0; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.04em; }
+  .crumbs li { display: flex; align-items: center; gap: 0.5rem; }
+  .crumbs li + li::before { content: '\203A'; color: var(--mist); }
+  .crumbs a { color: var(--mist); text-decoration: none; transition: color var(--dur-hover) var(--ease); }
+  .crumbs a:hover { color: var(--accent-text); }
+  .crumbs [aria-current] { color: var(--ink); }
+
+  /* Quick-fact tiles */
+  .facts { margin: 2rem 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; max-width: 560px; }
+  .facts__tile { background: var(--white-pure); background-image: var(--gloss-white); border: 1px solid var(--line); border-radius: var(--radius); padding: 0.9rem 1rem; }
+  .facts__tile dt { font-family: var(--mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--mist); }
+  .facts__tile dd { margin: 0.3rem 0 0; color: var(--ink); font-size: var(--step-0); line-height: 1.25; }
+
+  /* Who it's for */
+  .cand { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: var(--measure); }
+  .cand__label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.9rem; }
+  .cand__label--yes { color: var(--accent-text); }
+  .cand__label--wait { color: var(--mist); }
+  .cand__wait .supports__tick { background: var(--mist); }
+  .cand__note { margin-top: 1.2rem; }
+
+  /* Membership note in sidecard */
+  .sidecard__member { margin: 0.2rem 0 0; }
+  .sidecard__member a { color: var(--accent-text); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* Sticky mobile book bar */
+  .bookbar { display: none; }
+  .bookbar__in { display: flex; align-items: center; gap: 1rem; }
+  .bookbar__name { font-family: var(--display); font-size: var(--step-0); line-height: 1.1; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bookbar__cta { flex: none; }
+
   @media (max-width: 900px) {
     .detail__grid { grid-template-columns: 1fr; gap: 2rem; }
     .detail__side { position: static; }
+  }
+  @media (max-width: 640px) {
+    .facts { grid-template-columns: 1fr; max-width: var(--measure); }
+    .cand { grid-template-columns: 1fr; gap: 1.6rem; }
+  }
+  @media (max-width: 760px) {
+    .bookbar {
+      display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+      background: color-mix(in srgb, var(--white-pure) 92%, transparent);
+      backdrop-filter: blur(10px); border-top: 1px solid var(--line);
+      padding: 0.7rem 1.25rem calc(0.7rem + env(safe-area-inset-bottom));
+    }
+    .bookbar__cta { padding-block: 0.6rem; }
   }
 </style>

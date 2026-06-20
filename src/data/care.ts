@@ -1,13 +1,33 @@
-// Pre-care, post-care, and FAQ content for treatment pages, keyed by service
-// family so guidance fits the modality. Clinics should review before publishing.
+// Pre-care, post-care, candidacy, quick-facts, and FAQ content for treatment
+// pages, keyed by service family. Clinics should review before publishing.
 
 import type { FamilySlug } from './families';
 
 export interface Faq { q: string; a: string; }
-export interface Care { pre: string[]; post: string[]; faqs: Faq[]; }
+export interface QuickFacts { downtime: string; sessions: string; results: string; }
+export interface Care {
+  facts: QuickFacts;
+  goodFor: string[];
+  notNow: string[];
+  pre: string[];
+  post: string[];
+  faqs: Faq[];
+}
 
 export const careByFamily: Record<FamilySlug, Care> = {
   injectables: {
+    facts: { downtime: 'Minimal', sessions: 'One, with upkeep', results: 'Days to two weeks' },
+    goodFor: [
+      'Generally healthy adults wanting subtle, natural refinement',
+      'People who prefer little to no downtime',
+      'Anyone who values a reversible or adjustable option (HA filler)',
+    ],
+    notNow: [
+      'Pregnancy or breastfeeding',
+      'An active breakout or infection in the area',
+      'Certain neuromuscular or autoimmune conditions',
+      'A known allergy to an ingredient',
+    ],
     pre: [
       'Where your physician agrees it is safe, avoid blood thinners (aspirin, ibuprofen, fish oil, vitamin E) and alcohol for 24 to 48 hours.',
       'Tell us about your medications, allergies, and any history of cold sores.',
@@ -28,6 +48,18 @@ export const careByFamily: Record<FamilySlug, Care> = {
     ],
   },
   body: {
+    facts: { downtime: 'Little to none', sessions: 'Series of three', results: 'Builds over weeks' },
+    goodFor: [
+      'Dull, tired or early-aging skin wanting a glow',
+      'People building a longer-term skin-health plan',
+      'Those comfortable with a short series',
+    ],
+    notNow: [
+      'Pregnancy or breastfeeding',
+      'An active skin infection in the area',
+      'Certain blood or clotting conditions',
+      'One-session, overnight expectations',
+    ],
     pre: [
       'Hydrate well beforehand, and avoid alcohol and blood thinners for 24 hours where safe.',
       'Pause retinoids and strong exfoliating actives for a few days before.',
@@ -45,6 +77,18 @@ export const careByFamily: Record<FamilySlug, Care> = {
     ],
   },
   energy: {
+    facts: { downtime: 'Hours to days', sessions: 'One to a short series', results: 'Builds over weeks' },
+    goodFor: [
+      'Texture, tone, pigment, scarring or laxity concerns',
+      'People who can avoid sun before and after',
+      'Most skin tones (device-dependent)',
+    ],
+    notNow: [
+      'A recent tan or active sun exposure',
+      'Pregnancy (for some treatments)',
+      'An active infection, cold sore or open skin',
+      'Certain photosensitizing medications',
+    ],
     pre: [
       'Avoid sun exposure and tanning, including self-tan, for 2 to 4 weeks before.',
       'Stop retinoids and exfoliating acids about a week before, unless told otherwise.',
@@ -65,6 +109,17 @@ export const careByFamily: Record<FamilySlug, Care> = {
     ],
   },
   clinical: {
+    facts: { downtime: 'A few days', sessions: 'Usually two', results: 'Build over weeks, last years' },
+    goodFor: [
+      'Hooded eyelids or specific lesions wanting a non-surgical option',
+      'People who can allow healing time across two sessions',
+    ],
+    notNow: [
+      'Pregnancy or breastfeeding',
+      'An active infection or cold-sore outbreak',
+      'A tendency to keloid scarring (discuss first)',
+      'Certain medications, on screening',
+    ],
     pre: [
       'Avoid blood thinners and alcohol for 24 to 48 hours where your physician agrees.',
       'Pause retinoids and actives for about a week beforehand.',
@@ -82,6 +137,17 @@ export const careByFamily: Record<FamilySlug, Care> = {
     ],
   },
   skin: {
+    facts: { downtime: 'None to mild flaking', sessions: 'Monthly upkeep', results: 'Fresh now, builds with care' },
+    goodFor: [
+      'Maintenance, glow and overall skin health',
+      'Event-prep and a quick refresh',
+      'Pairing with a prescribed home routine',
+    ],
+    notNow: [
+      'Active, inflamed breakouts (for stronger peels)',
+      'Recent resurfacing or sunburn',
+      'A known acid sensitivity (for peels)',
+    ],
     pre: [
       'Arrive with clean skin and let us know your current products.',
       'For peels, pause retinoids and exfoliating acids for a few days beforehand.',
@@ -97,6 +163,15 @@ export const careByFamily: Record<FamilySlug, Care> = {
     ],
   },
   health: {
+    facts: { downtime: 'None', sessions: 'Daily at home', results: 'Weeks to months' },
+    goodFor: [
+      'Anyone wanting a considered, prescribed routine',
+      'Prevention and long-term skin health',
+    ],
+    notNow: [
+      'Looking for an overnight fix',
+      'Pregnancy (for some actives, on review)',
+    ],
     pre: [
       'Bring your current products, or a photo of them, so we can build around what you use.',
     ],
