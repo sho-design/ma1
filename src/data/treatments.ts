@@ -79,9 +79,9 @@ export const treatments: Treatment[] = [
   // ---- Regenerative & Boosters -------------------------------------------
   {
     slug: 'vamp-glass-facial',
-    name: 'VAMP™ Glass Facial',
+    name: 'Glass Facial',
     family: 'body',
-    brand: 'Salmon PDRN',
+    brand: 'VAMP™',
     essence: 'Salmon-DNA PDRN bio-revitalizing complex micro-infused for glow, pores and elasticity. Known as “The Glass Facial.”',
     price: '$450',
     time: '60 min',
@@ -91,8 +91,9 @@ export const treatments: Treatment[] = [
   },
   {
     slug: 'exosome-facial',
-    name: 'Pluryal® Exosome Facial',
+    name: 'Exosome Facial',
     family: 'body',
+    brand: 'Pluryal®',
     essence: 'An exosome and peptide complex micro-infused for regeneration and radiance.',
     price: '$450',
     time: '60 min',
@@ -124,8 +125,9 @@ export const treatments: Treatment[] = [
   // ---- Energy & Laser -----------------------------------------------------
   {
     slug: 'xerf',
-    name: 'XERF RF Microneedling',
+    name: 'RF Microneedling',
     family: 'energy',
+    brand: 'XERF',
     essence: 'Radiofrequency microneedling for tightening, texture, pores and scarring. Pairs beautifully with VAMP or PRF.',
     price: 'from $1,800',
     series: 'Series of 3 recommended.',
@@ -139,8 +141,9 @@ export const treatments: Treatment[] = [
   },
   {
     slug: 'eco2',
-    name: 'eCO₂ Fractional Laser',
+    name: 'Fractional CO₂ Laser',
     family: 'energy',
+    brand: 'eCO₂',
     essence: 'Ablative fractional CO₂ resurfacing for acne scars, deep texture, wrinkles and laxity.',
     price: 'from $600',
     variants: [
@@ -153,8 +156,9 @@ export const treatments: Treatment[] = [
   },
   {
     slug: 'picosure',
-    name: 'PicoSure® Picosecond Laser',
+    name: 'Picosecond Laser',
     family: 'energy',
+    brand: 'PicoSure®',
     essence: 'A 755nm picosecond laser for pigment, tone, texture, scars and tattoo removal, comparatively gentle across skin tones.',
     price: 'from $250',
     variants: [
@@ -170,8 +174,9 @@ export const treatments: Treatment[] = [
   },
   {
     slug: 'clarity-ii',
-    name: 'Clarity II™ Laser',
+    name: 'Dual-Wavelength Laser',
     family: 'energy',
+    brand: 'Clarity II™',
     essence: 'An Alexandrite + Nd:YAG dual-wavelength platform for rejuvenation, acne, pigment and vascular concerns, safe for all skin types.',
     price: 'from $250',
     variants: [
@@ -186,8 +191,9 @@ export const treatments: Treatment[] = [
   // ---- Plasma & Lesions ---------------------------------------------------
   {
     slug: 'plexr-blepharoplasty',
-    name: 'PlexR® Plus Plasma',
+    name: 'Plasma Soft Surgery',
     family: 'clinical',
+    brand: 'PlexR® Plus',
     essence: 'Health Canada–licensed plasma for non-surgical eyelid lifting and lesion removal: no incisions, no general anesthesia.',
     price: 'from $1,000',
     series: 'Results build over 2 sessions and last several years.',
@@ -217,8 +223,9 @@ export const treatments: Treatment[] = [
   // ---- Facials & Peels ----------------------------------------------------
   {
     slug: 'hydrafacial',
-    name: 'HydraFacial®',
+    name: 'Hydradermabrasion Facial',
     family: 'skin',
+    brand: 'HydraFacial®',
     essence: 'Cleanse, exfoliate, extract and hydrate in a medical setting, with prescriptive SkinCeuticals® home protocols.',
     price: 'from $225',
     variants: [
@@ -230,8 +237,9 @@ export const treatments: Treatment[] = [
   },
   {
     slug: 'medical-peel',
-    name: 'SkinCeuticals® Medical Peel',
+    name: 'Medical Peel',
     family: 'skin',
+    brand: 'SkinCeuticals®',
     essence: 'A customized medical-grade peel, paired with a prescriptive home protocol to extend results.',
     price: '$180',
     time: '60 min',
