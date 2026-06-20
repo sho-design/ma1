@@ -55,8 +55,7 @@ import { site } from '@data/site';
   const families = params.get('families');
   const interest = params.get('interest');
   const tx = params.get('tx');
-  const productsParam = params.get('products');
-  if (goals || downtime || families || interest || tx || productsParam) {
+  if (goals || downtime || families || interest || tx) {
     const concern = document.querySelector<HTMLSelectElement>('#concern');
     const message = document.querySelector<HTMLTextAreaElement>('#message');
     const list = (s: string) => s.split('|').join(', ');
@@ -65,7 +64,6 @@ import { site } from '@data/site';
       goals && `Goals: ${list(goals)}`,
       tx && `Also exploring: ${list(tx)}`,
       families && `Interested in: ${list(families)}`,
-      productsParam && `SkinCeuticals to discuss: ${list(productsParam)}`,
       downtime && `Comfortable downtime: ${downtime}`,
     ].filter(Boolean);
     if (message && lines.length) message.value = `From my plan:\n${lines.join('\n')}`;

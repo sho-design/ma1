@@ -5,16 +5,10 @@ import Advisory from '@components/Advisory.astro';
 import GoalsChecklist from '@components/GoalsChecklist.astro';
 import { treatments } from '@data/treatments';
 import { familyBySlug } from '@data/families';
-import { skinceuticals } from '@data/skinceuticals';
 
 // Slug -> display info for the live "suggested treatments" list (client-side).
-// `concerns` drives the SkinCeuticals product pairing.
 const txMap = Object.fromEntries(
-  treatments.map((t) => [t.slug, {
-    name: t.name,
-    accent: familyBySlug(t.family)?.accentVar ?? 'injectables',
-    concerns: t.concerns,
-  }])
+  treatments.map((t) => [t.slug, { name: t.name, accent: familyBySlug(t.family)?.accentVar ?? 'injectables' }])
 );
 ---
 <Base title="Plan your treatment" description="Mark your aesthetic goals and areas of concern, select all that apply, and we will shape a starting point for your consult. Not a prescription.">
@@ -62,13 +56,6 @@ const txMap = Object.fromEntries(
           <p class="meta">Pick a goal to see related treatments.</p>
         </div>
 
-        <div class="sc-head" data-sc-head hidden>
-          <p class="planner__label">SkinCeuticals to pair at home</p>
-          <p class="meta" style="margin:-0.2rem 0 0.6rem">Home care we often pair to support and extend your result.</p>
-          <div class="sc" data-products></div>
-          <p class="meta" style="margin-top:0.6rem"><a class="link-arrow" href="/treatments/skin-health-plan">Build a skin-health plan &rarr;</a></p>
-        </div>
-
         <Advisory title="Not a prescription">
           These are starting points, not a treatment plan. We screen for
           candidacy and your physician finalises everything. Results vary.
@@ -79,7 +66,6 @@ const txMap = Object.fromEntries(
   </section>
 
   <script type="application/json" id="tx-map" set:html={JSON.stringify(txMap)}></script>
-  <script type="application/json" id="sc-products" set:html={JSON.stringify(skinceuticals)}></script>
 </Base>
 
 <style>
@@ -98,11 +84,6 @@ const txMap = Object.fromEntries(
   .saved__name:hover { color: var(--accent-text); }
   .saved__rm { margin-left: auto; border: 0; background: none; color: var(--mist); font-size: 1.1rem; line-height: 1; cursor: pointer; padding: 0.1rem 0.3rem; border-radius: 6px; }
   .saved__rm:hover { color: var(--ink); background: var(--cloud); }
-  .sc { display: grid; gap: 0.5rem; }
-  .sc__row { display: grid; grid-template-columns: 1fr auto; gap: 0.1rem 0.6rem; padding: 0.55rem 0.7rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white-pure); }
-  .sc__name { font-size: var(--step--1); color: var(--ink); font-weight: 500; }
-  .sc__cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-skin-text, var(--mist)); align-self: center; }
-  .sc__role { grid-column: 1 / -1; font-size: var(--step--1); color: var(--graphite); line-height: 1.4; }
   .planner__out { margin: 1.4rem 0; display: grid; gap: 0.9rem; border-top: 1px solid var(--line); padding-top: 1.4rem; }
   .planner__out dt { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--mist); }
   .planner__out dd { margin: 0.2rem 0 0; color: var(--ink); line-height: 1.5; }
@@ -112,17 +93,13 @@ const txMap = Object.fromEntries(
 <script>
   import { getPlan, removeFromPlan } from '../scripts/plan';
 
-  type Info = { name: string; accent: string; concerns: string[] };
-  type Product = { slug: string; name: string; category: string; role: string; concerns: string[]; baseline?: boolean };
+  type Info = { name: string; accent: string };
   const txMap: Record<string, Info> = JSON.parse(document.getElementById('tx-map')?.textContent || '{}');
-  const products: Product[] = JSON.parse(document.getElementById('sc-products')?.textContent || '[]');
   const form = document.querySelector('.planner__form');
   const cta = document.querySelector<HTMLAnchorElement>('[data-plan-cta]');
   const suggestBox = document.querySelector<HTMLElement>('[data-suggest]');
   const savedBox = document.querySelector<HTMLElement>('[data-saved]');
   const savedHead = document.querySelector<HTMLElement>('[data-saved-head]');
-  const productBox = document.querySelector<HTMLElement>('[data-products]');
-  const productHead = document.querySelector<HTMLElement>('[data-sc-head]');
 
   const collect = (name: string) =>
     Array.from(document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`));
@@ -174,28 +151,12 @@ const txMap = Object.fromEntries(
     // Saved treatments are an explicit signal ("of interest"); goal-driven
     // suggestions are softer. We carry them to the consult separately.
     const saved = renderSaved();
-    const allSlugs = [...new Set([...saved, ...seen])];
-
-    // SkinCeuticals pairing: products matching the concerns of any chosen
-    // treatment, plus the baseline (sunscreen) once anything is selected.
-    const concernSet = new Set<string>();
-    for (const slug of allSlugs) (txMap[slug]?.concerns || []).forEach((c) => concernSet.add(c));
-    const matched = products.filter((p) => p.concerns.some((c) => concernSet.has(c)));
-    const baseline = products.filter((p) => p.baseline && !matched.includes(p));
-    const recommended = allSlugs.length ? [...matched, ...baseline] : [];
-    if (productHead) productHead.hidden = recommended.length === 0;
-    if (productBox) {
-      productBox.innerHTML = recommended
-        .map((p) => `<div class="sc__row"><span class="sc__name">${p.name}</span><span class="sc__cat">${p.category}</span><span class="sc__role">${p.role}</span></div>`)
-        .join('');
-    }
 
     const params = new URLSearchParams();
     if (goals.length) params.set('goals', goals.join('|'));
     if (downtime.length) params.set('downtime', downtime[0]);
     if (saved.length) params.set('interest', saved.map((s) => txMap[s].name).join('|'));
     if (seen.length) params.set('tx', seen.map((s) => txMap[s].name).join('|'));
-    if (recommended.length) params.set('products', recommended.map((p) => p.name).join('|'));
     if (cta) cta.href = `/contact${params.toString() ? `?${params}` : ''}`;
   };
 

@@ -1,8 +1,9 @@
-// SkinCeuticals home-care pairings for the Plan page. The clinic carries
-// SkinCeuticals; these are everyday products we often pair with in-clinic
-// treatments to support and extend the result. Matched to concern slugs (see
-// data/concerns.ts). A consult confirms what is right for your skin; this is
-// guidance, not a prescription.
+// SkinCeuticals home-care pairings. The clinic carries SkinCeuticals; these are
+// everyday products that complement specific in-clinic treatments, shown on the
+// relevant treatment page to support and extend the result. `treatments` lists
+// the treatment slugs each product complements (see data/treatments.ts).
+// A consult confirms what is right for your skin; this is guidance, not a
+// prescription.
 
 export interface SkinProduct {
   slug: string;
@@ -11,10 +12,8 @@ export interface SkinProduct {
   category: string;
   /** what it does, in plain language */
   role: string;
-  /** concern slugs this product commonly supports */
-  concerns: string[];
-  /** foundation products shown with every skin plan */
-  baseline?: boolean;
+  /** treatment slugs this product complements */
+  treatments: string[];
 }
 
 export const skinceuticals: SkinProduct[] = [
@@ -22,88 +21,90 @@ export const skinceuticals: SkinProduct[] = [
     slug: 'ce-ferulic',
     name: 'C E Ferulic',
     category: 'Antioxidant',
-    role: 'A daytime vitamin C serum that helps brighten and defend against environmental stress.',
-    concerns: ['pigmentation', 'aging-well', 'fine-lines', 'texture'],
+    role: 'A daytime vitamin C serum to brighten and defend, once skin has settled.',
+    treatments: ['picosure', 'hydrafacial', 'vamp-glass-facial', 'eco2', 'medical-peel', 'skin-health-plan'],
   },
   {
     slug: 'phloretin-cf',
     name: 'Phloretin CF',
     category: 'Antioxidant',
-    role: 'A vitamin C antioxidant aimed at uneven tone and oilier or combination skin.',
-    concerns: ['pigmentation', 'texture'],
+    role: 'A vitamin C antioxidant for uneven tone and oilier or combination skin.',
+    treatments: ['picosure', 'medical-peel'],
   },
   {
     slug: 'silymarin-cf',
     name: 'Silymarin CF',
     category: 'Antioxidant',
     role: 'An oil-free antioxidant for blemish-prone skin, helping with shine and texture.',
-    concerns: ['acne-scarring', 'texture'],
+    treatments: ['clarity-ii', 'hydrafacial', 'medical-peel'],
   },
   {
     slug: 'phyto-corrective',
     name: 'Phyto Corrective Gel',
-    category: 'Corrective',
-    role: 'A soothing serum to calm the look of redness and reactive skin.',
-    concerns: ['redness'],
+    category: 'Soothing',
+    role: 'A calming serum to settle the look of redness after light-based work.',
+    treatments: ['clarity-ii', 'vascular-lesions', 'plexr-blepharoplasty'],
   },
   {
     slug: 'discoloration-defense',
     name: 'Discoloration Defense',
     category: 'Corrective',
     role: 'Targets stubborn dark spots and post-blemish marks over time.',
-    concerns: ['pigmentation', 'acne-scarring'],
+    treatments: ['picosure', 'medical-peel'],
   },
   {
     slug: 'blemish-age-defense',
     name: 'Blemish + Age Defense',
     category: 'Corrective',
     role: 'A blend of acids for breakouts and early signs of aging together.',
-    concerns: ['acne-scarring', 'aging-well', 'texture'],
+    treatments: ['hydrafacial', 'medical-peel'],
   },
   {
     slug: 'retinol',
-    name: 'Retinol 0.3 / 0.5 / 1.0',
+    name: 'Retinol 0.5',
     category: 'Corrective',
-    role: 'A nightly retinol to refine texture and soften fine lines, introduced gradually.',
-    concerns: ['fine-lines', 'texture', 'aging-well'],
+    role: 'A nightly retinol to refine texture and soften fine lines, between visits.',
+    treatments: ['skin-health-plan', 'medical-peel'],
   },
   {
     slug: 'ha-intensifier',
     name: 'H.A. Intensifier',
-    category: 'Corrective',
-    role: 'A hyaluronic acid serum to support plumper, more hydrated-looking skin.',
-    concerns: ['fine-lines', 'texture'],
+    category: 'Hydrating',
+    role: 'A hyaluronic acid serum for plumper, more hydrated-looking skin.',
+    treatments: ['vamp-glass-facial', 'exosome-facial', 'prp', 'prf', 'xerf', 'dermal-filler'],
   },
   {
     slug: 'triple-lipid',
     name: 'Triple Lipid Restore 2:1',
-    category: 'Moisturizer',
-    role: 'A rich cream that supports the skin barrier and a firmer, smoother feel.',
-    concerns: ['laxity', 'aging-well', 'fine-lines'],
+    category: 'Barrier cream',
+    role: 'A rich cream to support the skin barrier and a firmer, smoother feel while you heal.',
+    treatments: ['xerf', 'eco2', 'plexr-blepharoplasty', 'biostimulator'],
   },
   {
     slug: 'age-interrupter',
     name: 'A.G.E. Interrupter Advanced',
     category: 'Moisturizer',
     role: 'A treatment cream for crepey skin, laxity and deeper lines.',
-    concerns: ['laxity', 'aging-well'],
+    treatments: ['xerf', 'biostimulator'],
   },
   {
     slug: 'clarifying-clay',
     name: 'Clarifying Clay Masque',
     category: 'Mask',
     role: 'A weekly clay masque to decongest pores and refine the surface.',
-    concerns: ['acne-scarring', 'texture'],
+    treatments: ['hydrafacial'],
   },
   {
     slug: 'uv-defense',
     name: 'Physical Fusion UV Defense SPF 50',
     category: 'Sunscreen',
-    role: 'A daily mineral sunscreen, the foundation of every plan and essential after any treatment.',
-    concerns: ['pigmentation', 'redness', 'aging-well'],
-    baseline: true,
+    role: 'A daily mineral sunscreen, essential after any treatment to protect your result.',
+    treatments: ['picosure', 'clarity-ii', 'eco2', 'xerf', 'medical-peel', 'hydrafacial', 'vamp-glass-facial', 'exosome-facial', 'plexr-blepharoplasty', 'vascular-lesions', 'skin-health-plan'],
   },
 ];
 
-export const productsByConcern = (slug: string): SkinProduct[] =>
-  skinceuticals.filter((p) => p.concerns.includes(slug));
+// Products that complement a treatment, with the everyday sunscreen kept last.
+export const productsByTreatment = (slug: string): SkinProduct[] => {
+  const matches = skinceuticals.filter((p) => p.treatments.includes(slug));
+  return matches.sort((a, b) => Number(a.slug === 'uv-defense') - Number(b.slug === 'uv-defense'));
+};
