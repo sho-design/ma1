@@ -7,7 +7,7 @@ import { site } from '@data/site';
 
 const tel = site.phone.replace(/[^0-9+]/g, '');
 const mapsHref = (loc: typeof site.locations[number]) =>
-  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${loc.name}, ${loc.city}`)}`;
+  `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(loc.mapQuery)}`;
 
 const jsonLd = site.locations.map((loc) => ({
   '@context': 'https://schema.org',
@@ -15,18 +15,18 @@ const jsonLd = site.locations.map((loc) => ({
   name: loc.name,
   url: `${site.url}/locations`,
   parentOrganization: { '@type': 'Organization', name: site.brand },
-  address: { '@type': 'PostalAddress', addressLocality: loc.city, addressCountry: 'CA' },
+  address: { '@type': 'PostalAddress', streetAddress: loc.address, addressLocality: loc.city, postalCode: loc.postal, addressCountry: 'CA' },
   telephone: site.phone,
   email: site.email,
   medicalSpecialty: 'CosmeticDermatology',
   availableService: { '@type': 'MedicalProcedure', name: 'Medical aesthetics consult' },
 }));
 ---
-<Base title="Locations" description="Visit Medical Aesthetics at Restoration Medical in Thornhill and Woodbridge. By appointment, physician-led, screened first.">
+<Base title="Locations" description="Visit Medical Aesthetics at Restoration Medical in Thornhill, with Maple opening soon. By appointment, physician-led, screened first.">
   <PageHeader
     eyebrow="Visit"
     title="Two clinics, one standard of care."
-    lead="We see patients by appointment across our Thornhill and Woodbridge locations. Screening comes first, then your physician shapes a plan."
+    lead="We see patients by appointment in Thornhill, with our Maple location opening soon. Screening comes first, then your physician shapes a plan."
     ripple
   />
 
@@ -36,10 +36,10 @@ const jsonLd = site.locations.map((loc) => ({
         {site.locations.map((loc) => (
           <article class="loc">
             <PhotoPlaceholder label={`${loc.name} — ${loc.city} clinic`} ratio="16 / 9" class="loc__photo" />
-            <h2 class="loc__city">{loc.city}</h2>
+            <h2 class="loc__city">{loc.label}</h2>
             <p class="loc__name">{loc.name}</p>
             <dl class="loc__rows">
-              <div><dt>Address</dt><dd>{loc.address}</dd></div>
+              <div><dt>Address</dt><dd>{loc.address}, {loc.city} {loc.postal}</dd></div>
               <div><dt>Hours</dt><dd>{loc.hours}</dd></div>
               <div><dt>Phone</dt><dd><a href={`tel:${tel}`}>{site.phone}</a></dd></div>
               <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>

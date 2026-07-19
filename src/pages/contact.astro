@@ -22,7 +22,7 @@ import { site } from '@data/site';
         {site.locations.map((loc) => (
           <p class="contact__loc">
             <strong>{loc.name}</strong><br />
-            {loc.address}<br />{loc.city}<br />
+            {loc.address}<br />{loc.city} {loc.postal}<br />
             <span class="meta">{loc.hours}</span>
           </p>
         ))}

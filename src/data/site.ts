@@ -11,16 +11,31 @@ export const site = {
   locations: [
     {
       name: 'Restoration Medical, Thornhill',
-      address: 'Address to confirm',
+      label: 'Thornhill',
+      address: '700 Centre St (Inside Walmart)',
       city: 'Thornhill, ON',
+      postal: 'L4J 0A7',
       hours: 'By appointment',
+      mapQuery: '700 Centre St, Thornhill, ON L4J 0A7',
+      comingSoon: false,
     },
     {
-      name: 'Restoration Medical, Woodbridge',
-      address: 'Address to confirm',
-      city: 'Woodbridge, ON',
-      hours: 'By appointment',
+      name: 'Restoration Medical, Maple',
+      label: 'Maple (Coming Soon)',
+      address: '2620 Rutherford Rd, Unit 105-107',
+      city: 'Vaughan, ON',
+      postal: 'L4K 0H1',
+      hours: 'Opening soon',
+      mapQuery: '2620 Rutherford Rd, Vaughan, ON L4K 0H1',
+      comingSoon: true,
     },
+  ],
+  // Sister brands across the Restoration Medical network (footer "Our network").
+  // TODO: replace href '#' with the live site URLs.
+  network: [
+    { name: 'Restoration Medical', note: 'The clinic', href: '#' },
+    { name: 'Canada Knee Clinic', note: 'Knee & joint care', href: '#' },
+    { name: 'IV Therapy', note: 'Wellness infusions', href: '#' },
   ],
   // Ontario regulatory context (AODA, PHIPA, CPSO), surfaced in legal + footer.
   legal: {

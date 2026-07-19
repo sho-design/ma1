@@ -6,6 +6,10 @@ const year = new Date().getFullYear();
 const tel = site.phone.replace(/[^0-9+]/g, '');
 
 const treatmentLinks = families.filter((f) => f.slug !== 'clinical' && f.slug !== 'health');
+
+// Keyless Google Maps embed + directions deep-link, driven by each location's mapQuery.
+const mapEmbed = (q: string) => `https://maps.google.com/maps?q=${encodeURIComponent(q)}&z=15&output=embed`;
+const directions = (q: string) => `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(q)}`;
 ---
 <footer class="footer">
   <div class="wrap footer__top">
@@ -15,6 +19,11 @@ const treatmentLinks = families.filter((f) => f.slug !== 'clinical' && f.slug !=
       <p class="footer__pitch measure">
         Natural-looking results, held to a clinical standard. Screened first,
         tailored to you, and finalised by your physician.
+      </p>
+      <p class="footer__reach">
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+        <span aria-hidden="true">·</span>
+        <a href={`tel:${tel}`}>{site.phone}</a>
       </p>
       <div class="footer__socials">
         <Socials />
@@ -56,31 +65,101 @@ const treatmentLinks = families.filter((f) => f.slug !== 'clinical' && f.slug !=
   <div class="wrap footer__locations">
     {site.locations.map((loc) => (
       <div class="footer__loc">
-        <p class="footer__loc-title">{loc.city}</p>
-        <p class="footer__meta">{loc.name}</p>
-        <p class="footer__meta">{loc.address}</p>
-        <p class="footer__meta">{loc.hours}</p>
+        <p class="footer__loc-title">{loc.label}</p>
+        <p class="footer__loc-address">{loc.address}, {loc.city} {loc.postal}</p>
+        <div class="footer__card">
+          <div class="footer__map-wrap">
+            <iframe
+              class="footer__map"
+              title={`Map — ${loc.label}, ${loc.city}`}
+              src={mapEmbed(loc.mapQuery)}
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <a class="footer__dir" href={directions(loc.mapQuery)} target="_blank" rel="noopener">
+            Get directions <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
       </div>
     ))}
-    <div class="footer__loc">
-      <p class="footer__loc-title">Reach us</p>
-      <p class="footer__meta"><a href={`mailto:${site.email}`}>{site.email}</a></p>
-      <p class="footer__meta"><a href={`tel:${tel}`}>{site.phone}</a></p>
-    </div>
   </div>
 
-  <div class="wrap footer__legal">
-    <p class="footer__fine">
-      Medical aesthetic services are elective and are not covered by OHIP. Every
-      treatment is physician-led and clinician-delivered. Information on this site
-      is educational and is not medical advice. Results vary from person to
-      person, and a consult confirms what is right for you.
-    </p>
-    <p class="footer__fine">© {year} {site.brand}. With care, the {site.brand} team.</p>
-    <p class="footer__legallinks">
-      <a href="/privacy">Privacy Policy</a>
-      <a href="/terms">Terms of Use</a>
-      <a href="/accessibility">Accessibility</a>
-    </p>
+  <div class="wrap footer__foot">
+    <div class="footer__network">
+      <p class="footer__heading">Our network</p>
+      <ul>
+        {site.network.map((n) => (
+          <li>
+            <a class="footer__net-link" href={n.href} target="_blank" rel="noopener">
+              <span class="footer__net-name">{n.name}<span class="footer__net-ext" aria-hidden="true">&#8599;</span></span>
+              <span class="footer__net-note">{n.note}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="footer__legal">
+      <p class="footer__fine">
+        Medical aesthetic services are elective and are not covered by OHIP. Every
+        treatment is physician-led and clinician-delivered. Information on this site
+        is educational and is not medical advice. Results vary from person to
+        person, and a consult confirms what is right for you.
+      </p>
+      <p class="footer__fine">© {year} {site.brand}. With care, the {site.brand} team.</p>
+      <p class="footer__legallinks">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Use</a>
+        <a href="/accessibility">Accessibility</a>
+      </p>
+    </div>
   </div>
 </footer>
+
+<style>
+  .footer__reach { margin-top: 1.1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: baseline; font-size: var(--step--1); color: #fcfcfdb8; }
+  .footer__reach a { transition: color var(--dur-hover) var(--ease); }
+  .footer__reach a:hover { color: var(--paper); }
+  .footer__reach span { color: #fcfcfd66; }
+
+  /* Location map cards */
+  .footer__locations { grid-template-columns: repeat(2, 1fr); }
+  .footer__loc-address { color: #fcfcfdb8; font-size: var(--step--1); line-height: 1.5; margin: 0 0 0.9rem; }
+  .footer__card { border: 1px solid rgba(252, 252, 253, 0.16); border-radius: var(--radius); overflow: hidden; background: rgba(252, 252, 253, 0.03); }
+  .footer__map-wrap { aspect-ratio: 16 / 9; }
+  .footer__map { width: 100%; height: 100%; border: 0; display: block; filter: grayscale(0.15); }
+  .footer__dir {
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    padding: 0.75rem 0.95rem; border-top: 1px solid rgba(252, 252, 253, 0.16);
+    font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em;
+    color: #fcfcfdcc; transition: background var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease);
+  }
+  .footer__dir:hover { background: rgba(252, 252, 253, 0.07); color: var(--paper); }
+
+  /* Our network + legal */
+  .footer__foot {
+    display: grid; grid-template-columns: 0.8fr 2fr; gap: 2.5rem 3rem;
+    padding-top: var(--space-l); margin-top: var(--space-l);
+    border-top: 1px solid rgba(252, 252, 253, 0.14);
+  }
+  .footer__network ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.1rem; }
+  .footer__net-link { display: grid; gap: 0.15rem; text-decoration: none; }
+  .footer__net-name {
+    font-family: var(--display); font-weight: 400; font-size: var(--step-1); letter-spacing: -0.01em;
+    color: var(--paper); display: inline-flex; align-items: center; gap: 0.28rem;
+    transition: color var(--dur-hover) var(--ease);
+  }
+  .footer__net-ext { font-size: 0.72em; color: #fcfcfd80; }
+  .footer__net-note { font-family: var(--mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.1em; color: #fcfcfd8c; }
+  .footer__net-link:hover .footer__net-name { color: #fcfcfdb8; }
+  .footer__foot .footer__legal { padding-top: 0; }
+
+  @media (max-width: 820px) {
+    .footer__foot { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+  @media (max-width: 520px) {
+    .footer__locations { grid-template-columns: 1fr; }
+  }
+</style>
