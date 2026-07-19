@@ -31,11 +31,10 @@ export const site = {
     },
   ],
   // Sister brands across the Restoration Medical network (footer "Our network").
-  // TODO: replace href '#' with the live site URLs.
   network: [
-    { name: 'Restoration Medical', note: 'The clinic', href: '#' },
-    { name: 'Canada Knee Clinic', note: 'Knee & joint care', href: '#' },
-    { name: 'IV Therapy', note: 'Wellness infusions', href: '#' },
+    { name: 'Restoration Medical', note: 'The clinic', href: 'https://restorationmedical.ca' },
+    { name: 'Canada Knee Clinic', note: 'Knee & joint care', href: 'https://canadakneeclinic.com' },
+    { name: 'Infusion Therapy', note: 'Wellness infusions', href: 'https://it-1-gold.vercel.app' },
   ],
   // Ontario regulatory context (AODA, PHIPA, CPSO), surfaced in legal + footer.
   legal: {
